@@ -329,35 +329,7 @@
   .select-all-rows-inner { overflow: hidden; }
 
   /* ── DOWNLOAD FORMAT REVEAL ── */
-  .dl-format-wrap {
-    display: grid;
-    grid-template-rows: 0fr;
-    opacity: 0;
-    transition: grid-template-rows 0.28s ease, opacity 0.28s ease, margin-top 0.28s ease;
-    margin-top: 0;
-  }
-  .dl-format-wrap.visible {
-    grid-template-rows: 1fr;
-    opacity: 1;
-    margin-top: 12px;
-  }
-  .dl-format-inner { overflow: hidden; }
-  .dl-format-box {
-    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-    padding: 12px 14px;
-    background: var(--ivory-dark); border: 1px solid var(--border); border-radius: 8px;
-  }
-  .dl-format-label {
-    font-family: 'Cinzel Decorative', serif; font-size: 9px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--maroon); flex-shrink: 0;
-  }
-  .dl-format-cancel {
-    margin-left: auto; background: none; border: none;
-    font-family: 'IM Fell English', serif; font-style: italic;
-    font-size: 13px; color: var(--text-muted); cursor: pointer;
-    padding: 2px 6px; transition: color 0.18s;
-  }
-  .dl-format-cancel:hover { color: var(--maroon); }
+
 
   /* ── TAB NAV BAR ── */
   .tab-navbar {
@@ -460,7 +432,7 @@
   <!-- COOKIE BANNER -->
   <div class="cookie-banner" id="cookie-banner">
     <span class="cookie-icon">📜</span>
-    <span class="cookie-text">by accepting cookies, your history shall be remembered between visits.</span>
+    <span class="cookie-text">If you accept cookies, your catalog history shall be remembered between visits.</span>
     <div class="cookie-btns">
       <button class="btn-cy" onclick="acceptCookies()">Accept</button>
       <button class="btn-cn" onclick="declineCookies()">Decline</button>
@@ -519,7 +491,7 @@
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
             <button class="btn" onclick="switchTab('export');buildExport()">Export Options</button>
             <button class="btn btn-gold" onclick="quickCopyTSV()">Copy TSV</button>
-            <button class="btn btn-gold" onclick="quickCopyCSV()">Copy CSV</button>
+            <button class="btn btn-gold" onclick="quickDlCSV()">Download CSV</button>
           </div>
           <button class="btn btn-outline" onclick="clearCatalog()">✕ Clear</button>
         </div>
@@ -589,22 +561,9 @@
         <div class="btn-row" style="margin-top:6px;justify-content:space-between;">
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
             <button class="btn" onclick="copyTSV()">Copy TSV</button>
-            <button class="btn" onclick="copyCSV()">Copy CSV</button>
-            <button class="btn btn-outline" onclick="dlChoose()">Download</button>
+            <button class="btn btn-outline" onclick="dlCSV()">Download CSV</button>
           </div>
           <button class="btn-clear-gold" onclick="clearExport()">✕ Clear</button>
-        </div>
-
-        <!-- Format picker — inline animated reveal -->
-        <div class="dl-format-wrap" id="dl-format-wrap">
-          <div class="dl-format-inner">
-            <div class="dl-format-box">
-              <span class="dl-format-label">Choose format</span>
-              <button class="btn" onclick="dlTSV();closeDlModal()">TSV<span style="display:block;font-size:11px;font-style:italic;font-weight:400;opacity:0.75;">Google Sheets</span></button>
-              <button class="btn btn-outline" onclick="dlCSV();closeDlModal()">CSV<span style="display:block;font-size:11px;font-style:italic;font-weight:400;opacity:0.75;">Excel &amp; others</span></button>
-              <button class="dl-format-cancel" onclick="closeDlModal()">✕ cancel</button>
-            </div>
-          </div>
         </div>
 
       </div>
@@ -896,8 +855,6 @@ function clearExport() {
   editModeOn = false;
   const wrap = document.getElementById('select-all-rows-wrap');
   if (wrap) wrap.classList.remove('visible');
-  const dlWrap = document.getElementById('dl-format-wrap');
-  if (dlWrap) dlWrap.classList.remove('visible');
   if (cookiesOk()) { try { localStorage.removeItem('aa_history'); } catch {} }
   document.getElementById('exp-content').style.display = 'none';
   document.getElementById('exp-empty').style.display = 'block';
@@ -1324,20 +1281,17 @@ function buildExport() {
   initColToggles();
   refreshExport();
 }
-function dlChoose(){
-  const wrap = document.getElementById('dl-format-wrap');
-  if (wrap) wrap.classList.toggle('visible');
-}
-function closeDlModal(){
-  const wrap = document.getElementById('dl-format-wrap');
-  if (wrap) wrap.classList.remove('visible');
-}
 function copyTSV(){navigator.clipboard.writeText(document.getElementById('tsv-out').textContent).then(()=>toast('TSV copied — paste into Google Sheets ✦'));}
-function copyCSV(){navigator.clipboard.writeText(document.getElementById('csv-out').textContent).then(()=>toast('CSV copied ✦'));}
 function quickCopyTSV(){const all=getAllEntries();if(!all.length){toast('No entries to copy yet.');return;}const withHdrs=document.getElementById('cat-include-headers')?.checked!==false;const rows=all.map(e=>COLS.map(c=>tsvEsc(e[c]||'N/A')).join('\t'));if(withHdrs)rows.unshift(HDRS.map(tsvEsc).join('\t'));navigator.clipboard.writeText(rows.join('\n')).then(()=>toast('TSV copied — paste into Google Sheets ✦'));}
-function quickCopyCSV(){const all=getAllEntries();if(!all.length){toast('No entries to copy yet.');return;}const withHdrs=document.getElementById('cat-include-headers')?.checked!==false;const rows=all.map(e=>COLS.map(c=>csvEsc(e[c]||'N/A')).join(','));if(withHdrs)rows.unshift(HDRS.map(csvEsc).join(','));navigator.clipboard.writeText(rows.join('\n')).then(()=>toast('CSV copied ✦'));}
-function dlTSV(){dlText(document.getElementById('tsv-out').textContent,'archive-assistant.tsv','text/tab-separated-values');}
-function dlCSV(){dlText(document.getElementById('csv-out').textContent,'archive-assistant.csv','text/csv');}
+function quickDlCSV(){const all=getAllEntries();if(!all.length){toast('No entries to download.');return;}const withHdrs=document.getElementById('cat-include-headers')?.checked!==false;const rows=all.map(e=>COLS.map(c=>csvEsc(e[c]||'N/A')).join(','));if(withHdrs)rows.unshift(HDRS.map(csvEsc).join(','));dlText(rows.join('\n'),'archive-assistant.csv','text/csv');}
+function dlCSV(){
+  const all=getExportEntries();
+  if(!all.length){toast('No entries to download.');return;}
+  const cols=getActiveCols(),hdrs=getActiveHdrs(),withHdrs=includeHeaders();
+  const rows=all.map(e=>cols.map(c=>csvEsc(e[c]||'N/A')).join(','));
+  if(withHdrs)rows.unshift(hdrs.map(csvEsc).join(','));
+  dlText(rows.join('\n'),'archive-assistant.csv','text/csv');
+}
 
 // ════ HISTORY ════
 function saveHist(e) {
