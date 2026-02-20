@@ -275,17 +275,34 @@
   .exp-preview-table .na-val { color: var(--text-muted); font-style: italic; }
   .exp-preview-table tr.excluded td { opacity: 0.35; text-decoration: line-through; background: rgba(139,32,53,0.04) !important; }
 
-  /* ── EXCLUDE BUTTON ── */
-  .exp-row-wrap { display: flex; align-items: stretch; margin-bottom: 1px; }
-  .exp-exclude-btn {
-    flex-shrink: 0; width: 28px; height: 31px; display: flex; align-items: center; justify-content: center;
-    background: none; border: none; cursor: pointer;
-    color: var(--ivory-darker); font-size: 15px; line-height: 1;
-    transition: color 0.15s; padding: 0 4px 0 0;
+  /* ── EDIT TOGGLE SWITCH ── */
+  .edit-toggle-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+    font-family: 'IM Fell English', serif; font-style: italic; font-size: 14px; color: var(--text-muted);
+    cursor: pointer; user-select: none; width: fit-content;
   }
-  .exp-exclude-btn:hover { color: var(--maroon); }
-  .exp-exclude-btn.excluded { color: var(--maroon); opacity: 0.5; }
-  .exp-preview-outer { flex: 1; overflow-x: auto; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 20px; max-height: 200px; overflow-y: auto; }
+  .edit-toggle-row:hover .edit-switch-track { border-color: var(--gold); }
+  .edit-switch-track {
+    position: relative; width: 26px; height: 15px; flex-shrink: 0;
+    background: var(--ivory-darker); border: 1.5px solid var(--border);
+    border-radius: 8px; transition: background 0.25s, border-color 0.25s;
+    cursor: pointer;
+  }
+  .edit-switch-track.on { background: var(--maroon); border-color: var(--maroon-deep); }
+  .edit-switch-knob {
+    position: absolute; top: 2px; left: 2px;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--ivory-light);
+    box-shadow: 0 1px 4px rgba(42,26,16,0.28);
+    transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .edit-switch-track.on .edit-switch-knob { transform: translateX(11px); }
+  /* edit mode: rows become clickable */
+  .exp-preview-table.edit-mode tbody tr { cursor: pointer; }
+  .exp-preview-table.edit-mode tbody tr:hover td { background: rgba(139,32,53,0.1) !important; }
+  .exp-preview-table tr.excluded td { opacity: 0.35; text-decoration: line-through; background: rgba(139,32,53,0.04) !important; }
+  /* preview outer: full width, no side col */
+  .exp-preview-outer { overflow-x: auto; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 12px; max-height: 200px; overflow-y: auto; }
 
   /* ── PROGRESS ── */
   .prog-wrap { background: var(--ivory-darker); border-radius: 20px; height: 7px; overflow: hidden; margin: 14px 0; }
@@ -420,7 +437,7 @@
             <thead><tr>
               <th>Date</th><th>Date Posted</th><th>Title</th><th>Author</th>
               <th>Fandom</th><th>Relationships</th><th>Characters</th><th>Tags</th>
-              <th>Warning</th><th>Words</th><th>Category</th><th>AO3 Link</th>
+              <th>Warning</th><th>Words</th><th>Category</th><th>AO3 Link</th><th>Summary</th>
             </tr></thead>
             <tbody id="meta-tbody"></tbody>
           </table>
@@ -467,11 +484,14 @@
         </div>
 
         <!-- Preview table -->
-        <div style="display:flex;align-items:flex-start;gap:0;margin-bottom:20px;">
-          <div style="display:flex;flex-direction:column;padding-top:34px;flex-shrink:0;" id="exp-exclude-col"></div>
-          <div class="exp-preview-outer" style="margin-bottom:0;">
-            <table class="exp-preview-table" id="exp-preview-table"></table>
-          </div>
+        <div class="exp-preview-outer">
+          <table class="exp-preview-table" id="exp-preview-table"></table>
+        </div>
+
+        <!-- Edit toggle — below table, above buttons -->
+        <div class="edit-toggle-row" onclick="toggleEditMode()" id="edit-toggle-row">
+          <div class="edit-switch-track" id="edit-switch-track"><div class="edit-switch-knob"></div></div>
+          <span id="edit-toggle-label">Edit rows</span>
         </div>
 
         <!-- Hidden data stores -->
@@ -531,8 +551,9 @@
 </div>
 
 <script>
-const COLS = ['date','datePosted','title','author','fandom','relationships','characters','tags','warning','words','category','ao3Link'];
-const HDRS = ['Date','Date Posted','Title','Author','Fandom','Relationships','Characters','Tags','Warning','Words','Category','AO3 Link'];
+const COLS = ['date','datePosted','title','author','fandom','relationships','characters','tags','warning','words','category','ao3Link','summary'];
+const HDRS = ['Date','Date Posted','Title','Author','Fandom','Relationships','Characters','Tags','Warning','Words','Category','AO3 Link','Summary'];
+const HISTORY_EXCLUDED_COLS = new Set(['summary']);
 let catalogEntries = [];
 let uploadedFiles = [];
 
@@ -666,7 +687,7 @@ async function fetchAO3Meta(id) {
     } catch { continue; }
   }
   // All proxies failed or returned bad data
-  return {id,title:`Work #${id}`,author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',datePosted:'N/A',ao3Link:`https://archiveofourown.org/works/${id}`,updatedAt:''};
+  return {id,title:`Work #${id}`,author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',datePosted:'N/A',ao3Link:`https://archiveofourown.org/works/${id}`,updatedAt:'',summary:'N/A'};
 }
 function parseAO3Page(html, id) {
   const doc=new DOMParser().parseFromString(html,'text/html');
@@ -693,8 +714,11 @@ function parseAO3Page(html, id) {
   const updatedAt=doc.querySelector('dd.status')?.textContent.trim().replace(/\D/g,'')||
                   doc.querySelector('dd.published')?.textContent.trim().replace(/\D/g,'')||'';
 
+  const sumEl=doc.querySelector('.summary.module blockquote')||doc.querySelector('.summary.module');
+  let summary='N/A';
+  if(sumEl){const raw=sumEl.textContent.replace(/\s{2,}/g,' ').trim();if(raw.length>2)summary=raw.length>600?raw.substring(0,597)+'…':raw;}
   return {
-    id, updatedAt, title, author, words, datePosted,
+    id, updatedAt, title, author, words, datePosted, summary,
     fandom:       tags('fandom'),
     relationships:tags('relationship'),
     characters:   tags('character'),
@@ -705,7 +729,7 @@ function parseAO3Page(html, id) {
   };
 }
 function addOne(m) {
-  const e={date:today(),datePosted:m.datePosted||'N/A',title:m.title||'N/A',author:m.author||'N/A',fandom:m.fandom||'N/A',relationships:m.relationships||'N/A',characters:m.characters||'N/A',tags:m.tags||'N/A',warning:m.warning||'N/A',words:m.words||'N/A',category:m.category||'N/A',ao3Link:m.ao3Link||'N/A'};
+  const e={date:today(),datePosted:m.datePosted||'N/A',title:m.title||'N/A',author:m.author||'N/A',fandom:m.fandom||'N/A',relationships:m.relationships||'N/A',characters:m.characters||'N/A',tags:m.tags||'N/A',warning:m.warning||'N/A',words:m.words||'N/A',category:m.category||'N/A',ao3Link:m.ao3Link||'N/A',summary:m.summary||'N/A'};
   catalogEntries.push(e); saveHist(e); toast(`"${m.title}" added to catalog ✦`);
 }
 function addAllToCatalog() { (window._fm||[]).forEach(m=>addOne(m)); }
@@ -801,7 +825,7 @@ async function catalogFiles() {
 // files from the ZIP, flatten them to plain text with ||| delimiters at block boundaries,
 // then do a linear position scan between known AO3 header labels — exactly as the bot does.
 async function extractEpub(file) {
-  const base={date:today(),datePosted:'N/A',title:cleanName(file.name),author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',ao3Link:'N/A'};
+  const base={date:today(),datePosted:'N/A',title:cleanName(file.name),author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',ao3Link:'N/A',summary:'N/A'};
   try {
     if (!window.JSZip) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
     const zip = await JSZip.loadAsync(await file.arrayBuffer());
@@ -830,7 +854,7 @@ async function extractEpub(file) {
     const res = {
       date:today(), datePosted:'N/A', title:cleanName(file.name),
       author:'N/A', fandom:'N/A', tags:'N/A', warning:'N/A',
-      words:'N/A', category:'N/A', ao3Link:'N/A', relationships:'N/A', characters:'N/A'
+      words:'N/A', category:'N/A', ao3Link:'N/A', relationships:'N/A', characters:'N/A', summary:'N/A'
     };
 
     // Title + Author: look for "Title - Author - Fandom" pattern first (AO3 EPUB header),
@@ -861,7 +885,8 @@ async function extractEpub(file) {
       { id:'tags',          labels:['Additional Tags:', 'Tags:'] },
       { id:'language',      labels:['Language:'] },
       { id:'stats',         labels:['Stats:'] },
-      { id:'summary',       labels:['Summary:'] },
+      { id:'summary',       labels:['Summary:', 'Summary'] },
+      { id:'notes',         labels:['Notes:', 'Notes'] },
     ];
     const found = [];
     for (const h of HEADER_MAP) {
@@ -883,6 +908,14 @@ async function extractEpub(file) {
       if (cur.id === 'relationships') res.relationships = val;
       if (cur.id === 'characters')    res.characters    = val;
       if (cur.id === 'tags')          res.tags          = val;
+      if (cur.id === 'summary') {
+        const summaryRaw = fullText.substring(cur.pos + cur.len, next ? next.pos : fullText.length);
+        const summaryClean = summaryRaw
+          .replace(/\|\|\|/g, ' ').replace(/<[^>]*>/g, '')
+          .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'")
+          .replace(/\s{2,}/g, ' ').replace(/^[\s,]+|[\s,]+$/g, '').trim();
+        res.summary = summaryClean ? (summaryClean.length > 600 ? summaryClean.substring(0,597) + '…' : summaryClean) : 'N/A';
+      }
     }
 
     // Stats: AO3 URL, published date, word count — scan full text
@@ -914,7 +947,7 @@ function epubClean(str) {
 
 // PDF EXTRACTION
 async function extractPdf(file) {
-  const base={date:today(),datePosted:'N/A',title:cleanName(file.name),author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',ao3Link:'N/A'};
+  const base={date:today(),datePosted:'N/A',title:cleanName(file.name),author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',ao3Link:'N/A',summary:'N/A'};
   try {
     if (!window.pdfjsLib) {
       await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
@@ -956,6 +989,13 @@ async function extractPdf(file) {
     const characters    = getPdfField(headerText,'Character');
     const tags          = getPdfField(headerText,'Additional Tags');
 
+    // --- Summary ---
+    const PDF_SUM_STOPS = ['Notes','Stats:','Words:','Rating:','Archive Warning','Fandom','Language:','Collections:','Published:','Completed:','Updated:'];
+    let summary = 'N/A';
+    const sPat = PDF_SUM_STOPS.map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
+    const sM = headerText.match(new RegExp('Summary\\s*:?\\s*([\\s\\S]+?)(?=\\s*(?:'+sPat+')|$)','i'));
+    if(sM){const raw=sM[1].replace(/\n+/g,' ').replace(/\s{2,}/g,' ').replace(/^[\s,]+|[\s,]+$/g,'').trim();if(raw.length>2)summary=raw.length>600?raw.substring(0,597)+'…':raw;}
+
     // --- AO3 URL: scan header text first, then full metadata ---
     const urlM = headerText.match(/https?:\/\/archiveofourown\.org\/works\/\d+/i)
                ||(info.Subject+' '+(info.Keywords||'')).match(/https?:\/\/archiveofourown\.org\/works\/\d+/i);
@@ -983,7 +1023,7 @@ async function extractPdf(file) {
       if (authorM) author=authorM[1].trim();
     }
 
-    return {date:today(),datePosted,title,author,fandom,relationships,characters,tags,warning,words,category,ao3Link};
+    return {date:today(),datePosted,title,author,fandom,relationships,characters,tags,warning,words,category,ao3Link,summary};
   } catch(err) { console.error('PDF parse error:', err); return base; }
 }
 function fmtPdfDate(d) { try{const s=d.replace('D:','');return `${s.substring(0,4)}-${s.substring(4,6)}-${s.substring(6,8)}`;}catch{return 'N/A';} }
@@ -994,6 +1034,7 @@ function renderMetaTable(entries) {
     const tr=document.createElement('tr');
     tr.innerHTML=COLS.map(c=>{const v=e[c]||'N/A',na=v==='N/A';
       if(c==='ao3Link'&&!na)return `<td class="link-cell"><a href="${esc(v)}" target="_blank">Link ↗</a></td>`;
+      if(c==='summary'){const d=v.length>60?v.substring(0,58)+'…':v;return `<td class="${na?'na-val':''} summary-cell" title="${esc(v)}" style="max-width:260px;">${esc(d)}</td>`;}
       return `<td class="${na?'na-val':''}" title="${esc(v)}">${esc(v.length>38?v.substring(0,36)+'…':v)}</td>`;
     }).join('');
     tbody.appendChild(tr);
@@ -1012,16 +1053,17 @@ function getAllEntries() {
   } catch { return catalogEntries; }
 }
 
-let activeCols = new Set(COLS); // all on by default
+let activeCols = new Set(COLS.filter(c => !HISTORY_EXCLUDED_COLS.has(c))); // summary off by default in export
 
 function initColToggles() {
   const wrap = document.getElementById('exp-col-toggles');
   if (!wrap || wrap.children.length) return;
   COLS.forEach((col, i) => {
+    const isOn = !HISTORY_EXCLUDED_COLS.has(col);
     const lbl = document.createElement('label');
-    lbl.className = 'exp-col-toggle on';
+    lbl.className = 'exp-col-toggle' + (isOn ? ' on' : '');
     lbl.title = HDRS[i];
-    lbl.innerHTML = `<input type="checkbox" checked value="${col}"><span>${HDRS[i]}</span>`;
+    lbl.innerHTML = `<input type="checkbox" ${isOn?'checked':''} value="${col}"><span>${HDRS[i]}</span>`;
     lbl.querySelector('input').addEventListener('change', function() {
       if (this.checked) { activeCols.add(col); lbl.classList.add('on'); }
       else { activeCols.delete(col); lbl.classList.remove('on'); }
@@ -1052,6 +1094,20 @@ function toggleExclude(idx) {
   refreshExport();
 }
 
+let editModeOn = false;
+function toggleEditMode() {
+  editModeOn = !editModeOn;
+  const track = document.getElementById('edit-switch-track');
+  const label = document.getElementById('edit-toggle-label');
+  if (track) track.classList.toggle('on', editModeOn);
+  if (label) label.textContent = editModeOn ? 'Edit rows (click a row to exclude/include)' : 'Edit rows';
+  refreshExport();
+}
+function handleRowClick(idx) {
+  if (!editModeOn) return;
+  toggleExclude(idx);
+}
+
 function getExportEntries() {
   return getAllEntries().filter((_, i) => !excludedRows.has(i));
 }
@@ -1064,28 +1120,23 @@ function refreshExport() {
 
   // Preview table
   const tbl = document.getElementById('exp-preview-table');
-  const excCol = document.getElementById('exp-exclude-col');
   if (tbl) {
     let html = '';
     if (withHdrs) html += '<thead><tr>' + hdrs.map(h => `<th>${esc(h)}</th>`).join('') + '</tr></thead>';
     html += '<tbody>' + all.slice(0,50).map((e, i) => {
       const excl = excludedRows.has(i);
-      return `<tr class="${excl?'excluded':''}" data-idx="${i}">` + cols.map(c => {
+      return `<tr class="${excl?'excluded':''}" data-idx="${i}" onclick="handleRowClick(${i})">` + cols.map(c => {
         const v = e[c]||'N/A';
+        if(c==='summary'){const d=v.length>50?v.substring(0,48)+'…':v;return `<td class="${v==='N/A'?'na-val':''}" title="${esc(v)}" style="max-width:220px;">${esc(d)}</td>`;}
         return `<td class="${v==='N/A'?'na-val':''}" title="${esc(v)}">${esc(v.length>22?v.substring(0,20)+'…':v)}</td>`;
       }).join('') + '</tr>';
     }).join('') + '</tbody>';
     tbl.innerHTML = html;
   }
 
-  // Exclude buttons column (rendered separately, outside scroll area)
-  if (excCol) {
-    excCol.innerHTML = all.slice(0,50).map((e, i) => {
-      const excl = excludedRows.has(i);
-      const title = excl ? 'Click to include' : 'Exclude from export';
-      return `<button class="exp-exclude-btn${excl?' excluded':''}" onclick="toggleExclude(${i})" title="${title}">⤬</button>`;
-    }).join('');
-  }
+  // Apply edit-mode class to table (rows clickable when edit mode on)
+  const editOn = document.getElementById('edit-switch-track')?.classList.contains('on');
+  if (tbl) tbl.classList.toggle('edit-mode', !!editOn);
 
   // Use only non-excluded entries for copy/download
   const active = getExportEntries();
