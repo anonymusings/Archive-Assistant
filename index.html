@@ -973,13 +973,28 @@ async function extractPdf(file) {
       fullText+=pageText+' ';
     }
 
-    // --- Text-based anchor field extraction (ported from bot's parsePdfData / getPdfField) ---
-    const ANCHORS=['Rating:','Archive Warning','Categor','Fandom','Relationship','Character','Additional Tags','Language:','Stats:','Summary:','Words:'];
+    // --- Field extraction: line-accumulator approach ---
+    // Handles both inline ("Relationship: A/B") and two-column ("Relationship:\nA/B") layouts.
+    // Anchors both target and stop detection to line starts, preventing false matches
+    // when anchor words appear inside tag values (e.g. "Original Male Character/Original Male Character").
+    const PDF_ANCHORS=['Rating:','Archive Warning','Categor','Fandom','Relationship','Character','Additional Tags','Language:','Stats:','Summary:','Words:','Series:','Collections:'];
+    const anchorLineRe = new RegExp('^(?:'+PDF_ANCHORS.map(a=>a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','i');
     function getPdfField(text, target) {
-      const stops=ANCHORS.map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
-      const m=text.match(new RegExp(target+'(?:y|ies|s)?\\s*:?\\s*([\\s\\S]+?)(?=\\s*(?:'+stops+')|$)','i'));
-      if (!m) return 'N/A';
-      return m[1].trim().replace(/\n+/g,', ').replace(/\s{2,}/g,' ').replace(/^[,\s]+|[,\s]+$/g,'').trim()||'N/A';
+      const targetRe = new RegExp('^'+target+'(?:y|ies|s)?\\s*:?\\s*(.*)','i');
+      const lines = text.split('\n');
+      let collecting = false, parts = [];
+      for (const line of lines) {
+        const t = line.trim(); if (!t) continue;
+        if (!collecting) {
+          const m = t.match(targetRe);
+          if (m) { collecting = true; if (m[1].trim()) parts.push(m[1].trim()); }
+        } else {
+          if (anchorLineRe.test(t) && !targetRe.test(t)) break;
+          parts.push(t);
+        }
+      }
+      if (!parts.length) return 'N/A';
+      return parts.join(', ').replace(/\s{2,}/g,' ').replace(/^[,\s]+|[,\s]+$/g,'').trim() || 'N/A';
     }
 
     const fandom        = getPdfField(headerText,'Fandom');
