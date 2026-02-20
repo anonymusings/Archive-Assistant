@@ -273,6 +273,19 @@
   .exp-preview-table tr:nth-child(even) td { background: rgba(201,169,110,0.05); }
   .exp-preview-table tr:hover td { background: rgba(139,32,53,0.05); }
   .exp-preview-table .na-val { color: var(--text-muted); font-style: italic; }
+  .exp-preview-table tr.excluded td { opacity: 0.35; text-decoration: line-through; background: rgba(139,32,53,0.04) !important; }
+
+  /* ── EXCLUDE BUTTON ── */
+  .exp-row-wrap { display: flex; align-items: stretch; margin-bottom: 1px; }
+  .exp-exclude-btn {
+    flex-shrink: 0; width: 28px; height: 31px; display: flex; align-items: center; justify-content: center;
+    background: none; border: none; cursor: pointer;
+    color: var(--ivory-darker); font-size: 15px; line-height: 1;
+    transition: color 0.15s; padding: 0 4px 0 0;
+  }
+  .exp-exclude-btn:hover { color: var(--maroon); }
+  .exp-exclude-btn.excluded { color: var(--maroon); opacity: 0.5; }
+  .exp-preview-outer { flex: 1; overflow-x: auto; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 20px; max-height: 200px; overflow-y: auto; }
 
   /* ── PROGRESS ── */
   .prog-wrap { background: var(--ivory-darker); border-radius: 20px; height: 7px; overflow: hidden; margin: 14px 0; }
@@ -454,8 +467,11 @@
         </div>
 
         <!-- Preview table -->
-        <div class="exp-preview-wrap">
-          <table class="exp-preview-table" id="exp-preview-table"></table>
+        <div style="display:flex;align-items:flex-start;gap:0;margin-bottom:20px;">
+          <div style="display:flex;flex-direction:column;padding-top:34px;flex-shrink:0;" id="exp-exclude-col"></div>
+          <div class="exp-preview-outer" style="margin-bottom:0;">
+            <table class="exp-preview-table" id="exp-preview-table"></table>
+          </div>
         </div>
 
         <!-- Hidden data stores -->
@@ -732,6 +748,7 @@ function clearFiles()  { uploadedFiles=[]; renderFileList(); document.getElement
 function clearCatalog() {
   if (!confirm('Clear all extracted metadata? This cannot be undone.')) return;
   catalogEntries = [];
+  excludedRows = new Set();
   if (cookiesOk()) { try { localStorage.removeItem('aa_history'); } catch {} }
   document.getElementById('meta-tbody').innerHTML = '';
   document.getElementById('cat-results').style.display = 'none';
@@ -744,6 +761,7 @@ function clearCatalog() {
 function clearExport() {
   if (!confirm('Clear all entries? This will reset the catalog and history.')) return;
   catalogEntries = [];
+  excludedRows = new Set();
   if (cookiesOk()) { try { localStorage.removeItem('aa_history'); } catch {} }
   document.getElementById('exp-content').style.display = 'none';
   document.getElementById('exp-empty').style.display = 'block';
@@ -1026,6 +1044,18 @@ function getActiveCols() { return COLS.filter(c => activeCols.has(c)); }
 function getActiveHdrs() { return COLS.filter(c => activeCols.has(c)).map(c => HDRS[COLS.indexOf(c)]); }
 function includeHeaders() { return document.getElementById('exp-include-headers')?.checked !== false; }
 
+let excludedRows = new Set(); // tracks indices into getAllEntries()
+
+function toggleExclude(idx) {
+  if (excludedRows.has(idx)) excludedRows.delete(idx);
+  else excludedRows.add(idx);
+  refreshExport();
+}
+
+function getExportEntries() {
+  return getAllEntries().filter((_, i) => !excludedRows.has(i));
+}
+
 function refreshExport() {
   const all = getAllEntries();
   const cols = getActiveCols();
@@ -1034,29 +1064,45 @@ function refreshExport() {
 
   // Preview table
   const tbl = document.getElementById('exp-preview-table');
+  const excCol = document.getElementById('exp-exclude-col');
   if (tbl) {
     let html = '';
     if (withHdrs) html += '<thead><tr>' + hdrs.map(h => `<th>${esc(h)}</th>`).join('') + '</tr></thead>';
-    html += '<tbody>' + all.slice(0,50).map(e =>
-      '<tr>' + cols.map(c => { const v=e[c]||'N/A'; return `<td class="${v==='N/A'?'na-val':''}" title="${esc(v)}">${esc(v.length>22?v.substring(0,20)+'…':v)}</td>`; }).join('') + '</tr>'
-    ).join('') + '</tbody>';
+    html += '<tbody>' + all.slice(0,50).map((e, i) => {
+      const excl = excludedRows.has(i);
+      return `<tr class="${excl?'excluded':''}" data-idx="${i}">` + cols.map(c => {
+        const v = e[c]||'N/A';
+        return `<td class="${v==='N/A'?'na-val':''}" title="${esc(v)}">${esc(v.length>22?v.substring(0,20)+'…':v)}</td>`;
+      }).join('') + '</tr>';
+    }).join('') + '</tbody>';
     tbl.innerHTML = html;
   }
 
+  // Exclude buttons column (rendered separately, outside scroll area)
+  if (excCol) {
+    excCol.innerHTML = all.slice(0,50).map((e, i) => {
+      const excl = excludedRows.has(i);
+      const title = excl ? 'Click to include' : 'Exclude from export';
+      return `<button class="exp-exclude-btn${excl?' excluded':''}" onclick="toggleExclude(${i})" title="${title}">⤬</button>`;
+    }).join('');
+  }
+
+  // Use only non-excluded entries for copy/download
+  const active = getExportEntries();
+
   // TSV
-  const tsvRows = all.map(e => cols.map(c => e[c]||'N/A').join('\t'));
+  const tsvRows = active.map(e => cols.map(c => e[c]||'N/A').join('\t'));
   if (withHdrs) tsvRows.unshift(hdrs.join('\t'));
-  const tsvText = tsvRows.join('\n');
-  document.getElementById('tsv-out').textContent = tsvText;
+  document.getElementById('tsv-out').textContent = tsvRows.join('\n');
 
   // CSV
-  const csvRows = all.map(e => cols.map(c => csvEsc(e[c]||'N/A')).join(','));
+  const csvRows = active.map(e => cols.map(c => csvEsc(e[c]||'N/A')).join(','));
   if (withHdrs) csvRows.unshift(hdrs.map(csvEsc).join(','));
-  const csvText = csvRows.join('\n');
-  document.getElementById('csv-out').textContent = csvText;
+  document.getElementById('csv-out').textContent = csvRows.join('\n');
 
   const el = document.getElementById('exp-summary');
-  if (el) el.textContent = `${all.length} entr${all.length===1?'y':'ies'}, ${cols.length} column${cols.length===1?'':'s'}`;
+  const excCount = excludedRows.size;
+  if (el) el.textContent = `${active.length} of ${all.length} entr${all.length===1?'y':'ies'} · ${cols.length} column${cols.length===1?'':'s'}${excCount?` · ${excCount} excluded`:''}`;
 }
 
 function buildExport() {
@@ -1095,6 +1141,7 @@ function clearHistory() {
   if (!confirm('Clear all saved history? This cannot be undone.')) return;
   if (cookiesOk()) { try { localStorage.removeItem('aa_history'); } catch {} }
   catalogEntries = [];
+  excludedRows = new Set();
   loadHistory();
   document.getElementById('meta-tbody').innerHTML = '';
   document.getElementById('cat-results').style.display = 'none';
