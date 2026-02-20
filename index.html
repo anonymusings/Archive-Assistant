@@ -18,6 +18,7 @@
     --gold: #C9A96E;
     --gold-light: #DEC08A;
     --gold-dark: #9E7830;
+    --gold-medium: #E8D8BA;
     --ink: #2A1A10;
     --ink-muted: #6B4A38;
     --shadow: rgba(42,26,16,0.15);
@@ -172,7 +173,7 @@
   .btn-outline:hover { background: rgba(139,32,53,0.08); }
   .btn-clear-gold {
     display: inline-flex; align-items: center; gap: 7px; padding: 9px 22px;
-    background: transparent; border: 1.5px solid var(--gold-dark); color: var(--ivory-darker);
+    background: transparent; border: 1.5px solid var(--gold); color: var(--gold-dark);
     font-family: 'IM Fell English', serif; font-size: 15px; border-radius: 5px;
     cursor: pointer; transition: all 0.2s;
   }
@@ -243,7 +244,7 @@
     padding: 4px 10px; cursor: pointer; font-family: 'Crimson Pro', serif; font-size: 13px;
     color: var(--text-muted); transition: all 0.18s; user-select: none;
   }
-  .exp-col-toggle.on { background: rgba(139,32,53,0.1); border-color: var(--maroon); color: var(--maroon); }
+  .exp-col-toggle.on { background: var(--ivory); border-color: var(--gold-dark); color: var(--ink); }
   .exp-col-toggle input { display: none; }
   .exp-header-row {
     display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
