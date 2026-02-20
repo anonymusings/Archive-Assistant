@@ -208,9 +208,18 @@
   .file-item .rm:hover { opacity: 1; }
 
   /* ── RESULTS TABLE ── */
-  .results-wrap { margin-top: 22px; overflow-x: auto; border-radius: 6px; border: 1px solid var(--border); }
+  .results-wrap-outer { margin-top: 22px; border-radius: 6px; border: 1px solid var(--border); position: relative; }
+  .results-wrap { overflow-x: auto; overflow-y: auto; max-height: 272px; border-radius: 6px; }
+  .results-wrap-outer::after {
+    content: ''; pointer-events: none;
+    position: absolute; bottom: 0; left: 0; right: 0; height: 48px;
+    background: linear-gradient(to bottom, transparent, var(--surface));
+    border-radius: 0 0 6px 6px;
+    transition: opacity 0.2s;
+  }
+  .results-wrap-outer.at-bottom::after { opacity: 0; }
   .results-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .results-table th { background: var(--maroon); color: var(--ivory-light); font-family: 'Cinzel Decorative', serif; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 14px; text-align: left; white-space: nowrap; }
+  .results-table th { background: var(--maroon); color: var(--ivory-light); font-family: 'Cinzel Decorative', serif; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 14px; text-align: left; white-space: nowrap; position: sticky; top: 0; z-index: 1; }
   .results-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text); font-family: 'Crimson Pro', serif; vertical-align: top; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .results-table tr:nth-child(even) td { background: rgba(201,169,110,0.05); }
   .results-table tr:hover td { background: rgba(139,32,53,0.05); }
@@ -304,6 +313,68 @@
   /* preview outer: full width, no side col */
   .exp-preview-outer { overflow-x: auto; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 12px; max-height: 200px; overflow-y: auto; }
 
+  /* ── SELECT ALL ROWS REVEAL ── */
+  .select-all-rows-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.28s ease, opacity 0.28s ease, margin-bottom 0.28s ease;
+    margin-bottom: 0;
+  }
+  .select-all-rows-wrap.visible {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-bottom: 12px;
+  }
+  .select-all-rows-inner { overflow: hidden; }
+
+  /* ── DOWNLOAD FORMAT REVEAL ── */
+  .dl-format-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.28s ease, opacity 0.28s ease, margin-top 0.28s ease;
+    margin-top: 0;
+  }
+  .dl-format-wrap.visible {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: 12px;
+  }
+  .dl-format-inner { overflow: hidden; }
+  .dl-format-box {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 12px 14px;
+    background: var(--ivory-dark); border: 1px solid var(--border); border-radius: 8px;
+  }
+  .dl-format-label {
+    font-family: 'Cinzel Decorative', serif; font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--maroon); flex-shrink: 0;
+  }
+  .dl-format-cancel {
+    margin-left: auto; background: none; border: none;
+    font-family: 'IM Fell English', serif; font-style: italic;
+    font-size: 13px; color: var(--text-muted); cursor: pointer;
+    padding: 2px 6px; transition: color 0.18s;
+  }
+  .dl-format-cancel:hover { color: var(--maroon); }
+
+  /* ── TAB NAV BAR ── */
+  .tab-navbar {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; padding: 8px 0 4px;
+    font-family: 'IM Fell English', serif; font-style: italic; font-size: 13px;
+  }
+  .tab-navlink {
+    color: var(--maroon); text-decoration: underline; text-underline-offset: 3px;
+    cursor: pointer; background: none; border: none; padding: 0;
+    font-family: inherit; font-style: inherit; font-size: inherit;
+    transition: opacity 0.18s;
+  }
+  [data-theme="dark"] .tab-navlink { color: var(--gold); }
+  .tab-navlink:hover { opacity: 0.7; }
+  .tab-navsep { color: var(--text-muted); user-select: none; }
+
   /* ── PROGRESS ── */
   .prog-wrap { background: var(--ivory-darker); border-radius: 20px; height: 7px; overflow: hidden; margin: 14px 0; }
   .prog-bar { height: 100%; background: linear-gradient(90deg, var(--maroon), var(--gold)); border-radius: 20px; transition: width 0.4s ease; width: 0%; }
@@ -389,7 +460,7 @@
   <!-- COOKIE BANNER -->
   <div class="cookie-banner" id="cookie-banner">
     <span class="cookie-icon">📜</span>
-    <span class="cookie-text">If you accept cookies, your catalog history shall be remembered between visits.</span>
+    <span class="cookie-text">by accepting cookies, your history shall be remembered between visits.</span>
     <div class="cookie-btns">
       <button class="btn-cy" onclick="acceptCookies()">Accept</button>
       <button class="btn-cn" onclick="declineCookies()">Decline</button>
@@ -432,7 +503,8 @@
           <input type="checkbox" id="cat-include-headers" checked>
           Include column headers
         </label>
-        <div class="results-wrap">
+        <div class="results-wrap-outer" id="results-wrap-outer">
+          <div class="results-wrap" id="results-wrap-inner" onscroll="checkResultsScroll()">
           <table class="results-table">
             <thead><tr>
               <th>Date</th><th>Date Posted</th><th>Title</th><th>Author</th>
@@ -441,6 +513,7 @@
             </tr></thead>
             <tbody id="meta-tbody"></tbody>
           </table>
+          </div>
         </div>
         <div class="btn-row" style="margin-top:16px;justify-content:space-between;">
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
@@ -451,6 +524,11 @@
           <button class="btn btn-outline" onclick="clearCatalog()">✕ Clear</button>
         </div>
       </div>
+    </div>
+    <div class="tab-navbar">
+      <button class="tab-navlink" onclick="switchTab('export');buildExport()">Export</button>
+      <span class="tab-navsep"> | </span>
+      <button class="tab-navlink" onclick="switchTab('history')">History</button>
     </div>
   </div>
 
@@ -472,14 +550,20 @@
             <button class="btn btn-sm btn-outline" onclick="toggleAllCols(true)">Select All</button>
             <button class="btn btn-sm btn-outline" onclick="toggleAllCols(false)">Deselect All</button>
           </div>
+          <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+            <label class="exp-toggle-label">
+              <input type="checkbox" id="exp-include-headers" checked onchange="refreshExport()">
+              Include column headers
+            </label>
+          </div>
         </div>
 
-        <!-- Header toggle -->
+        <!-- Edit toggle + summary row -->
         <div class="exp-header-row">
-          <label class="exp-toggle-label">
-            <input type="checkbox" id="exp-include-headers" checked onchange="refreshExport()">
-            Include column headers
-          </label>
+          <div class="edit-toggle-row" onclick="toggleEditMode()" id="edit-toggle-row" style="margin-bottom:0;">
+            <div class="edit-switch-track" id="edit-switch-track"><div class="edit-switch-knob"></div></div>
+            <span id="edit-toggle-label">Edit rows</span>
+          </div>
           <p id="exp-summary" style="font-family:'IM Fell English',serif;font-style:italic;color:var(--gold-dark);font-size:13px;margin:0;"></p>
         </div>
 
@@ -488,10 +572,14 @@
           <table class="exp-preview-table" id="exp-preview-table"></table>
         </div>
 
-        <!-- Edit toggle — below table, above buttons -->
-        <div class="edit-toggle-row" onclick="toggleEditMode()" id="edit-toggle-row">
-          <div class="edit-switch-track" id="edit-switch-track"><div class="edit-switch-knob"></div></div>
-          <span id="edit-toggle-label">Edit rows</span>
+        <!-- Select all rows checkbox — hidden until edit mode on -->
+        <div class="select-all-rows-wrap" id="select-all-rows-wrap">
+          <div class="select-all-rows-inner">
+            <label class="exp-toggle-label" style="padding-top:4px;">
+              <input type="checkbox" id="exp-select-all-rows" checked onchange="toggleSelectAllRows(this.checked)">
+              Select all rows
+            </label>
+          </div>
         </div>
 
         <!-- Hidden data stores -->
@@ -507,19 +595,24 @@
           <button class="btn-clear-gold" onclick="clearExport()">✕ Clear</button>
         </div>
 
-        <!-- Format picker modal -->
-        <div id="dl-modal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(42,26,16,0.45);align-items:center;justify-content:center;">
-          <div style="background:var(--surface);border:1.5px solid var(--gold);border-radius:10px;padding:28px 32px;box-shadow:0 8px 40px var(--shadow);min-width:260px;text-align:center;">
-            <div style="font-family:'Cinzel Decorative',serif;font-size:11px;letter-spacing:0.14em;color:var(--maroon);margin-bottom:18px;">Choose Format</div>
-            <div style="display:flex;gap:12px;justify-content:center;">
+        <!-- Format picker — inline animated reveal -->
+        <div class="dl-format-wrap" id="dl-format-wrap">
+          <div class="dl-format-inner">
+            <div class="dl-format-box">
+              <span class="dl-format-label">Choose format</span>
               <button class="btn" onclick="dlTSV();closeDlModal()">TSV<span style="display:block;font-size:11px;font-style:italic;font-weight:400;opacity:0.75;">Google Sheets</span></button>
               <button class="btn btn-outline" onclick="dlCSV();closeDlModal()">CSV<span style="display:block;font-size:11px;font-style:italic;font-weight:400;opacity:0.75;">Excel &amp; others</span></button>
+              <button class="dl-format-cancel" onclick="closeDlModal()">✕ cancel</button>
             </div>
-            <button onclick="closeDlModal()" style="margin-top:16px;background:none;border:none;font-family:'IM Fell English',serif;font-style:italic;font-size:13px;color:var(--text-muted);cursor:pointer;">Cancel</button>
           </div>
         </div>
 
       </div>
+    </div>
+    <div class="tab-navbar">
+      <button class="tab-navlink" onclick="switchTab('cataloger')">Cataloger</button>
+      <span class="tab-navsep"> | </span>
+      <button class="tab-navlink" onclick="switchTab('history')">History</button>
     </div>
   </div>
 
@@ -539,6 +632,11 @@
         <button class="btn" onclick="exportHistory()">Export All</button>
         <button class="btn btn-outline" onclick="clearHistory()">✕ Clear History</button>
       </div>
+    </div>
+    <div class="tab-navbar">
+      <button class="tab-navlink" onclick="switchTab('cataloger')">Cataloger</button>
+      <span class="tab-navsep"> | </span>
+      <button class="tab-navlink" onclick="switchTab('export');buildExport()">Export</button>
     </div>
   </div>
 
@@ -565,6 +663,14 @@ function toggleTheme() {
   document.getElementById('theme-label').textContent = dark?'Night':'Day';
   if (cookiesOk()) localStorage.setItem('aa_theme', dark?'light':'dark');
 }
+function checkResultsScroll() {
+  const inner = document.getElementById('results-wrap-inner');
+  const outer = document.getElementById('results-wrap-outer');
+  if (!inner || !outer) return;
+  const atBottom = inner.scrollHeight - inner.scrollTop <= inner.clientHeight + 4;
+  outer.classList.toggle('at-bottom', atBottom);
+}
+
 function applyTheme() {
   const saved = cookiesOk()?localStorage.getItem('aa_theme'):null;
   const t = saved||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
@@ -613,6 +719,7 @@ function toast(msg) {
 function today() { return new Date().toISOString().split('T')[0]; }
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function csvEsc(s) { s=String(s||''); return (s.includes(',')||s.includes('"')||s.includes('\n'))?'"'+s.replace(/"/g,'""')+'"':s; }
+function tsvEsc(s) { return String(s||'').replace(/[\t\r\n]+/g,' ').replace(/  +/g,' ').trim(); }
 function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
 function fmtBytes(b) { if(b<1024)return b+' B'; if(b<1048576)return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(1)+' MB'; }
 function cleanName(n) { return n.replace(/\.(epub|pdf)$/i,'').replace(/[-_]/g,' ').trim(); }
@@ -716,7 +823,7 @@ function parseAO3Page(html, id) {
 
   const sumEl=doc.querySelector('.summary.module blockquote')||doc.querySelector('.summary.module');
   let summary='N/A';
-  if(sumEl){const raw=sumEl.textContent.replace(/\s{2,}/g,' ').trim();if(raw.length>2)summary=raw.length>600?raw.substring(0,597)+'…':raw;}
+  if(sumEl){const raw=sumEl.textContent.replace(/\s{2,}/g,' ').trim();if(raw.length>2)summary=raw;}
   return {
     id, updatedAt, title, author, words, datePosted, summary,
     fandom:       tags('fandom'),
@@ -786,6 +893,11 @@ function clearExport() {
   if (!confirm('Clear all entries? This will reset the catalog and history.')) return;
   catalogEntries = [];
   excludedRows = new Set();
+  editModeOn = false;
+  const wrap = document.getElementById('select-all-rows-wrap');
+  if (wrap) wrap.classList.remove('visible');
+  const dlWrap = document.getElementById('dl-format-wrap');
+  if (dlWrap) dlWrap.classList.remove('visible');
   if (cookiesOk()) { try { localStorage.removeItem('aa_history'); } catch {} }
   document.getElementById('exp-content').style.display = 'none';
   document.getElementById('exp-empty').style.display = 'block';
@@ -914,7 +1026,7 @@ async function extractEpub(file) {
           .replace(/\|\|\|/g, ' ').replace(/<[^>]*>/g, '')
           .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'")
           .replace(/\s{2,}/g, ' ').replace(/^[\s,]+|[\s,]+$/g, '').trim();
-        res.summary = summaryClean ? (summaryClean.length > 600 ? summaryClean.substring(0,597) + '…' : summaryClean) : 'N/A';
+        res.summary = summaryClean || 'N/A';
       }
     }
 
@@ -973,12 +1085,14 @@ async function extractPdf(file) {
       fullText+=pageText+' ';
     }
 
-    // --- Field extraction: line-accumulator approach ---
-    // Handles both inline ("Relationship: A/B") and two-column ("Relationship:\nA/B") layouts.
-    // Anchors both target and stop detection to line starts, preventing false matches
-    // when anchor words appear inside tag values (e.g. "Original Male Character/Original Male Character").
+    // --- Field extraction: line-accumulator with smart joining ---
+    // Handles both inline ("Relationship: A/B") and two-column ("Relationships:\nA/B") PDF layouts.
+    // Anchors target + stop detection to line starts to prevent false matches inside tag values.
+    // Smart joining: detects wrapped continuation lines (ending in & or word char) vs new entries.
+    // Strips AO3 UI artifact lines (e.g. "Apply" that leaks after Archive Warnings field).
     const PDF_ANCHORS=['Rating:','Archive Warning','Categor','Fandom','Relationship','Character','Additional Tags','Language:','Stats:','Summary:','Words:','Series:','Collections:'];
     const anchorLineRe = new RegExp('^(?:'+PDF_ANCHORS.map(a=>a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','i');
+    const PDF_STRIP_LINES = new Set(['apply','choose not to warn','not choose to warn']);
     function getPdfField(text, target) {
       const targetRe = new RegExp('^'+target+'(?:y|ies|s)?\\s*:?\\s*(.*)','i');
       const lines = text.split('\n');
@@ -990,11 +1104,21 @@ async function extractPdf(file) {
           if (m) { collecting = true; if (m[1].trim()) parts.push(m[1].trim()); }
         } else {
           if (anchorLineRe.test(t) && !targetRe.test(t)) break;
+          if (PDF_STRIP_LINES.has(t.toLowerCase())) continue; // skip AO3 UI artifacts
           parts.push(t);
         }
       }
       if (!parts.length) return 'N/A';
-      return parts.join(', ').replace(/\s{2,}/g,' ').replace(/^[,\s]+|[,\s]+$/g,'').trim() || 'N/A';
+      // Smart join: if prev part ends with & or - or a word char (wrapped mid-entry),
+      // join with space. Otherwise join with ', ' (new list entry).
+      let result = parts[0];
+      for (let i = 1; i < parts.length; i++) {
+        const prev = result.trimEnd();
+        result = /[&\-]$/.test(prev) || /[a-zA-Z0-9\(]$/.test(prev)
+          ? prev + ' ' + parts[i]
+          : prev + ', ' + parts[i];
+      }
+      return result.replace(/\s{2,}/g,' ').replace(/^[,\s]+|[,\s]+$/g,'').trim() || 'N/A';
     }
 
     const fandom        = getPdfField(headerText,'Fandom');
@@ -1009,7 +1133,7 @@ async function extractPdf(file) {
     let summary = 'N/A';
     const sPat = PDF_SUM_STOPS.map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
     const sM = headerText.match(new RegExp('Summary\\s*:?\\s*([\\s\\S]+?)(?=\\s*(?:'+sPat+')|$)','i'));
-    if(sM){const raw=sM[1].replace(/\n+/g,' ').replace(/\s{2,}/g,' ').replace(/^[\s,]+|[\s,]+$/g,'').trim();if(raw.length>2)summary=raw.length>600?raw.substring(0,597)+'…':raw;}
+    if(sM){const raw=sM[1].replace(/\n+/g,' ').replace(/\s{2,}/g,' ').replace(/^[\s,]+|[\s,]+$/g,'').trim();if(raw.length>2)summary=raw;}
 
     // --- AO3 URL: scan header text first, then full metadata ---
     const urlM = headerText.match(/https?:\/\/archiveofourown\.org\/works\/\d+/i)
@@ -1054,7 +1178,7 @@ function renderMetaTable(entries) {
     }).join('');
     tbody.appendChild(tr);
   });
-  document.getElementById('cat-results').style.display='block';
+  document.getElementById('cat-results').style.display='block'; checkResultsScroll();
 }
 
 // ════ EXPORT ════
@@ -1114,13 +1238,34 @@ function toggleEditMode() {
   editModeOn = !editModeOn;
   const track = document.getElementById('edit-switch-track');
   const label = document.getElementById('edit-toggle-label');
+  const wrap = document.getElementById('select-all-rows-wrap');
   if (track) track.classList.toggle('on', editModeOn);
   if (label) label.textContent = editModeOn ? 'Edit rows (click a row to exclude/include)' : 'Edit rows';
+  if (wrap) wrap.classList.toggle('visible', editModeOn);
   refreshExport();
 }
 function handleRowClick(idx) {
   if (!editModeOn) return;
   toggleExclude(idx);
+  syncSelectAllCheckbox();
+}
+
+function toggleSelectAllRows(checked) {
+  const all = getAllEntries();
+  if (checked) {
+    excludedRows.clear();
+  } else {
+    all.forEach((_, i) => excludedRows.add(i));
+  }
+  refreshExport();
+}
+
+function syncSelectAllCheckbox() {
+  const cb = document.getElementById('exp-select-all-rows');
+  if (!cb) return;
+  const total = getAllEntries().length;
+  cb.checked = excludedRows.size < total;
+  cb.indeterminate = excludedRows.size > 0 && excludedRows.size < total;
 }
 
 function getExportEntries() {
@@ -1157,8 +1302,8 @@ function refreshExport() {
   const active = getExportEntries();
 
   // TSV
-  const tsvRows = active.map(e => cols.map(c => e[c]||'N/A').join('\t'));
-  if (withHdrs) tsvRows.unshift(hdrs.join('\t'));
+  const tsvRows = active.map(e => cols.map(c => tsvEsc(e[c]||'N/A')).join('\t'));
+  if (withHdrs) tsvRows.unshift(hdrs.map(tsvEsc).join('\t'));
   document.getElementById('tsv-out').textContent = tsvRows.join('\n');
 
   // CSV
@@ -1169,6 +1314,7 @@ function refreshExport() {
   const el = document.getElementById('exp-summary');
   const excCount = excludedRows.size;
   if (el) el.textContent = `${active.length} of ${all.length} entr${all.length===1?'y':'ies'} · ${cols.length} column${cols.length===1?'':'s'}${excCount?` · ${excCount} excluded`:''}`;
+  syncSelectAllCheckbox();
 }
 
 function buildExport() {
@@ -1178,11 +1324,17 @@ function buildExport() {
   initColToggles();
   refreshExport();
 }
-function dlChoose(){document.getElementById('dl-modal').style.display='flex';}
-function closeDlModal(){document.getElementById('dl-modal').style.display='none';}
+function dlChoose(){
+  const wrap = document.getElementById('dl-format-wrap');
+  if (wrap) wrap.classList.toggle('visible');
+}
+function closeDlModal(){
+  const wrap = document.getElementById('dl-format-wrap');
+  if (wrap) wrap.classList.remove('visible');
+}
 function copyTSV(){navigator.clipboard.writeText(document.getElementById('tsv-out').textContent).then(()=>toast('TSV copied — paste into Google Sheets ✦'));}
 function copyCSV(){navigator.clipboard.writeText(document.getElementById('csv-out').textContent).then(()=>toast('CSV copied ✦'));}
-function quickCopyTSV(){const all=getAllEntries();if(!all.length){toast('No entries to copy yet.');return;}const withHdrs=document.getElementById('cat-include-headers')?.checked!==false;const rows=all.map(e=>COLS.map(c=>e[c]||'N/A').join('\t'));if(withHdrs)rows.unshift(HDRS.join('\t'));navigator.clipboard.writeText(rows.join('\n')).then(()=>toast('TSV copied — paste into Google Sheets ✦'));}
+function quickCopyTSV(){const all=getAllEntries();if(!all.length){toast('No entries to copy yet.');return;}const withHdrs=document.getElementById('cat-include-headers')?.checked!==false;const rows=all.map(e=>COLS.map(c=>tsvEsc(e[c]||'N/A')).join('\t'));if(withHdrs)rows.unshift(HDRS.map(tsvEsc).join('\t'));navigator.clipboard.writeText(rows.join('\n')).then(()=>toast('TSV copied — paste into Google Sheets ✦'));}
 function quickCopyCSV(){const all=getAllEntries();if(!all.length){toast('No entries to copy yet.');return;}const withHdrs=document.getElementById('cat-include-headers')?.checked!==false;const rows=all.map(e=>COLS.map(c=>csvEsc(e[c]||'N/A')).join(','));if(withHdrs)rows.unshift(HDRS.map(csvEsc).join(','));navigator.clipboard.writeText(rows.join('\n')).then(()=>toast('CSV copied ✦'));}
 function dlTSV(){dlText(document.getElementById('tsv-out').textContent,'archive-assistant.tsv','text/tab-separated-values');}
 function dlCSV(){dlText(document.getElementById('csv-out').textContent,'archive-assistant.csv','text/csv');}
