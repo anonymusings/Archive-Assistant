@@ -323,259 +323,6 @@
   .dropzone.compact .dropzone-default-text { display: none; }
   .dropzone.compact .dropzone-compact-text { display: block; }
   .dropzone-compact-text { display: none; font-size: 12px; line-height: 1.3; }
-  
-  /* ── AO3 IMPORT LINK ── */
-  .ao3-import-link {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    color: var(--text-muted);
-    text-decoration: underline;
-    cursor: pointer;
-    margin-top: 10px;
-    display: inline-block;
-    transition: color 0.2s;
-  }
-  .ao3-import-link:hover { color: var(--maroon); }
-  
-  /* ── AO3 MODAL ── */
-  .ao3-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-  }
-  .ao3-modal-overlay.visible {
-    opacity: 1;
-    pointer-events: all;
-  }
-  .ao3-modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    box-shadow: 0 8px 32px var(--shadow);
-    max-width: 500px;
-    width: 90%;
-    max-height: 85vh;
-    overflow-y: auto;
-    position: relative;
-  }
-  .ao3-modal-header {
-    padding: 20px 24px 12px;
-    border-bottom: 1px solid var(--border);
-    position: relative;
-  }
-  .ao3-modal-title {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 18px;
-    color: var(--gold-dark);
-    margin: 0;
-  }
-  .ao3-modal-close {
-    position: absolute;
-    top: 16px;
-    right: 20px;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 24px;
-    line-height: 1;
-    padding: 4px 8px;
-    opacity: 0.6;
-    transition: opacity 0.2s;
-  }
-  .ao3-modal-close:hover { opacity: 1; }
-  .ao3-modal-body {
-    padding: 24px;
-  }
-  .ao3-input-group {
-    margin-bottom: 16px;
-  }
-  .ao3-url-input-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  .ao3-url-input {
-    width: 100%;
-    padding: 10px 36px 10px 12px;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Crimson Pro', Georgia, serif;
-    font-size: 15px;
-    transition: border-color 0.2s;
-  }
-  .ao3-url-input:focus {
-    outline: none;
-    border-color: var(--maroon);
-  }
-  .ao3-url-clear {
-    position: absolute;
-    right: 8px;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 20px;
-    line-height: 1;
-    padding: 4px;
-    opacity: 0;
-    transition: opacity 0.2s;
-    pointer-events: none;
-  }
-  .ao3-url-input:not(:placeholder-shown) + .ao3-url-clear {
-    opacity: 0.5;
-    pointer-events: all;
-  }
-  .ao3-url-clear:hover { opacity: 1; }
-  
-  /* ── BATCH MODE TOGGLE ── */
-  .ao3-batch-toggle-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-    font-family: 'IM Fell English', serif;
-    font-style: italic;
-    font-size: 14px;
-    color: var(--text-muted);
-  }
-  .ao3-batch-switch-track {
-    width: 32px;
-    height: 18px;
-    background: var(--ivory-darker);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    position: relative;
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
-    flex-shrink: 0;
-  }
-  .ao3-batch-switch-track:hover { border-color: var(--gold); }
-  .ao3-batch-switch-track.on {
-    background: var(--maroon);
-    border-color: var(--maroon-deep);
-  }
-  .ao3-batch-switch-knob {
-    width: 12px;
-    height: 12px;
-    background: var(--ivory-light);
-    border-radius: 50%;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    transition: transform 0.2s;
-  }
-  .ao3-batch-switch-track.on .ao3-batch-switch-knob {
-    transform: translateX(14px);
-  }
-  [data-theme="dark"] .ao3-batch-switch-track {
-    background: #3A2818;
-    border-color: #5A3C20;
-  }
-  [data-theme="dark"] .ao3-batch-switch-knob {
-    background: #8A7A6A;
-  }
-  
-  /* ── BATCH LIST ── */
-  .ao3-batch-list {
-    margin: 16px 0;
-    display: none;
-  }
-  .ao3-batch-list.visible { display: block; }
-  .ao3-batch-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    margin-bottom: 8px;
-  }
-  .ao3-batch-num {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 11px;
-    color: var(--gold-dark);
-    min-width: 20px;
-  }
-  .ao3-batch-url {
-    flex: 1;
-    font-size: 13px;
-    color: var(--text);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .ao3-batch-error {
-    flex: 1;
-    font-family: 'IM Fell English', serif;
-    font-style: italic;
-    font-size: 12px;
-    color: var(--maroon);
-  }
-  .ao3-batch-remove {
-    background: none;
-    border: none;
-    color: var(--maroon);
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 1;
-    padding: 4px;
-    opacity: 0.5;
-    flex-shrink: 0;
-  }
-  .ao3-batch-remove:hover { opacity: 1; }
-  
-  .ao3-fetch-btn {
-    width: 100%;
-    padding: 10px 22px;
-    cursor: pointer;
-    font-family: 'IM Fell English', serif;
-    font-size: 15px;
-    background: var(--maroon);
-    color: var(--ivory-light);
-    border: 1px solid var(--maroon-deep);
-    border-radius: 5px;
-    transition: background 0.2s;
-  }
-  .ao3-fetch-btn:hover { background: var(--maroon-light); }
-  .ao3-fetch-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  .ao3-fetch-status {
-    font-family: 'IM Fell English', serif;
-    font-style: italic;
-    font-size: 13px;
-    color: var(--text-muted);
-    text-align: center;
-    margin-top: 12px;
-    display: none;
-  }
-  .ao3-fetch-status.visible { display: block; }
-  
-  /* ── URL FILE TYPE BADGE ── */
-  .file-type.url {
-    background: #D6D0C7;
-    color: var(--maroon);
-  }
-  [data-theme="dark"] .file-type.url {
-    background: #3A3530;
-    color: #B8385A;
-  }
   .dropzone.compact strong { display: block; line-height: 1.2; font-size: 11px; }
   .dropzone.compact .dropzone-compact-text { margin-top: 2px; }
 
@@ -849,16 +596,8 @@
   .prog-lbl { font-family: 'IM Fell English', serif; font-style: italic; font-size: 13px; color: var(--text-muted); text-align: center; }
 
   /* ── DOWNLOAD ROW ── */
-  .dl-row {
-    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
-    padding: 12px 16px; background: var(--ivory-dark);
-    border: 1px solid var(--border); border-left: 3px solid var(--maroon);
-    border-radius: 0 6px 6px 0; margin-bottom: 8px;
-  }
-  .dl-title { flex: 1; font-weight: 600; font-size: 15px; min-width: 100px; }
-  .dl-author { font-style: italic; color: var(--text-muted); font-size: 14px; flex-shrink: 0; }
 
-  /* ── HISTORY ENTRY ── */
+  //* ── HISTORY ENTRY ── */
   .hist-entry {
     background: var(--ivory-dark); border: 1px solid var(--border);
     border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0;
@@ -987,43 +726,6 @@
 </head>
 <body>
 
-  <!-- AO3 IMPORT MODAL -->
-  <div class="ao3-modal-overlay" id="ao3-modal-overlay" onclick="if(event.target===this) closeAo3Modal()">
-    <div class="ao3-modal">
-      <div class="ao3-modal-header">
-        <h2 class="ao3-modal-title">Import from AO3</h2>
-        <button class="ao3-modal-close" onclick="closeAo3Modal()">×</button>
-      </div>
-      <div class="ao3-modal-body">
-        <div class="ao3-input-group">
-          <div class="ao3-url-input-wrap">
-            <input 
-              type="text" 
-              class="ao3-url-input" 
-              id="ao3-url-input"
-              placeholder="https://archiveofourown.org/works/..." 
-              onkeydown="if(event.key==='Enter') addUrlToBatch()"
-            >
-            <button class="ao3-url-clear" onclick="clearUrlInput()">×</button>
-          </div>
-        </div>
-        
-        <div class="ao3-batch-toggle-row">
-          <div class="ao3-batch-switch-track" id="ao3-batch-switch" onclick="toggleBatchMode()">
-            <div class="ao3-batch-switch-knob"></div>
-          </div>
-          <span>batch mode</span>
-        </div>
-        
-        <div class="ao3-batch-list" id="ao3-batch-list"></div>
-        
-        <button class="ao3-fetch-btn" id="ao3-fetch-btn" onclick="fetchAo3Works()">Fetch</button>
-        <div class="ao3-fetch-status" id="ao3-fetch-status"></div>
-      </div>
-    </div>
-  </div>
-
-
 <button class="theme-toggle" onclick="toggleTheme()">
   <span id="theme-icon">🌙</span> <span id="theme-label">Night</span>
 </button>
@@ -1068,7 +770,6 @@
         <strong style="font-family:'Cinzel Decorative',serif;font-size:12px;letter-spacing:0.12em;">PASS ME THE TOME!</strong>
         <p class="dropzone-default-text" style="font-size:13px;margin-top:6px;">drop or click to browse <em>.epub</em> and <em>.pdf</em> files up to 100 files / 100 MB per batch</p>
         <p class="dropzone-compact-text" style="margin-top:4px;">keep adding files — drag and drop or click to browse</p>
-        <a class="ao3-import-link" onclick="event.stopPropagation(); openAo3Modal()">OR IMPORT FROM AO3</a>
       </div>
       <div class="file-list" id="file-list"></div>
       <div class="btn-row" id="cat-btn-row" style="display:none">
@@ -1250,360 +951,6 @@ const HDRS = ['Date','Date Posted','Title','Author','Fandom','Relationships','Ch
 const HISTORY_EXCLUDED_COLS = new Set(['series','rating']);
 let catalogEntries = [];
 let uploadedFiles = [];
-let ao3UrlItems = []; // Stores URL-based entries with metadata
-let batchUrls = []; // Batch mode URL list
-let batchModeOn = false;
-
-// ════ AO3 URL FETCH ════
-function openAo3Modal() {
-  document.getElementById('ao3-modal-overlay').classList.add('visible');
-  document.getElementById('ao3-url-input').focus();
-}
-
-function closeAo3Modal() {
-  document.getElementById('ao3-modal-overlay').classList.remove('visible');
-  document.getElementById('ao3-url-input').value = '';
-  document.getElementById('ao3-fetch-status').classList.remove('visible');
-  document.getElementById('ao3-fetch-status').textContent = '';
-  batchUrls = [];
-  batchModeOn = false;
-  document.getElementById('ao3-batch-switch').classList.remove('on');
-  renderBatchList();
-}
-
-function clearUrlInput() {
-  document.getElementById('ao3-url-input').value = '';
-  document.getElementById('ao3-url-input').focus();
-}
-
-function toggleBatchMode() {
-  batchModeOn = !batchModeOn;
-  document.getElementById('ao3-batch-switch').classList.toggle('on', batchModeOn);
-  document.getElementById('ao3-batch-list').classList.toggle('visible', batchModeOn);
-  if (!batchModeOn) {
-    batchUrls = [];
-    renderBatchList();
-  }
-}
-
-function addUrlToBatch() {
-  if (!batchModeOn) return;
-  const input = document.getElementById('ao3-url-input');
-  const url = input.value.trim();
-  if (!url) return;
-  
-  // Basic URL validation
-  if (!url.includes('archiveofourown.org/works/')) {
-    toast('Please enter a valid AO3 work URL.');
-    return;
-  }
-  
-  if (batchUrls.length >= 10) {
-    toast('Maximum 10 URLs in batch mode.');
-    return;
-  }
-  
-  if (batchUrls.some(item => item.url === url)) {
-    toast('This URL is already in the batch.');
-    return;
-  }
-  
-  batchUrls.push({ url, error: null });
-  input.value = '';
-  renderBatchList();
-}
-
-function removeBatchUrl(idx) {
-  batchUrls.splice(idx, 1);
-  renderBatchList();
-}
-
-function renderBatchList() {
-  const list = document.getElementById('ao3-batch-list');
-  if (!batchUrls.length) {
-    list.innerHTML = '';
-    return;
-  }
-  
-  list.innerHTML = batchUrls.map((item, i) => `
-    <div class="ao3-batch-item">
-      <span class="ao3-batch-num">${i + 1}.</span>
-      ${item.error 
-        ? `<span class="ao3-batch-error">${esc(item.error)}</span>` 
-        : `<span class="ao3-batch-url">${esc(item.url)}</span>`
-      }
-      <button class="ao3-batch-remove" onclick="removeBatchUrl(${i})">×</button>
-    </div>
-  `).join('');
-}
-
-async function fetchAo3Works() {
-  const input = document.getElementById('ao3-url-input');
-  const statusEl = document.getElementById('ao3-fetch-status');
-  const btn = document.getElementById('ao3-fetch-btn');
-  
-  let urlsToFetch = [];
-  
-  if (batchModeOn) {
-    if (batchUrls.length === 0) {
-      toast('Add at least one URL to the batch.');
-      return;
-    }
-    urlsToFetch = batchUrls.map(item => item.url);
-  } else {
-    const url = input.value.trim();
-    if (!url) {
-      toast('Please enter an AO3 work URL.');
-      return;
-    }
-    if (!url.includes('archiveofourown.org/works/')) {
-      toast('Please enter a valid AO3 work URL.');
-      return;
-    }
-    urlsToFetch = [url];
-  }
-  
-  btn.disabled = true;
-  statusEl.classList.add('visible');
-  statusEl.textContent = 'patience is dead but she lives in our hearts.';
-  
-  let successCount = 0;
-  
-  for (let i = 0; i < urlsToFetch.length; i++) {
-    const url = urlsToFetch[i];
-    
-    if (batchModeOn && urlsToFetch.length > 1) {
-      statusEl.textContent = `Fetching ${i + 1} of ${urlsToFetch.length}...`;
-    }
-    
-    try {
-      const workId = extractAo3WorkId(url);
-      if (!workId) {
-        throw new Error('Invalid AO3 URL');
-      }
-
-      // Use the same proven fetchAO3Meta pipeline (Cloudflare Worker → parseAO3Page)
-      const raw = await fetchAO3Meta(workId);
-
-      if (raw.title === `Work #${workId}`) {
-        throw new Error('Could not retrieve work — it may be restricted or unavailable.');
-      }
-
-      const metadata = {
-        date:          today(),
-        datePosted:    raw.datePosted    || 'N/A',
-        title:         raw.title        || 'N/A',
-        author:        raw.author       || 'N/A',
-        fandom:        raw.fandom       || 'N/A',
-        relationships: raw.relationships|| 'N/A',
-        characters:    raw.characters   || 'N/A',
-        tags:          raw.tags         || 'N/A',
-        warning:       raw.warning      || 'N/A',
-        words:         raw.words        || 'N/A',
-        category:      raw.category     || 'N/A',
-        rating:        raw.rating       || 'N/A',
-        ao3Link:       raw.ao3Link      || `https://archiveofourown.org/works/${workId}`,
-        summary:       raw.summary      || 'N/A',
-        series:        raw.series       || 'N/A',
-        fileType:      'url',
-        chapters:      'N/A',
-        status:        'N/A',
-        language:      'N/A',
-        dateUpdated:   'N/A'
-      };
-      
-      // Add to URL items array
-      ao3UrlItems.push(metadata);
-      successCount++;
-      
-      // Update batch list if in batch mode
-      if (batchModeOn) {
-        const batchItem = batchUrls.find(item => item.url === url);
-        if (batchItem) {
-          batchItem.error = null; // Clear any previous error
-        }
-      }
-      
-      // Small delay between requests to avoid rate limiting
-      if (i < urlsToFetch.length - 1) {
-        await sleep(500);
-      }
-      
-    } catch (err) {
-      console.error('Fetch error:', err);
-      const errorMsg = `Failed: ${err.message}`;
-      
-      if (batchModeOn) {
-        const batchItem = batchUrls.find(item => item.url === url);
-        if (batchItem) {
-          batchItem.error = errorMsg;
-        }
-      } else {
-        statusEl.textContent = errorMsg;
-        btn.disabled = false;
-        setTimeout(() => statusEl.classList.remove('visible'), 3000);
-        return;
-      }
-    }
-  }
-  
-  // Update display
-  if (batchModeOn) {
-    renderBatchList();
-  }
-  
-  btn.disabled = false;
-  
-  if (successCount > 0) {
-    renderFileList();
-    closeAo3Modal();
-    toast(`${successCount} work(s) imported from AO3 ✦`);
-  } else {
-    statusEl.textContent = 'All URLs failed to fetch.';
-    setTimeout(() => statusEl.classList.remove('visible'), 3000);
-  }
-}
-
-function extractAo3WorkId(url) {
-  const match = url.match(/works\/(\d+)/);
-  return match ? match[1] : null;
-}
-
-function parseAo3Atom(xmlText, originalUrl) {
-  const parser = new DOMParser();
-  const xml = parser.parseFromString(xmlText, 'text/xml');
-  
-  // Helper to get text content safely
-  const getText = (selector) => {
-    const el = xml.querySelector(selector);
-    return el ? el.textContent.trim() : 'N/A';
-  };
-  
-  const getCategories = (schemePattern) => {
-    const categories = Array.from(xml.querySelectorAll('category'));
-    const matches = categories.filter(cat => {
-      const scheme = cat.getAttribute('scheme') || '';
-      return scheme.includes(schemePattern);
-    });
-    
-    if (!matches.length) return 'N/A';
-    
-    return matches.map(cat => {
-      return cat.getAttribute('label') || cat.getAttribute('term') || '';
-    }).filter(Boolean).join(', ');
-  };
-  
-  // Extract metadata
-  const title = getText('entry > title') || 'N/A';
-  const author = getText('entry > author > name') || 'N/A';
-  const summary = getText('entry > summary') || 'N/A';
-  
-  // Categories
-  const fandom = getCategories('fandoms');
-  const relationships = getCategories('relationships');
-  const characters = getCategories('characters');
-  const tags = getCategories('freeforms');
-  const rating = getCategories('ratings');
-  const warning = getCategories('warnings');
-  const category = getCategories('categories');
-  
-  // Dates
-  const published = getText('entry > published') || 'N/A';
-  const updated = getText('entry > updated') || 'N/A';
-  const datePosted = published !== 'N/A' ? published.split('T')[0] : 'N/A';
-  
-  // Stats from summary div
-  const summaryDiv = xml.querySelector('entry > summary');
-  let words = 'N/A';
-  let chapters = 'N/A';
-  let status = 'N/A';
-  let language = 'N/A';
-  
-  if (summaryDiv) {
-    const summaryText = summaryDiv.textContent;
-    
-    // Words
-    const wordMatch = summaryText.match(/Words:\s*([\d,]+)/);
-    if (wordMatch) words = wordMatch[1];
-    
-    // Chapters
-    const chapMatch = summaryText.match(/Chapters:\s*(\d+\/\d+|\d+)/);
-    if (chapMatch) {
-      chapters = chapMatch[1];
-      if (chapMatch[1].includes('/')) {
-        const [current, total] = chapMatch[1].split('/');
-        status = current === total ? 'Complete' : 'In Progress';
-      }
-    }
-    
-    // Language
-    const langMatch = summaryText.match(/Language:\s*([^\n]+)/);
-    if (langMatch) language = langMatch[1].trim();
-  }
-  
-  // Work URL
-  const workId = extractAo3WorkId(originalUrl);
-  const ao3Link = workId ? `https://archiveofourown.org/works/${workId}` : originalUrl;
-  
-  // Series - try to extract from summary or other fields
-  const series = 'N/A'; // Atom feed doesn't reliably provide series info
-  
-  return {
-    date: today(),
-    datePosted,
-    title: cleanAo3Text(title),
-    author: cleanAo3Text(author),
-    fandom: cleanAo3Text(fandom),
-    relationships: cleanAo3Text(relationships),
-    characters: cleanAo3Text(characters),
-    tags: cleanAo3Text(tags),
-    warning: cleanAo3Text(warning),
-    words: cleanAo3Text(words),
-    category: cleanAo3Text(category),
-    rating: cleanAo3Text(rating),
-    ao3Link,
-    summary: cleanAo3Text(summary),
-    series: cleanAo3Text(series),
-    fileType: 'url',
-    chapters: cleanAo3Text(chapters),
-    status: cleanAo3Text(status),
-    language: cleanAo3Text(language),
-    dateUpdated: updated !== 'N/A' ? updated.split('T')[0] : 'N/A'
-  };
-}
-
-function cleanAo3Text(str) {
-  if (!str || str === 'N/A') return 'N/A';
-  return str
-    .replace(/<[^>]*>/g, '')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/\s+/g, ' ')
-    .trim() || 'N/A';
-}
-
-function sendUrlToExport(idx) {
-  const entry = ao3UrlItems[idx];
-  if (!entry) return toast('Entry not found.');
-  
-  // Add to catalog entries if not already present
-  if (!catalogEntries.find(x => x.title === entry.title && x.author === entry.author)) {
-    catalogEntries.push(entry);
-  }
-  
-  switchTab('export');
-  buildExport();
-  toast(`"${entry.title}" sent to Export ✦`);
-}
-
-function removeUrlItem(idx) {
-  ao3UrlItems.splice(idx, 1);
-  renderFileList();
-}
-
 
 // THEME
 function toggleTheme() {
@@ -1682,126 +1029,69 @@ function loadScript(src) {
   });
 }
 
-// ════ DOWNLOADER ════
+// ════ AO3 FETCH (via Cloudflare Worker) ════
+const AO3_WORKER = 'https://ao3-proxy-2.archiveassistant.workers.dev';
 const AO3_RE = /https?:\/\/archiveofourown\.org\/works\/(\d+)/g;
 
-// Ported from bot: strip special chars, replace spaces with underscores for clean filenames
-function cleanTitle(title) {
-  return title.replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_') || 'work';
+function extractAo3WorkId(url) {
+  const match = url.match(/works\/(\d+)/);
+  return match ? match[1] : null;
 }
-
-async function processLinks() {
-  const raw = document.getElementById('ao3-links').value.trim();
-  if (!raw) return toast('Paste at least one AO3 link.');
-  const ids = [...new Set([...raw.matchAll(AO3_RE)].map(m=>m[1]))];
-  if (!ids.length) return toast('No valid AO3 work links found.');
-  const prog=document.getElementById('link-progress'), bar=document.getElementById('link-bar'), lbl=document.getElementById('link-lbl');
-  prog.style.display='block'; document.getElementById('dl-results').style.display='none'; document.getElementById('dl-list').innerHTML='';
-  const fetched=[];
-  for (let i=0;i<ids.length;i++) {
-    bar.style.width=(i/ids.length*100)+'%'; lbl.textContent=`Fetching work ${i+1} of ${ids.length}…`;
-    fetched.push(await fetchAO3Meta(ids[i]));
-    if (i<ids.length-1) await sleep(350);
-  }
-  bar.style.width='100%'; lbl.textContent='Done!';
-  setTimeout(()=>prog.style.display='none',600);
-  const list=document.getElementById('dl-list');
-  fetched.forEach(m=>{
-    // Build a clean filename for the AO3 download URL — mirrors bot's cleanTitle logic
-    const fetchFailed = m.title===`Work #${m.id}`;
-    const safeTitle = cleanTitle(!fetchFailed ? m.title : `work_${m.id}`);
-    const epubUrl=`https://archiveofourown.org/downloads/${m.id}/${encodeURIComponent(safeTitle)}.epub?updated_at=${m.updatedAt}`;
-    const pdfUrl=`https://archiveofourown.org/downloads/${m.id}/${encodeURIComponent(safeTitle)}.pdf?updated_at=${m.updatedAt}`;
-    const row=document.createElement('div'); row.className='dl-row';
-    row.innerHTML=`<span class="dl-title">${esc(m.title)}${fetchFailed?` <span style="font-size:11px;color:var(--gold-dark);font-style:italic;">(metadata unavailable — links still work)</span>`:''}</span><span class="dl-author">${m.author!=='N/A'?'by '+esc(m.author):''}</span><a class="btn btn-sm" href="${esc(epubUrl)}" target="_blank">⬇ EPUB</a><a class="btn btn-sm btn-gold" href="${esc(pdfUrl)}" target="_blank">⬇ PDF</a><button class="btn btn-sm btn-outline" onclick="addOne(${JSON.stringify(m).replace(/"/g,'&quot;')})">+ Catalog</button>`;
-    list.appendChild(row);
-  });
-  document.getElementById('bulk-row').style.display=fetched.length>1?'flex':'none';
-  window._fm=fetched; document.getElementById('dl-results').style.display='block';
-}
-
-// ── Cloudflare Worker proxy — fetches AO3 pages server-side, no CORS issues ──
-const AO3_WORKER = 'https://ao3-proxy-2.archiveassistant.workers.dev';
 
 async function fetchAO3Meta(id) {
   try {
     const res = await fetch(`${AO3_WORKER}?id=${id}`, {
       signal: AbortSignal.timeout(20000)
     });
-
-    // Worker returns JSON error objects for known failure cases
     if (!res.ok) {
       let msg = `HTTP ${res.status}`;
       try { const j = await res.json(); msg = j.error || msg; } catch {}
       throw new Error(msg);
     }
-
     const html = await res.text();
-
-    if (!html || html.length < 500) {
-      throw new Error('Empty response from worker');
-    }
-
+    if (!html || html.length < 500) throw new Error('Empty response from worker');
     const parsed = parseAO3Page(html, id);
     if (parsed.title && parsed.title !== `Work #${id}`) return parsed;
     throw new Error('Could not parse work page');
-
   } catch (err) {
     console.error('fetchAO3Meta failed:', err.message);
-    return {id,title:`Work #${id}`,author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',rating:'N/A',series:'N/A',datePosted:'N/A',ao3Link:`https://archiveofourown.org/works/${id}`,updatedAt:'',summary:'N/A'};
+    return {id, title:`Work #${id}`, author:'N/A', fandom:'N/A', relationships:'N/A', characters:'N/A', tags:'N/A', warning:'N/A', words:'N/A', category:'N/A', rating:'N/A', series:'N/A', datePosted:'N/A', ao3Link:`https://archiveofourown.org/works/${id}`, updatedAt:'', summary:'N/A'};
   }
 }
+
 function parseAO3Page(html, id) {
-  const doc=new DOMParser().parseFromString(html,'text/html');
-  // Helper: collect tag text from a CSS class, with fallback selectors
-  function tags(cls, fallbackCls) {
-    let els=[...doc.querySelectorAll(`.${cls} a.tag`)];
-    if (!els.length && fallbackCls) els=[...doc.querySelectorAll(`.${fallbackCls} a.tag`)];
-    return els.length ? els.map(x=>x.textContent.trim()).join(', ') : 'N/A';
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  function tags(cls) {
+    const els = [...doc.querySelectorAll(`.${cls} a.tag`)];
+    return els.length ? els.map(x => x.textContent.trim()).join(', ') : 'N/A';
   }
-  // Title: try the heading first, then <title> tag as last resort
-  const titleEl=doc.querySelector('h2.title.heading, h2.title');
-  let title=titleEl?.textContent.trim()||'';
-  if (!title) { const t=doc.querySelector('title')?.textContent||''; title=t.replace(/\s*[-|].*$/,'').trim(); }
-  title=title||`Work #${id}`;
-
-  // Author
-  const author=doc.querySelector('a[rel="author"]')?.textContent.trim()||
-               doc.querySelector('.byline a')?.textContent.trim()||'N/A';
-
-  // Stats
-  const words=(doc.querySelector('dd.words')?.textContent.trim()||'N/A').replace(/,/g,'');
-  const datePosted=doc.querySelector('dd.published')?.textContent.trim()||
-                   doc.querySelector('dd.status')?.textContent.trim()||'N/A';
-  const updatedAt=doc.querySelector('dd.status')?.textContent.trim().replace(/\D/g,'')||
-                  doc.querySelector('dd.published')?.textContent.trim().replace(/\D/g,'')||'';
-
-  const sumEl=doc.querySelector('.summary.module blockquote')||doc.querySelector('.summary.module');
-  let summary='N/A';
-  if(sumEl){const raw=sumEl.textContent.replace(/\s{2,}/g,' ').trim();if(raw.length>2)summary=raw;}
-  const ratingEl=doc.querySelector('dd.rating.tags a.tag')||doc.querySelector('.rating a.tag');
-  const rating=ratingEl?ratingEl.textContent.trim():'N/A';
-  const seriesEl=doc.querySelector('dd.series span.position')||doc.querySelector('dd.series');
-  const series=seriesEl?seriesEl.textContent.replace(/\s{2,}/g,' ').trim():'N/A';
+  const titleEl = doc.querySelector('h2.title.heading, h2.title');
+  let title = titleEl?.textContent.trim() || '';
+  if (!title) { const t = doc.querySelector('title')?.textContent || ''; title = t.replace(/\s*[-|].*$/, '').trim(); }
+  title = title || `Work #${id}`;
+  const author = doc.querySelector('a[rel="author"]')?.textContent.trim() || doc.querySelector('.byline a')?.textContent.trim() || 'N/A';
+  const words = (doc.querySelector('dd.words')?.textContent.trim() || 'N/A').replace(/,/g, '');
+  const datePosted = doc.querySelector('dd.published')?.textContent.trim() || doc.querySelector('dd.status')?.textContent.trim() || 'N/A';
+  const updatedAt = doc.querySelector('dd.status')?.textContent.trim().replace(/\D/g, '') || doc.querySelector('dd.published')?.textContent.trim().replace(/\D/g, '') || '';
+  const sumEl = doc.querySelector('.summary.module blockquote') || doc.querySelector('.summary.module');
+  let summary = 'N/A';
+  if (sumEl) { const raw = sumEl.textContent.replace(/\s{2,}/g, ' ').trim(); if (raw.length > 2) summary = raw; }
+  const ratingEl = doc.querySelector('dd.rating.tags a.tag') || doc.querySelector('.rating a.tag');
+  const rating = ratingEl ? ratingEl.textContent.trim() : 'N/A';
+  const seriesEl = doc.querySelector('dd.series span.position') || doc.querySelector('dd.series');
+  const series = seriesEl ? seriesEl.textContent.replace(/\s{2,}/g, ' ').trim() : 'N/A';
   return {
     id, updatedAt, title, author, words, datePosted, summary, rating, series,
-    fandom:       tags('fandom'),
-    relationships:tags('relationship'),
-    characters:   tags('character'),
-    tags:         tags('freeform'),
-    warning:      tags('warning'),
-    category:     tags('category'),
-    ao3Link:`https://archiveofourown.org/works/${id}`
+    fandom: tags('fandom'), relationships: tags('relationship'), characters: tags('character'),
+    tags: tags('freeform'), warning: tags('warning'), category: tags('category'),
+    ao3Link: `https://archiveofourown.org/works/${id}`
   };
 }
+
 function addOne(m) {
-  const e={date:today(),datePosted:m.datePosted||'N/A',title:m.title||'N/A',author:m.author||'N/A',fandom:m.fandom||'N/A',relationships:m.relationships||'N/A',characters:m.characters||'N/A',tags:m.tags||'N/A',warning:m.warning||'N/A',words:m.words||'N/A',category:m.category||'N/A',rating:m.rating||'N/A',ao3Link:m.ao3Link||'N/A',series:m.series||'N/A',summary:m.summary||'N/A'};
+  const e = {date:today(), datePosted:m.datePosted||'N/A', title:m.title||'N/A', author:m.author||'N/A', fandom:m.fandom||'N/A', relationships:m.relationships||'N/A', characters:m.characters||'N/A', tags:m.tags||'N/A', warning:m.warning||'N/A', words:m.words||'N/A', category:m.category||'N/A', rating:m.rating||'N/A', ao3Link:m.ao3Link||'N/A', series:m.series||'N/A', summary:m.summary||'N/A'};
   catalogEntries.push(e); saveHist(e); toast(`"${m.title}" added to catalog ✦`);
 }
-function addAllToCatalog() { (window._fm||[]).forEach(m=>addOne(m)); }
-function dlAllEpub() { (window._fm||[]).forEach((m,i)=>setTimeout(()=>window.open(`https://archiveofourown.org/downloads/${m.id}/${encodeURIComponent(cleanTitle(m.title))}.epub?updated_at=${m.updatedAt}`,'_blank'),i*300)); }
-function dlAllPdf()  { (window._fm||[]).forEach((m,i)=>setTimeout(()=>window.open(`https://archiveofourown.org/downloads/${m.id}/${encodeURIComponent(cleanTitle(m.title))}.pdf?updated_at=${m.updatedAt}`,'_blank'),i*300)); }
-function clearLinks() { document.getElementById('ao3-links').value=''; document.getElementById('dl-results').style.display='none'; }
 
 // ════ CATALOGER ════
 function onDragOver(e) { e.preventDefault(); document.getElementById('dropzone').classList.add('dragover'); }
@@ -1824,51 +1114,19 @@ function handleFiles(files) {
   renderFileList();
 }
 function renderFileList() {
-  const list = document.getElementById('file-list');
-  list.innerHTML = '';
-  
-  // Render uploaded files
-  uploadedFiles.forEach((f, i) => {
-    const ext = f.name.split('.').pop().toLowerCase();
-    const d = document.createElement('div');
-    d.className = 'file-item';
-    d.innerHTML = `<span class="file-type ${ext}">${ext.toUpperCase()}</span><span class="file-name">${esc(f.name)}</span><span class="file-size">${fmtBytes(f.size)}</span><button class="rm" onclick="removeFile(${i})"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>`;
+  const list=document.getElementById('file-list'); list.innerHTML='';
+  uploadedFiles.forEach((f,i)=>{
+    const ext=f.name.split('.').pop().toLowerCase();
+    const d=document.createElement('div'); d.className='file-item';
+    d.innerHTML=`<span class="file-type ${ext}">${ext.toUpperCase()}</span><span class="file-name">${esc(f.name)}</span><span class="file-size">${fmtBytes(f.size)}</span><button class="rm" onclick="removeFile(${i})"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>`;
     list.appendChild(d);
   });
-  
-  // Render URL items
-  ao3UrlItems.forEach((entry, i) => {
-    const d = document.createElement('div');
-    d.className = 'file-item';
-    const displayName = `${entry.title} — ${entry.author}`;
-    d.innerHTML = `
-      <span class="file-type url">URL</span>
-      <span class="file-name">${esc(displayName)}</span>
-      <a href="${esc(entry.ao3Link)}" target="_blank" style="flex-shrink:0;margin-right:8px;" title="View on AO3">
-        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;opacity:0.6">
-          <line x1="1" y1="8" x2="8" y2="1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <polyline points="4,1 8,1 8,5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        </svg>
-      </a>
-      <button class="btn btn-sm" style="padding:4px 10px;font-size:11px;margin-right:8px;" onclick="sendUrlToExport(${i})">Send to Export</button>
-      <button class="rm" onclick="removeUrlItem(${i})">
-        <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          <line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-        </svg>
-      </button>
-    `;
-    list.appendChild(d);
-  });
-  
-  const hasItems = uploadedFiles.length > 0 || ao3UrlItems.length > 0;
-  document.getElementById('cat-btn-row').style.display = uploadedFiles.length > 0 ? 'flex' : 'none';
-  document.getElementById('dropzone').classList.toggle('compact', hasItems);
+  document.getElementById('cat-btn-row').style.display=uploadedFiles.length?'flex':'none';
+  document.getElementById('dropzone').classList.toggle('compact', uploadedFiles.length > 0);
 }
 function removeFile(i) { uploadedFiles.splice(i,1); renderFileList(); }
 function clearFiles()  {
-  uploadedFiles = [];
-  ao3UrlItems = [];
+  uploadedFiles=[];
   renderFileList();
   document.getElementById('cat-results').style.display='none';
   document.body.classList.remove('has-extraction');
@@ -1879,7 +1137,6 @@ function clearCatalog() {
   catalogEntries = [];
   excludedRows = new Set();
   uploadedFiles = [];
-  ao3UrlItems = [];
   renderFileList();
   document.getElementById('meta-tbody').innerHTML = '';
   document.getElementById('cat-results').style.display = 'none';
@@ -2751,23 +2008,7 @@ function initBtnRowWrapObservers() {
 }
 
 // INIT
-document.addEventListener('DOMContentLoaded',()=>{
-  checkCookieBanner();
-  applyTheme();
-  loadHistory();
-  loadExtractions();
-  initBtnRowWrapObservers();
-  
-  // AO3 modal Escape key support
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      const modal = document.getElementById('ao3-modal-overlay');
-      if (modal.classList.contains('visible')) {
-        closeAo3Modal();
-      }
-    }
-  });
-});
+document.addEventListener('DOMContentLoaded',()=>{checkCookieBanner();applyTheme();loadHistory();loadExtractions();initBtnRowWrapObservers();});
 </script>
 </body>
 </html>
