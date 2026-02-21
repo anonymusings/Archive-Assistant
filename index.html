@@ -43,6 +43,20 @@
     --shadow: rgba(0,0,0,0.55);
     --tab-bg: rgba(139,32,53,0.18);
   }
+  /* ── DARK MODE OVERRIDES ── */
+  [data-theme="dark"] .btn { color: #D6D0C7; }
+  [data-theme="dark"] .btn-cy { color: #D6D0C7; }
+  [data-theme="dark"] .btn-outline { color: var(--maroon); }
+  [data-theme="dark"] .results-table th,
+  [data-theme="dark"] .exp-preview-table th { color: #D6D0C7; }
+  [data-theme="dark"] .card-title { color: var(--gold); }
+  [data-theme="dark"] .exp-options-label { color: var(--gold); }
+  [data-theme="dark"] .exp-col-toggle.on { color: var(--maroon); }
+  [data-theme="dark"] .hist-entry h4 { color: #D6D0C7; }
+  [data-theme="dark"] .file-type.epub,
+  [data-theme="dark"] .file-type.pdf,
+  [data-theme="dark"] .file-type-inline.epub,
+  [data-theme="dark"] .file-type-inline.pdf { color: #D4CFCD; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background-color: var(--bg);
@@ -177,8 +191,8 @@
     cursor: pointer; transition: all 0.2s;
   }
   .btn-clear-gold:hover { background: rgba(201,169,110,0.12); border-color: var(--gold-light); color: var(--gold); }
-  .btn-gold { background: transparent; border-color: var(--gold-light); color: var(--ink); }
-  .btn-gold:hover { background: var(--ivory-light); box-shadow: 0 4px 14px rgba(201,169,110,0.3); }
+  .btn-gold { background: transparent; border-color: var(--gold-light); color: var(--gold-dark); }
+  .btn-gold:hover { background: rgba(201,169,110,0.10); box-shadow: 0 4px 14px rgba(201,169,110,0.3); }
   .btn-sm { padding: 3px 12px; font-size: 12px; }
   .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
 
@@ -202,6 +216,9 @@
   .file-type { font-family: 'Cinzel Decorative', serif; font-size: 9px; padding: 3px 8px; border-radius: 3px; letter-spacing: 0.08em; flex-shrink: 0; }
   .file-type.epub { background: var(--maroon); color: var(--ivory-light); }
   .file-type.pdf  { background: var(--gold-dark); color: var(--ivory-light); }
+  .file-type-inline { font-family: Georgia, serif; font-size: 0.6em; padding: 2px 6px; border-radius: 3px; letter-spacing: 0; vertical-align: middle; display: inline-block; flex-shrink: 0; }
+  .file-type-inline.epub { background: var(--maroon); color: var(--ivory-light); }
+  .file-type-inline.pdf  { background: var(--gold-dark); color: var(--ivory-light); }
   .file-item .file-name { flex: 1; color: var(--text); }
   .file-item .file-size { font-size: 12px; color: var(--text-muted); font-style: italic; }
   .file-item .rm { cursor: pointer; color: var(--maroon); opacity: 0.4; background: none; border: none; font-size: 18px; }
@@ -634,10 +651,11 @@
 
         <div class="btn-row" style="margin-top:6px;justify-content:space-between;">
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button class="btn" onclick="copyTSV()">Copy TSV</button>
-            <button class="btn btn-outline" onclick="dlCSV()">Download CSV</button>
+            <button class="btn" onclick="switchTab('cataloger')">+ Add More</button>
+            <button class="btn btn-gold" onclick="copyTSV()">Copy TSV</button>
+            <button class="btn btn-gold" onclick="dlCSV()">Download CSV</button>
           </div>
-          <button class="btn-clear-gold" onclick="clearExport()">✕ Clear</button>
+          <button class="btn btn-outline" onclick="clearExport()">✕ Clear</button>
         </div>
 
       </div>
@@ -956,7 +974,7 @@ async function catalogFiles() {
     bar.style.width=(i/uploadedFiles.length*100)+'%'; lbl.textContent=`Recording "${f.name}"…`;
     const ext=f.name.split('.').pop().toLowerCase();
     const meta=ext==='epub'?await extractEpub(f):await extractPdf(f);
-    meta.date=today(); results.push(meta); catalogEntries.push(meta);
+    meta.date=today(); meta.fileType=ext; results.push(meta); catalogEntries.push(meta);
   }
   bar.style.width='100%'; lbl.textContent=`Done — ${results.length} file(s) processed.`;
   setTimeout(()=>prog.style.display='none',800);
@@ -1245,7 +1263,9 @@ function renderMetaTable(entries) {
   const tbody=document.getElementById('meta-tbody'); tbody.innerHTML='';
   entries.forEach(e=>{
     const tr=document.createElement('tr');
+    const ftBadge = e.fileType ? `<span class="file-type-inline ${esc(e.fileType)}">${e.fileType==='epub'?'E':'P'}</span> ` : '';
     tr.innerHTML=COLS.map(c=>{const v=e[c]||'N/A',na=v==='N/A';
+      if(c==='title'){const d=v.length>38?v.substring(0,36)+'…':v;return `<td class="${na?'na-val':''}" title="${esc(v)}">${ftBadge}${esc(d)}</td>`;}
       if(c==='ao3Link'&&!na)return `<td class="link-cell"><a href="${esc(v)}" target="_blank">Link ↗</a></td>`;
       if(c==='summary'){const d=v.length>60?v.substring(0,58)+'…':v;return `<td class="${na?'na-val':''} summary-cell" title="${esc(v)}" style="max-width:260px;">${esc(d)}</td>`;}
       return `<td class="${na?'na-val':''}" title="${esc(v)}">${esc(v.length>38?v.substring(0,36)+'…':v)}</td>`;
@@ -1357,8 +1377,10 @@ function refreshExport() {
     if (withHdrs) html += '<thead><tr>' + hdrs.map(h => `<th>${esc(h)}</th>`).join('') + '</tr></thead>';
     html += '<tbody>' + all.slice(0,50).map((e, i) => {
       const excl = excludedRows.has(i);
+      const ftBadge = e.fileType ? `<span class="file-type-inline ${esc(e.fileType)}">${e.fileType==='epub'?'E':'P'}</span> ` : '';
       return `<tr class="${excl?'excluded':''}" data-idx="${i}" onclick="handleRowClick(${i})">` + cols.map(c => {
         const v = e[c]||'N/A';
+        if(c==='title'){const d=v.length>22?v.substring(0,20)+'…':v;return `<td class="${v==='N/A'?'na-val':''}" title="${esc(v)}">${ftBadge}${esc(d)}</td>`;}
         if(c==='summary'){const d=v.length>50?v.substring(0,48)+'…':v;return `<td class="${v==='N/A'?'na-val':''}" title="${esc(v)}" style="max-width:220px;">${esc(d)}</td>`;}
         return `<td class="${v==='N/A'?'na-val':''}" title="${esc(v)}">${esc(v.length>22?v.substring(0,20)+'…':v)}</td>`;
       }).join('') + '</tr>';
@@ -1556,7 +1578,8 @@ function loadHistory(page) {
   pageEntries.forEach((e, pi) => {
     const i = start + pi;
     const d=document.createElement('div');d.className='hist-entry';
-    d.innerHTML=`<button class="hist-entry-delete" onclick="deleteHistEntry(${i})" title="Remove">✕</button><h4>${esc(e.title)}</h4><p>${esc(e.author)}</p><div class="hist-meta"><span><strong>${esc(e.fandom)}</strong></span><span>Words: <strong>${esc(e.words)}</strong></span><span>Added: <strong>${esc(e.date)}</strong></span>${e.ao3Link&&e.ao3Link!=='N/A'?`<span><a href="${esc(e.ao3Link)}" target="_blank" style="color:var(--maroon)">AO3 ↗</a></span>`:''}</div><div style="margin-top:8px;"><button class="btn btn-sm" onclick="sendHistEntryToExport(${i})">Send to Export</button></div>`;
+    const ftBadge = e.fileType ? ` <span class="file-type-inline ${esc(e.fileType)}" style="margin-left:5px;">${e.fileType.toUpperCase()}</span>` : '';
+    d.innerHTML=`<button class="hist-entry-delete" onclick="deleteHistEntry(${i})" title="Remove">✕</button><h4>${esc(e.title)}${ftBadge}</h4><p>${esc(e.author)}</p><div class="hist-meta"><span><strong>${esc(e.fandom)}</strong></span><span>Added: <strong>${esc(e.date)}</strong></span>${e.ao3Link&&e.ao3Link!=='N/A'?`<span><a href="${esc(e.ao3Link)}" target="_blank" style="color:var(--maroon)">AO3 ↗</a></span>`:''}</div><div style="margin-top:6px;"><button class="btn btn-sm" style="padding:2px 8px;font-size:11px;" onclick="sendHistEntryToExport(${i})">Send to Export</button></div>`;
     list.appendChild(d);
   });
 
