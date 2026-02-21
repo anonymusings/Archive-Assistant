@@ -109,7 +109,7 @@
   .hero-logo {
     width: 210px; height: 210px; object-fit: contain;
     mix-blend-mode: multiply;
-    transition: transform 0.4s;
+    transition: transform 0.4s, width 0.35s ease, height 0.35s ease;
   }
   .hero-logo:hover { transform: scale(1.02); }
   [data-theme="dark"] .hero-logo { mix-blend-mode: normal; filter: brightness(0.85) contrast(1.1); }
@@ -120,6 +120,7 @@
     letter-spacing: 0.22em;
     font-weight: 400;
     margin: 14px 0 5px;
+    transition: font-size 0.35s ease, margin 0.35s ease;
   }
   .hero-sub {
     font-family: 'IM Fell English', serif;
@@ -127,6 +128,7 @@
     color: var(--text-muted);
     font-size: 15px;
     letter-spacing: 0.03em;
+    transition: font-size 0.35s ease;
   }
   .hero-rule {
     width: 100%; border: none; height: 2px; margin: 26px 0 0;
@@ -139,6 +141,15 @@
     .hero-logo { width: 162px; height: 162px; }
     .hero-title { font-size: clamp(13px, 3.2vw, 21px); }
     .hero-sub { font-size: 12px; }
+  }
+
+  /* ── HERO COMPACT after extraction (mobile) ── */
+  @media (max-width: 430px) {
+    body.has-extraction .hero { padding: 14px 0 0; }
+    body.has-extraction .hero-logo { width: 81px; height: 81px; }
+    body.has-extraction .hero-title { font-size: clamp(7px, 1.6vw, 11px); margin: 7px 0 2px; }
+    body.has-extraction .hero-sub { font-size: 6px; }
+    body.has-extraction .hero-rule { margin: 13px 0 0; }
   }
 
   /* ── THEME TOGGLE ── */
@@ -1131,6 +1142,7 @@ function clearFiles()  {
   uploadedFiles=[];
   renderFileList();
   document.getElementById('cat-results').style.display='none';
+  document.body.classList.remove('has-extraction');
   document.getElementById('dropzone').classList.remove('compact');
 }
 function clearCatalog() {
@@ -1141,6 +1153,7 @@ function clearCatalog() {
   renderFileList();
   document.getElementById('meta-tbody').innerHTML = '';
   document.getElementById('cat-results').style.display = 'none';
+  document.body.classList.remove('has-extraction');
   document.getElementById('exp-content').style.display = 'none';
   document.getElementById('exp-empty').style.display = 'block';
   activeCols = new Set(COLS);
@@ -1168,6 +1181,7 @@ function clearExport() {
   activeCols = new Set(COLS.filter(c => !HISTORY_EXCLUDED_COLS.has(c)));
   document.getElementById('meta-tbody').innerHTML = '';
   document.getElementById('cat-results').style.display = 'none';
+  document.body.classList.remove('has-extraction');
   toast('Session entries cleared.');
 }
 
@@ -1479,7 +1493,7 @@ function renderMetaTable(entries) {
     }).join('');
     tbody.appendChild(tr);
   });
-  document.getElementById('cat-results').style.display='block'; checkResultsScroll();
+  document.getElementById('cat-results').style.display='block'; document.body.classList.add('has-extraction'); checkResultsScroll();
   const catSummary = document.getElementById('cat-summary');
   if (catSummary) catSummary.textContent = `${entries.length} entr${entries.length===1?'y':'ies'}`;
 }
