@@ -144,7 +144,7 @@
   .card-title {
     font-family: 'Cinzel Decorative', serif; font-size: 10.5px; color: var(--maroon);
     letter-spacing: 0.16em; text-transform: uppercase;
-    margin-bottom: 18px; padding-bottom: 11px; border-bottom: 1px solid var(--ivory-darker);
+    margin-bottom: 18px;
     display: flex; align-items: center; gap: 8px;
   }
   .card-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin-left: 6px; }
@@ -161,9 +161,9 @@
 
   /* ── BUTTONS ── */
   .btn {
-    display: inline-flex; align-items: center; gap: 7px; padding: 9px 22px;
+    display: inline-flex; align-items: center; gap: 7px; padding: 6px 22px;
     border: 1.5px solid var(--maroon); background: var(--maroon); color: var(--ivory-light);
-    font-family: 'IM Fell English', serif; font-size: 15px; border-radius: 5px;
+    font-family: 'IM Fell English', serif; font-size: 13px; border-radius: 5px;
     cursor: pointer; transition: all 0.2s; text-decoration: none;
   }
   .btn:hover { background: var(--maroon-deep); border-color: var(--maroon-deep); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(139,32,53,0.28); }
@@ -171,15 +171,15 @@
   .btn-outline { background: transparent; color: var(--maroon); }
   .btn-outline:hover { background: rgba(139,32,53,0.08); }
   .btn-clear-gold {
-    display: inline-flex; align-items: center; gap: 7px; padding: 9px 22px;
+    display: inline-flex; align-items: center; gap: 7px; padding: 6px 22px;
     background: transparent; border: 1.5px solid var(--gold); color: var(--gold-dark);
-    font-family: 'IM Fell English', serif; font-size: 15px; border-radius: 5px;
+    font-family: 'IM Fell English', serif; font-size: 13px; border-radius: 5px;
     cursor: pointer; transition: all 0.2s;
   }
   .btn-clear-gold:hover { background: rgba(201,169,110,0.12); border-color: var(--gold-light); color: var(--gold); }
   .btn-gold { background: transparent; border-color: var(--gold-light); color: var(--ink); }
   .btn-gold:hover { background: var(--ivory-light); box-shadow: 0 4px 14px rgba(201,169,110,0.3); }
-  .btn-sm { padding: 5px 14px; font-size: 13px; }
+  .btn-sm { padding: 3px 12px; font-size: 12px; }
   .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
 
   /* ── DROPZONE ── */
@@ -208,7 +208,7 @@
   .file-item .rm:hover { opacity: 1; }
 
   /* ── RESULTS TABLE ── */
-  .results-wrap-outer { margin-top: 22px; border-radius: 6px; border: 1px solid var(--border); position: relative; }
+  .results-wrap-outer { margin-top: 0; border-radius: 6px; border: 1px solid var(--border); position: relative; }
   .results-wrap { overflow-x: auto; overflow-y: auto; max-height: 272px; border-radius: 6px; }
   .results-wrap-outer::after {
     content: ''; pointer-events: none;
@@ -239,7 +239,7 @@
   /* ── EXPORT OPTIONS ── */
   .exp-options-card {
     background: var(--ivory-dark); border: 1px solid var(--border); border-radius: 8px;
-    padding: 16px 18px; margin-bottom: 14px;
+    padding: 16px 18px 8px; margin-bottom: 14px;
   }
   .exp-options-label {
     font-family: 'Cinzel Decorative', serif; font-size: 9px; letter-spacing: 0.12em;
@@ -256,7 +256,7 @@
   .exp-col-toggle input { display: none; }
   .exp-header-row {
     display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
-    gap: 10px; margin-bottom: 14px;
+    gap: 10px; margin-bottom: 7px;
   }
   .exp-toggle-label {
     display: flex; align-items: center; gap: 8px;
@@ -367,7 +367,7 @@
     background: var(--ivory-dark); border: 1px solid var(--border);
     border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0;
     padding: 13px 16px; margin-bottom: 8px;
-    position: relative;
+    position: relative; line-height: 1.3;
   }
   .hist-entry h4 { font-family: 'Cinzel Decorative', serif; font-size: 11px; color: var(--maroon); margin-bottom: 3px; padding-right: 24px; }
   .hist-entry p { font-size: 14px; color: var(--text-muted); font-style: italic; }
@@ -463,6 +463,12 @@
   ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: var(--ivory-dark); }
   ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+  .results-wrap::-webkit-scrollbar,
+  .exp-preview-outer::-webkit-scrollbar { width: 3px; height: 3px; }
+  .results-wrap::-webkit-scrollbar-track,
+  .exp-preview-outer::-webkit-scrollbar-track { background: var(--ivory-dark); }
+  .results-wrap::-webkit-scrollbar-thumb,
+  .exp-preview-outer::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
 
   @media (max-width: 600px) {
     .tab-btn { padding: 8px 12px; font-size: 13px; }
@@ -531,10 +537,13 @@
     <div id="cat-results" style="display:none">
       <div class="card">
         <div class="card-title">✦ Extracted Metadata</div>
-        <label class="exp-toggle-label" style="margin-bottom:14px;">
-          <input type="checkbox" id="cat-include-headers" checked>
-          Include column headers
-        </label>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+          <label class="exp-toggle-label">
+            <input type="checkbox" id="cat-include-headers" checked>
+            Include column headers
+          </label>
+          <p id="cat-summary" style="font-family:'IM Fell English',serif;font-style:italic;color:var(--gold-dark);font-size:13px;margin:0;"></p>
+        </div>
         <div class="results-wrap-outer" id="results-wrap-outer">
           <div class="results-wrap" id="results-wrap-inner" onscroll="checkResultsScroll()">
           <table class="results-table">
@@ -1206,6 +1215,8 @@ function renderMetaTable(entries) {
     tbody.appendChild(tr);
   });
   document.getElementById('cat-results').style.display='block'; checkResultsScroll();
+  const catSummary = document.getElementById('cat-summary');
+  if (catSummary) catSummary.textContent = `${entries.length} entr${entries.length===1?'y':'ies'}`;
 }
 
 // ════ EXPORT ════
@@ -1409,10 +1420,10 @@ function loadExtractions(page) {
     div.className = 'ext-job';
     div.innerHTML = `
       <div class="ext-job-header" onclick="toggleExtJob(this)">
-        <span class="ext-job-chevron">▶</span>
+        <button class="ext-job-delete" onclick="event.stopPropagation();deleteExtractionJob(${job.id})" title="Delete job">✕</button>
         <span class="ext-job-label">${esc(job.label||job.date||'')}</span>
         <span class="ext-job-count">${job.count} file${job.count===1?'':'s'}</span>
-        <button class="ext-job-delete" onclick="event.stopPropagation();deleteExtractionJob(${job.id})" title="Delete job">✕</button>
+        <span class="ext-job-chevron">▶</span>
       </div>
       <div class="ext-job-body">
         <div class="ext-job-inner">
@@ -1437,7 +1448,7 @@ function loadExtractions(page) {
     paginationEl = document.createElement('div');
     paginationEl.id = 'ext-pagination';
     paginationEl.className = 'tab-navbar';
-    paginationEl.style.cssText = 'padding:10px 0 4px;';
+    paginationEl.style.cssText = 'padding:4px 0 4px;';
     section.appendChild(paginationEl);
   }
   if (totalPages <= 1) { paginationEl.style.display='none'; return; }
@@ -1453,7 +1464,7 @@ function loadExtractions(page) {
     const btn = document.createElement('button');
     btn.className = 'tab-navlink';
     btn.textContent = p;
-    btn.style.cssText = p === extractionsPage ? 'font-weight:bold;text-decoration:none;opacity:1;cursor:default;' : '';
+    btn.style.cssText = `font-size:17px;${p === extractionsPage ? 'font-weight:bold;text-decoration:underline;text-underline-offset:3px;cursor:default;' : 'text-decoration:none;'}`;
     if (p !== extractionsPage) btn.onclick = () => loadExtractions(p);
     paginationEl.appendChild(btn);
   }
@@ -1517,7 +1528,7 @@ function loadHistory(page) {
     paginationEl = document.createElement('div');
     paginationEl.id = 'hist-pagination';
     paginationEl.className = 'tab-navbar';
-    paginationEl.style.cssText = 'padding:10px 0 4px;';
+    paginationEl.style.cssText = 'padding:4px 0 4px;';
     list.after(paginationEl);
   }
   if (totalPages <= 1) { paginationEl.style.display='none'; return; }
@@ -1533,7 +1544,7 @@ function loadHistory(page) {
     const btn = document.createElement('button');
     btn.className = 'tab-navlink';
     btn.textContent = p;
-    btn.style.cssText = p === historyPage ? 'font-weight:bold;text-decoration:none;opacity:1;cursor:default;' : '';
+    btn.style.cssText = `font-size:17px;${p === historyPage ? 'font-weight:bold;text-decoration:underline;text-underline-offset:3px;cursor:default;' : 'text-decoration:none;'}`;
     if (p !== historyPage) btn.onclick = () => loadHistory(p);
     paginationEl.appendChild(btn);
   }
