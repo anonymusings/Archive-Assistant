@@ -1263,9 +1263,8 @@ function renderMetaTable(entries) {
   const tbody=document.getElementById('meta-tbody'); tbody.innerHTML='';
   entries.forEach(e=>{
     const tr=document.createElement('tr');
-    const ftBadge = e.fileType ? `<span class="file-type-inline ${esc(e.fileType)}">${e.fileType==='epub'?'E':'P'}</span> ` : '';
     tr.innerHTML=COLS.map(c=>{const v=e[c]||'N/A',na=v==='N/A';
-      if(c==='title'){const d=v.length>38?v.substring(0,36)+'…':v;return `<td class="${na?'na-val':''}" title="${esc(v)}">${ftBadge}${esc(d)}</td>`;}
+      if(c==='title'){const d=v.length>38?v.substring(0,36)+'…':v;return `<td class="${na?'na-val':''}" title="${esc(v)}">${esc(d)}</td>`;}
       if(c==='ao3Link'&&!na)return `<td class="link-cell"><a href="${esc(v)}" target="_blank">Link ↗</a></td>`;
       if(c==='summary'){const d=v.length>60?v.substring(0,58)+'…':v;return `<td class="${na?'na-val':''} summary-cell" title="${esc(v)}" style="max-width:260px;">${esc(d)}</td>`;}
       return `<td class="${na?'na-val':''}" title="${esc(v)}">${esc(v.length>38?v.substring(0,36)+'…':v)}</td>`;
@@ -1377,10 +1376,9 @@ function refreshExport() {
     if (withHdrs) html += '<thead><tr>' + hdrs.map(h => `<th>${esc(h)}</th>`).join('') + '</tr></thead>';
     html += '<tbody>' + all.slice(0,50).map((e, i) => {
       const excl = excludedRows.has(i);
-      const ftBadge = e.fileType ? `<span class="file-type-inline ${esc(e.fileType)}">${e.fileType==='epub'?'E':'P'}</span> ` : '';
       return `<tr class="${excl?'excluded':''}" data-idx="${i}" onclick="handleRowClick(${i})">` + cols.map(c => {
         const v = e[c]||'N/A';
-        if(c==='title'){const d=v.length>22?v.substring(0,20)+'…':v;return `<td class="${v==='N/A'?'na-val':''}" title="${esc(v)}">${ftBadge}${esc(d)}</td>`;}
+        if(c==='title'){const d=v.length>22?v.substring(0,20)+'…':v;return `<td class="${v==='N/A'?'na-val':''}" title="${esc(v)}">${esc(d)}</td>`;}
         if(c==='summary'){const d=v.length>50?v.substring(0,48)+'…':v;return `<td class="${v==='N/A'?'na-val':''}" title="${esc(v)}" style="max-width:220px;">${esc(d)}</td>`;}
         return `<td class="${v==='N/A'?'na-val':''}" title="${esc(v)}">${esc(v.length>22?v.substring(0,20)+'…':v)}</td>`;
       }).join('') + '</tr>';
@@ -1489,7 +1487,7 @@ function loadExtractions(page) {
           <div class="ext-job-entries">
             ${job.entries.map(e=>`
               <div class="ext-job-entry">
-                <div><strong>${esc(e.title||'Untitled')}</strong></div>
+                <div><strong>${esc(e.title||'Untitled')}</strong>${e.fileType?` <span style="color:var(--text-muted);font-style:italic;font-size:0.85em;">· ${esc(e.fileType)}</span>`:''}</div>
                 <div style="color:var(--text-muted);font-style:italic;">${esc(e.author||'N/A')} · ${esc(e.fandom||'N/A')} · ${esc(e.words||'N/A')} words</div>
               </div>`).join('')}
           </div>
@@ -1578,8 +1576,8 @@ function loadHistory(page) {
   pageEntries.forEach((e, pi) => {
     const i = start + pi;
     const d=document.createElement('div');d.className='hist-entry';
-    const ftBadge = e.fileType ? ` <span class="file-type-inline ${esc(e.fileType)}" style="margin-left:5px;">${e.fileType.toUpperCase()}</span>` : '';
-    d.innerHTML=`<button class="hist-entry-delete" onclick="deleteHistEntry(${i})" title="Remove">✕</button><h4>${esc(e.title)}${ftBadge}</h4><p>${esc(e.author)}</p><div class="hist-meta"><span><strong>${esc(e.fandom)}</strong></span><span>Added: <strong>${esc(e.date)}</strong></span>${e.ao3Link&&e.ao3Link!=='N/A'?`<span><a href="${esc(e.ao3Link)}" target="_blank" style="color:var(--maroon)">AO3 ↗</a></span>`:''}</div><div style="margin-top:6px;"><button class="btn btn-sm" style="padding:2px 8px;font-size:11px;" onclick="sendHistEntryToExport(${i})">Send to Export</button></div>`;
+    const ftSep = e.fileType ? ` <span style="color:var(--text-muted);font-style:italic;font-size:0.85em;">· ${e.fileType}</span>` : '';
+    d.innerHTML=`<button class="hist-entry-delete" onclick="deleteHistEntry(${i})" title="Remove">✕</button><h4>${esc(e.title)}${ftSep}</h4><p>${esc(e.author)}</p><div class="hist-meta"><span><strong>${esc(e.fandom)}</strong></span><span>Added: <strong>${esc(e.date)}</strong></span>${e.ao3Link&&e.ao3Link!=='N/A'?`<span><a href="${esc(e.ao3Link)}" target="_blank" style="color:var(--maroon)">AO3 ↗</a></span>`:''}</div><div style="margin-top:6px;"><button class="btn btn-sm" style="padding:1px 6px;font-size:10px;" onclick="sendHistEntryToExport(${i})">Send to Export</button></div>`;
     list.appendChild(d);
   });
 
