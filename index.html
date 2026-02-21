@@ -232,6 +232,7 @@
   .file-item {
     background: var(--ivory-dark); border: 1px solid var(--border); border-radius: 6px;
     padding: 10px 16px; display: flex; align-items: center; gap: 12px; font-size: 15px;
+    min-width: 0;
   }
   .file-type { font-family: 'Cinzel Decorative', serif; font-size: 9px; padding: 3px 8px; border-radius: 3px; letter-spacing: 0.08em; flex-shrink: 0; }
   .file-type.epub { background: var(--maroon); color: var(--ivory-light); }
@@ -239,9 +240,9 @@
   .file-type-inline { font-family: Georgia, serif; font-size: 0.6em; padding: 2px 6px; border-radius: 3px; letter-spacing: 0; vertical-align: middle; display: inline-block; flex-shrink: 0; }
   .file-type-inline.epub { background: var(--maroon); color: var(--ivory-light); }
   .file-type-inline.pdf  { background: var(--gold-dark); color: var(--ivory-light); }
-  .file-item .file-name { flex: 1; color: var(--text); }
-  .file-item .file-size { font-size: 12px; color: var(--text-muted); font-style: italic; }
-  .file-item .rm { cursor: pointer; color: var(--maroon); opacity: 0.4; background: none; border: none; font-size: 18px; }
+  .file-item .file-name { flex: 1; min-width: 0; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-item .file-size { font-size: 12px; color: var(--text-muted); font-style: italic; flex-shrink: 0; white-space: nowrap; }
+  .file-item .rm { cursor: pointer; color: var(--maroon); opacity: 0.4; background: none; border: none; font-size: 18px; flex-shrink: 0; }
   .file-item .rm:hover { opacity: 1; }
 
   /* ── RESULTS TABLE ── */
