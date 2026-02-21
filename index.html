@@ -674,7 +674,7 @@
       <div class="file-list" id="file-list"></div>
       <div class="btn-row" id="cat-btn-row" style="display:none">
         <button class="btn" onclick="catalogFiles()">✦ Extract Metadata</button>
-        <button class="btn btn-outline" onclick="clearFiles()">✕ Clear All</button>
+        <button class="btn btn-outline" onclick="clearFiles()"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Clear All</button>
       </div>
     </div>
     <div id="cat-progress" style="display:none">
@@ -709,7 +709,7 @@
             <button class="btn btn-gold" onclick="quickCopyTSV()">Copy TSV</button>
             <button class="btn btn-gold" onclick="quickDlCSV()">Download CSV</button>
           </div>
-          <button class="btn btn-outline" onclick="clearCatalog()">✕ Clear</button>
+          <button class="btn btn-outline" onclick="clearCatalog()"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Clear</button>
         </div>
       </div>
     </div>
@@ -796,7 +796,7 @@
             <button class="btn btn-gold" onclick="copyTSV()">Copy TSV</button>
             <button class="btn btn-gold" onclick="dlCSV()">Download CSV</button>
           </div>
-          <button class="btn btn-outline" onclick="clearExport()">✕ Clear</button>
+          <button class="btn btn-outline" onclick="clearExport()"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Clear</button>
         </div>
 
       </div>
@@ -813,7 +813,7 @@
     <div class="card">
       <div class="card-title">History</div>
       <div id="hist-cookie-note" style="display:none;font-family:'IM Fell English',serif;font-style:italic;color:var(--gold-dark);font-size:14px;margin-bottom:14px;padding:10px 14px;background:rgba(201,169,110,0.1);border:1px solid var(--gold);border-radius:6px;">
-        ⚠ Cookies are disabled — history will not save between sessions.
+        <svg width="12" height="12" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0;margin-right:3px"><path d="M5 1L9.3 8.5H0.7L5 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="none"/><line x1="5" y1="4" x2="5" y2="6.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="5" cy="7.4" r="0.55" fill="currentColor"/></svg> Cookies are disabled — history will not save between sessions.
       </div>
       <!-- Individual fic history -->
       <div id="hist-list"></div>
@@ -830,8 +830,8 @@
       </div>
 
       <div class="btn-row" id="hist-actions" style="display:none;justify-content:space-between;">
-        <button class="btn btn-outline btn-sm" onclick="clearHistory()">✕ Clear History</button>
-        <button class="btn btn-outline btn-sm" onclick="clearCache()" style="opacity:0.7;">⚠ Clear Cache</button>
+        <button class="btn btn-outline btn-sm" onclick="clearHistory()"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Clear History</button>
+        <button class="btn btn-outline btn-sm" onclick="clearCache()" style="opacity:0.7;"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M5 1L9.3 8.5H0.7L5 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="none"/><line x1="5" y1="4" x2="5" y2="6.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="5" cy="7.4" r="0.55" fill="currentColor"/></svg> Clear Cache</button>
       </div>
     </div>
     <div class="tab-navbar">
@@ -1070,7 +1070,7 @@ function renderFileList() {
   uploadedFiles.forEach((f,i)=>{
     const ext=f.name.split('.').pop().toLowerCase();
     const d=document.createElement('div'); d.className='file-item';
-    d.innerHTML=`<span class="file-type ${ext}">${ext.toUpperCase()}</span><span class="file-name">${esc(f.name)}</span><span class="file-size">${fmtBytes(f.size)}</span><button class="rm" onclick="removeFile(${i})">✕</button>`;
+    d.innerHTML=`<span class="file-type ${ext}">${ext.toUpperCase()}</span><span class="file-name">${esc(f.name)}</span><span class="file-size">${fmtBytes(f.size)}</span><button class="rm" onclick="removeFile(${i})"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>`;
     list.appendChild(d);
   });
   document.getElementById('cat-btn-row').style.display=uploadedFiles.length?'flex':'none';
@@ -1413,7 +1413,7 @@ function renderMetaTable(entries) {
     const tr=document.createElement('tr');
     tr.innerHTML=COLS.map(c=>{const v=e[c]||'N/A',na=v==='N/A';
       if(c==='title'){const d=v.length>38?v.substring(0,36)+'…':v;return `<td class="${na?'na-val':''}" title="${esc(v)}">${esc(d)}</td>`;}
-      if(c==='ao3Link'&&!na)return `<td class="link-cell"><a href="${esc(v)}" target="_blank">Link ↗</a></td>`;
+      if(c==='ao3Link'&&!na)return `<td class="link-cell"><a href="${esc(v)}" target="_blank">Link <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle"><line x1="1" y1="8" x2="8" y2="1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="4,1 8,1 8,5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></a></td>`;
       if(c==='summary'){const d=v.length>60?v.substring(0,58)+'…':v;return `<td class="${na?'na-val':''} summary-cell" title="${esc(v)}" style="max-width:260px;">${esc(d)}</td>`;}
       return `<td class="${na?'na-val':''}" title="${esc(v)}">${esc(v.length>38?v.substring(0,36)+'…':v)}</td>`;
     }).join('');
@@ -1839,7 +1839,7 @@ function loadHistory(page) {
   pageEntries.forEach((e, pi) => {
     const i = start + pi;
     const d=document.createElement('div');d.className='hist-entry';
-    d.innerHTML=`<button class="hist-entry-delete" onclick="deleteHistEntry(${i})" title="Remove">✕</button><h4>${esc(e.title)}</h4><p>${esc(e.author)}</p><div class="hist-meta"><span><strong>${esc(e.fandom)}</strong></span><span>Added: <strong>${esc(e.date)}</strong></span>${e.ao3Link&&e.ao3Link!=='N/A'?`<span><a href="${esc(e.ao3Link)}" target="_blank" style="color:var(--maroon)">AO3 ↗</a></span>`:''}</div><div style="margin-top:5px;"><button class="btn btn-sm" style="padding:1px 6px;font-size:10px;" onclick="sendHistEntryToExport(${i})">Send to Export</button></div>`;
+    d.innerHTML=`<button class="hist-entry-delete" onclick="deleteHistEntry(${i})" title="Remove"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><h4>${esc(e.title)}</h4><p>${esc(e.author)}</p><div class="hist-meta"><span><strong>${esc(e.fandom)}</strong></span><span>Added: <strong>${esc(e.date)}</strong></span>${e.ao3Link&&e.ao3Link!=='N/A'?`<span><a href="${esc(e.ao3Link)}" target="_blank" style="color:var(--maroon)">AO3 <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle"><line x1="1" y1="8" x2="8" y2="1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="4,1 8,1 8,5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></a></span>`:''}</div><div style="margin-top:5px;"><button class="btn btn-sm" style="padding:1px 6px;font-size:10px;" onclick="sendHistEntryToExport(${i})">Send to Export</button></div>`;
     list.appendChild(d);
   });
 
