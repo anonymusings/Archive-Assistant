@@ -52,7 +52,22 @@
   [data-theme="dark"] .exp-preview-table th { color: #D6D0C7; }
   [data-theme="dark"] .card-title { color: var(--gold); }
   [data-theme="dark"] .exp-options-label { color: var(--gold); }
-  [data-theme="dark"] .exp-col-toggle.on { color: var(--maroon); }
+  /* ── DARK MODE PILL OVERRIDES ── */
+  [data-theme="dark"] .exp-col-toggle {
+    background: #2A1218; border-color: #4A2028; color: #C4A07A;
+  }
+  [data-theme="dark"] .exp-col-toggle.on {
+    background: #5C1C2A; border-color: #7A2438; color: #F0D8C0;
+  }
+  [data-theme="dark"] .exp-col-toggle:hover {
+    background: #351820; border-color: #5C2030; color: #D4B08A;
+  }
+  [data-theme="dark"] .exp-col-toggle.on:hover {
+    background: #6B2232; border-color: #8A2840; color: #F0D8C0;
+  }
+  [data-theme="dark"] .exp-col-toggles.reorder-mode .exp-col-toggle {
+    border-color: #6B2232; border-style: dashed;
+  }
   [data-theme="dark"] .hist-entry h4 { color: #D6D0C7; }
   [data-theme="dark"] .file-type.epub,
   [data-theme="dark"] .file-type.pdf,
@@ -395,9 +410,11 @@
   .exp-col-toggles.reorder-mode .exp-col-toggle:active { cursor: grabbing; }
   .exp-col-toggle.dragging { opacity: 0.35; }
   .pill-x {
-    display: none; font-size: 9px; line-height: 1; margin-left: 2px;
+    display: none; font-size: 9px; line-height: 1;
     color: var(--text-muted); font-style: normal; pointer-events: none;
+    position: absolute; top: 2px; right: 4px;
   }
+  .exp-col-toggle { position: relative; }
   .reorder-mode .pill-x { display: inline; }
   .reorder-actions {
     display: none; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap;
