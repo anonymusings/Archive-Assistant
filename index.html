@@ -1487,7 +1487,7 @@ function loadExtractions(page) {
           <div class="ext-job-entries">
             ${job.entries.map(e=>`
               <div class="ext-job-entry">
-                <div><strong>${esc(e.title||'Untitled')}</strong>${e.fileType?` <span style="color:var(--text-muted);font-style:italic;font-size:0.85em;">· ${esc(e.fileType)}</span>`:''}</div>
+                <div><strong>${esc(e.title||'Untitled')}</strong></div>
                 <div style="color:var(--text-muted);font-style:italic;">${esc(e.author||'N/A')} · ${esc(e.fandom||'N/A')} · ${esc(e.words||'N/A')} words</div>
               </div>`).join('')}
           </div>
@@ -1576,8 +1576,7 @@ function loadHistory(page) {
   pageEntries.forEach((e, pi) => {
     const i = start + pi;
     const d=document.createElement('div');d.className='hist-entry';
-    const ftSep = e.fileType ? ` <span style="color:var(--text-muted);font-style:italic;font-size:0.85em;">· ${e.fileType}</span>` : '';
-    d.innerHTML=`<button class="hist-entry-delete" onclick="deleteHistEntry(${i})" title="Remove">✕</button><h4>${esc(e.title)}${ftSep}</h4><p>${esc(e.author)}</p><div class="hist-meta"><span><strong>${esc(e.fandom)}</strong></span><span>Added: <strong>${esc(e.date)}</strong></span>${e.ao3Link&&e.ao3Link!=='N/A'?`<span><a href="${esc(e.ao3Link)}" target="_blank" style="color:var(--maroon)">AO3 ↗</a></span>`:''}</div><div style="margin-top:6px;"><button class="btn btn-sm" style="padding:1px 6px;font-size:10px;" onclick="sendHistEntryToExport(${i})">Send to Export</button></div>`;
+    d.innerHTML=`<button class="hist-entry-delete" onclick="deleteHistEntry(${i})" title="Remove">✕</button><h4>${esc(e.title)}</h4><p>${esc(e.author)}</p><div class="hist-meta"><span><strong>${esc(e.fandom)}</strong></span><span>Added: <strong>${esc(e.date)}</strong></span>${e.ao3Link&&e.ao3Link!=='N/A'?`<span><a href="${esc(e.ao3Link)}" target="_blank" style="color:var(--maroon)">AO3 ↗</a></span>`:''}</div><div style="margin-top:6px;"><button class="btn btn-sm" style="padding:1px 6px;font-size:10px;" onclick="sendHistEntryToExport(${i})">Send to Export</button></div>`;
     list.appendChild(d);
   });
 
