@@ -367,12 +367,72 @@
     background: var(--ivory-dark); border: 1px solid var(--border);
     border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0;
     padding: 13px 16px; margin-bottom: 8px;
+    position: relative;
   }
-  .hist-entry h4 { font-family: 'Cinzel Decorative', serif; font-size: 11px; color: var(--maroon); margin-bottom: 3px; }
+  .hist-entry h4 { font-family: 'Cinzel Decorative', serif; font-size: 11px; color: var(--maroon); margin-bottom: 3px; padding-right: 24px; }
   .hist-entry p { font-size: 14px; color: var(--text-muted); font-style: italic; }
   .hist-meta { display: flex; gap: 16px; margin-top: 7px; flex-wrap: wrap; }
   .hist-meta span { font-size: 12px; color: var(--text-muted); }
   .hist-meta strong { color: var(--text); }
+  .hist-entry-delete {
+    position: absolute; top: 10px; right: 10px;
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); font-size: 12px; padding: 2px 5px;
+    transition: color 0.18s; line-height: 1;
+  }
+  .hist-entry-delete:hover { color: var(--maroon); }
+  .hist-section-label {
+    font-family: 'Cinzel Decorative', serif; font-size: 9px; letter-spacing: 0.13em;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px;
+  }
+
+  /* ── EXTRACTION JOBS ── */
+  .ext-section-title {
+    font-family: 'Cinzel Decorative', serif; font-size: 9px; letter-spacing: 0.13em;
+    text-transform: uppercase; color: var(--maroon); margin: 20px 0 10px;
+  }
+  .ext-job {
+    background: var(--ivory-dark); border: 1px solid var(--border);
+    border-left: 3px solid var(--maroon); border-radius: 0 6px 6px 0;
+    margin-bottom: 8px; overflow: hidden;
+  }
+  .ext-job-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 14px; cursor: pointer; user-select: none;
+    font-family: 'IM Fell English', serif; font-style: italic; font-size: 13px;
+    color: var(--text);
+  }
+  .ext-job-header:hover { background: rgba(139,32,53,0.04); }
+  .ext-job-chevron {
+    font-size: 10px; color: var(--text-muted); transition: transform 0.22s ease;
+    flex-shrink: 0;
+  }
+  .ext-job.open .ext-job-chevron { transform: rotate(90deg); }
+  .ext-job-label { flex: 1; }
+  .ext-job-count { font-size: 12px; color: var(--text-muted); }
+  .ext-job-delete {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); font-size: 13px; padding: 2px 6px;
+    transition: color 0.18s; flex-shrink: 0;
+  }
+  .ext-job-delete:hover { color: var(--maroon); }
+  .ext-job-body {
+    display: grid; grid-template-rows: 0fr;
+    transition: grid-template-rows 0.25s ease;
+  }
+  .ext-job.open .ext-job-body { grid-template-rows: 1fr; }
+  .ext-job-inner { overflow: hidden; }
+  .ext-job-entries { padding: 0 14px 10px; }
+  .ext-job-entry {
+    padding: 7px 0; border-top: 1px solid var(--border);
+    font-family: 'Crimson Pro', serif; font-size: 13px; color: var(--text);
+  }
+  .ext-job-entry:first-child { border-top: none; }
+  .ext-job-entry strong { color: var(--maroon); font-family: 'Cinzel Decorative', serif; font-size: 10px; }
+  .ext-job-actions {
+    display: flex; gap: 8px; padding: 8px 14px 12px;
+    border-top: 1px solid var(--border);
+  }
 
   /* ── DIVIDER ── */
   .divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: var(--gold-dark); font-family: 'IM Fell English', serif; font-style: italic; font-size: 13px; }
@@ -456,7 +516,7 @@
         <input type="file" id="file-input" multiple accept=".epub,.pdf" onchange="handleFiles(this.files)">
         <span class="dropzone-icon">🕯️</span>
         <strong style="font-family:'Cinzel Decorative',serif;font-size:12px;letter-spacing:0.12em;">PASS ME THE TOME!</strong>
-        <p style="font-size:13px;margin-top:6px;">drop or click to browse <em>.epub</em> and <em>.pdf</em> files up to 50 files / 500 MB per batch</p>
+        <p style="font-size:13px;margin-top:6px;">drop or click to browse <em>.epub</em> and <em>.pdf</em> files up to 100 files / 100 MB per batch</p>
       </div>
       <div class="file-list" id="file-list"></div>
       <div class="btn-row" id="cat-btn-row" style="display:none">
@@ -582,14 +642,23 @@
       <div id="hist-cookie-note" style="display:none;font-family:'IM Fell English',serif;font-style:italic;color:var(--gold-dark);font-size:14px;margin-bottom:14px;padding:10px 14px;background:rgba(201,169,110,0.1);border:1px solid var(--gold);border-radius:6px;">
         ⚠ Cookies are disabled — history will not save between sessions.
       </div>
+      <!-- Individual fic history -->
       <div id="hist-list"></div>
       <div id="hist-empty" class="empty-state">
         <span class="empty-icon">🕯</span>
         The void! Go forth and catalog.
       </div>
-      <div class="btn-row" id="hist-actions" style="display:none">
-        <button class="btn" onclick="exportHistory()">Export All</button>
+
+      <!-- Divider + extraction jobs -->
+      <div id="hist-extractions-section" style="display:none">
+        <div class="divider">✦</div>
+        <div class="ext-section-title">Extraction Jobs</div>
+        <div id="hist-extractions-list"></div>
+      </div>
+
+      <div class="btn-row" id="hist-actions" style="display:none;justify-content:space-between;">
         <button class="btn btn-outline" onclick="clearHistory()">✕ Clear History</button>
+        <button class="btn btn-outline" onclick="clearCache()" style="opacity:0.7;">⚠ Clear Cache</button>
       </div>
     </div>
     <div class="tab-navbar">
@@ -808,8 +877,8 @@ function onDragOver(e) { e.preventDefault(); document.getElementById('dropzone')
 function onDragLeave()  { document.getElementById('dropzone').classList.remove('dragover'); }
 function onDrop(e) { e.preventDefault(); document.getElementById('dropzone').classList.remove('dragover'); handleFiles(e.dataTransfer.files); }
 function handleFiles(files) {
-  const MAX_FILES = 50;
-  const MAX_BYTES = 500 * 1024 * 1024; // 500 MB
+  const MAX_FILES = 100;
+  const MAX_BYTES = 100 * 1024 * 1024; // 100 MB
   let skipped = 0;
   for (const f of files) {
     const ext=f.name.split('.').pop().toLowerCase();
@@ -820,7 +889,7 @@ function handleFiles(files) {
     if (totalSize + f.size > MAX_BYTES) { skipped++; continue; }
     uploadedFiles.push(f);
   }
-  if (skipped) toast(`${skipped} file(s) skipped — batch limit is 50 files / 500 MB.`);
+  if (skipped) toast(`${skipped} file(s) skipped — batch limit is 100 files / 100 MB.`);
   renderFileList();
 }
 function renderFileList() {
@@ -836,34 +905,31 @@ function renderFileList() {
 function removeFile(i) { uploadedFiles.splice(i,1); renderFileList(); }
 function clearFiles()  { uploadedFiles=[]; renderFileList(); document.getElementById('cat-results').style.display='none'; }
 function clearCatalog() {
-  if (!confirm('Clear all extracted metadata? This cannot be undone.')) return;
+  if (!confirm('Clear current session metadata?')) return;
   catalogEntries = [];
   excludedRows = new Set();
-  if (cookiesOk()) { try { localStorage.removeItem('aa_history'); } catch {} }
   document.getElementById('meta-tbody').innerHTML = '';
   document.getElementById('cat-results').style.display = 'none';
   document.getElementById('exp-content').style.display = 'none';
   document.getElementById('exp-empty').style.display = 'block';
   activeCols = new Set(COLS);
   document.getElementById('exp-col-toggles').innerHTML = '';
-  toast('Extracted metadata cleared.');
+  toast('Session metadata cleared.');
 }
 function clearExport() {
-  if (!confirm('Clear all entries? This will reset the catalog and history.')) return;
+  if (!confirm('Clear current session entries?')) return;
   catalogEntries = [];
   excludedRows = new Set();
   editModeOn = false;
   const wrap = document.getElementById('select-all-rows-wrap');
   if (wrap) wrap.classList.remove('visible');
-  if (cookiesOk()) { try { localStorage.removeItem('aa_history'); } catch {} }
   document.getElementById('exp-content').style.display = 'none';
   document.getElementById('exp-empty').style.display = 'block';
   document.getElementById('exp-col-toggles').innerHTML = '';
   activeCols = new Set(COLS);
   document.getElementById('meta-tbody').innerHTML = '';
   document.getElementById('cat-results').style.display = 'none';
-  loadHistory();
-  toast('All entries cleared.');
+  toast('Session entries cleared.');
 }
 
 async function catalogFiles() {
@@ -876,14 +942,18 @@ async function catalogFiles() {
     bar.style.width=(i/uploadedFiles.length*100)+'%'; lbl.textContent=`Recording "${f.name}"…`;
     const ext=f.name.split('.').pop().toLowerCase();
     const meta=ext==='epub'?await extractEpub(f):await extractPdf(f);
-    meta.date=today(); results.push(meta); catalogEntries.push(meta); saveHist(meta);
+    meta.date=today(); results.push(meta); catalogEntries.push(meta);
   }
   bar.style.width='100%'; lbl.textContent=`Done — ${results.length} file(s) processed.`;
   setTimeout(()=>prog.style.display='none',800);
-  // Append new results to existing table rows
-  const existingRows = document.getElementById('meta-tbody').querySelectorAll('tr').length;
-  renderMetaTable(getAllEntries().slice(-catalogEntries.length)); // show all session entries
-  // Clear the queue so the dropzone is ready for more files immediately
+  // Single file → individual history entry; multiple → extraction job
+  if (results.length === 1) {
+    saveHist(results[0]);
+    loadHistory();
+  } else {
+    saveExtractionJob(results);
+  }
+  renderMetaTable(getAllEntries().slice(-catalogEntries.length));
   uploadedFiles=[];
   renderFileList();
 }
@@ -1140,13 +1210,9 @@ function renderMetaTable(entries) {
 
 // ════ EXPORT ════
 function getAllEntries() {
-  if (!cookiesOk()) return catalogEntries;
-  try {
-    const saved=JSON.parse(localStorage.getItem('aa_history')||'[]');
-    const all=[...saved];
-    catalogEntries.forEach(e=>{if(!all.find(s=>s.title===e.title&&s.author===e.author))all.push(e);});
-    return all;
-  } catch { return catalogEntries; }
+  // Returns only the current session's catalogEntries (in-memory).
+  // History is kept separately in aa_history and is not mixed into export/copy.
+  return catalogEntries;
 }
 
 let activeCols = new Set(COLS.filter(c => !HISTORY_EXCLUDED_COLS.has(c))); // summary off by default in export
@@ -1296,37 +1362,223 @@ function dlCSV(){
 // ════ HISTORY ════
 function saveHist(e) {
   if (!cookiesOk()) return;
-  try{const h=JSON.parse(localStorage.getItem('aa_history')||'[]');h.unshift(e);localStorage.setItem('aa_history',JSON.stringify(h.slice(0,500)));}catch{}
+  try{const h=JSON.parse(localStorage.getItem('aa_history')||'[]');h.unshift(e);localStorage.setItem('aa_history',JSON.stringify(h.slice(0,21)));}catch{}
 }
-function loadHistory() {
+function nowLabel() {
+  const d = new Date();
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
+    + ', ' + d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+}
+function saveExtractionJob(entries) {
+  if (!entries.length) return;
+  const job = { id: Date.now(), label: nowLabel(), count: entries.length, entries };
+  if (cookiesOk()) {
+    try {
+      const jobs = JSON.parse(localStorage.getItem('aa_extractions')||'[]');
+      jobs.unshift(job);
+      localStorage.setItem('aa_extractions', JSON.stringify(jobs.slice(0,10)));
+    } catch {}
+  }
+  loadExtractions();
+}
+let extractionsPage = 1;
+const EXTRACTIONS_PER_PAGE = 7;
+
+function loadExtractions(page) {
+  const section = document.getElementById('hist-extractions-section');
+  const list = document.getElementById('hist-extractions-list');
+  if (!section || !list) return;
+  if (!cookiesOk()) { section.style.display='none'; return; }
+  let jobs = [];
+  try { jobs = JSON.parse(localStorage.getItem('aa_extractions')||'[]'); } catch {}
+  const actions=document.getElementById('hist-actions');
+  if (!jobs.length) { section.style.display='none'; if(actions) actions.style.display='none'; return; }
+  if(actions) actions.style.display='flex';
+  section.style.display = 'block';
+
+  const totalPages = Math.ceil(jobs.length / EXTRACTIONS_PER_PAGE);
+  if (page !== undefined) extractionsPage = page;
+  extractionsPage = Math.max(1, Math.min(extractionsPage, totalPages));
+
+  const start = (extractionsPage - 1) * EXTRACTIONS_PER_PAGE;
+  const pageJobs = jobs.slice(start, start + EXTRACTIONS_PER_PAGE);
+
+  list.innerHTML = '';
+  pageJobs.forEach((job) => {
+    const div = document.createElement('div');
+    div.className = 'ext-job';
+    div.innerHTML = `
+      <div class="ext-job-header" onclick="toggleExtJob(this)">
+        <span class="ext-job-chevron">▶</span>
+        <span class="ext-job-label">${esc(job.label||job.date||'')}</span>
+        <span class="ext-job-count">${job.count} file${job.count===1?'':'s'}</span>
+        <button class="ext-job-delete" onclick="event.stopPropagation();deleteExtractionJob(${job.id})" title="Delete job">✕</button>
+      </div>
+      <div class="ext-job-body">
+        <div class="ext-job-inner">
+          <div class="ext-job-entries">
+            ${job.entries.map(e=>`
+              <div class="ext-job-entry">
+                <div><strong>${esc(e.title||'Untitled')}</strong></div>
+                <div style="color:var(--text-muted);font-style:italic;">${esc(e.author||'N/A')} · ${esc(e.fandom||'N/A')} · ${esc(e.words||'N/A')} words</div>
+              </div>`).join('')}
+          </div>
+          <div class="ext-job-actions">
+            <button class="btn btn-sm" onclick="sendJobToExport(${job.id})">Send to Export</button>
+          </div>
+        </div>
+      </div>`;
+    list.appendChild(div);
+  });
+
+  // Render pagination nav — styled like tab-navbar
+  let paginationEl = document.getElementById('ext-pagination');
+  if (!paginationEl) {
+    paginationEl = document.createElement('div');
+    paginationEl.id = 'ext-pagination';
+    paginationEl.className = 'tab-navbar';
+    paginationEl.style.cssText = 'padding:10px 0 4px;';
+    section.appendChild(paginationEl);
+  }
+  if (totalPages <= 1) { paginationEl.style.display='none'; return; }
+  paginationEl.style.display = 'flex';
+  paginationEl.innerHTML = '';
+  for (let p = 1; p <= totalPages; p++) {
+    if (p > 1) {
+      const sep = document.createElement('span');
+      sep.className = 'tab-navsep';
+      sep.textContent = ' | ';
+      paginationEl.appendChild(sep);
+    }
+    const btn = document.createElement('button');
+    btn.className = 'tab-navlink';
+    btn.textContent = p;
+    btn.style.cssText = p === extractionsPage ? 'font-weight:bold;text-decoration:none;opacity:1;cursor:default;' : '';
+    if (p !== extractionsPage) btn.onclick = () => loadExtractions(p);
+    paginationEl.appendChild(btn);
+  }
+}
+function toggleExtJob(header) {
+  header.closest('.ext-job').classList.toggle('open');
+}
+function deleteExtractionJob(id) {
+  if (!cookiesOk()) return;
+  try {
+    const jobs = JSON.parse(localStorage.getItem('aa_extractions')||'[]');
+    localStorage.setItem('aa_extractions', JSON.stringify(jobs.filter(j=>j.id!==id)));
+    extractionsPage = 1;
+    loadExtractions();
+  } catch {}
+}
+function sendJobToExport(id) {
+  try {
+    let jobs=[];
+    if(cookiesOk()){try{jobs=JSON.parse(localStorage.getItem('aa_extractions')||'[]');}catch{}}
+    const job=jobs.find(j=>j.id===id);
+    if(!job) return toast('Job not found.');
+    job.entries.forEach(e=>{
+      if(!catalogEntries.find(x=>x.title===e.title&&x.author===e.author))
+        catalogEntries.push(e);
+    });
+    switchTab('export'); buildExport();
+    toast(`${job.count} entr${job.count===1?'y':'ies'} sent to Export ✦`);
+  } catch { toast('Could not send job to Export.'); }
+}
+let historyPage = 1;
+const HISTORY_PER_PAGE = 3;
+
+function loadHistory(page) {
   const list=document.getElementById('hist-list'),empty=document.getElementById('hist-empty'),actions=document.getElementById('hist-actions');
-  const all=getAllEntries();
-  if (!all.length){list.innerHTML='';empty.style.display='block';actions.style.display='none';return;}
+  let entries=[];
+  if(cookiesOk()){try{entries=JSON.parse(localStorage.getItem('aa_history')||'[]');}catch{}}
+  let jobs=[];
+  if(cookiesOk()){try{jobs=JSON.parse(localStorage.getItem('aa_extractions')||'[]');}catch{}}
+  const hasAnything = entries.length||jobs.length;
+  const existingPag=document.getElementById('hist-pagination');
+  if(!entries.length){list.innerHTML='';if(existingPag)existingPag.remove();empty.style.display=hasAnything?'none':'block';actions.style.display=hasAnything?'flex':'none';return;}
   empty.style.display='none'; actions.style.display='flex'; list.innerHTML='';
-  all.forEach(e=>{
+
+  const totalPages = Math.ceil(entries.length / HISTORY_PER_PAGE);
+  if (page !== undefined) historyPage = page;
+  historyPage = Math.max(1, Math.min(historyPage, totalPages));
+  const start = (historyPage - 1) * HISTORY_PER_PAGE;
+  const pageEntries = entries.slice(start, start + HISTORY_PER_PAGE);
+
+  pageEntries.forEach((e, pi) => {
+    const i = start + pi;
     const d=document.createElement('div');d.className='hist-entry';
-    d.innerHTML=`<h4>${esc(e.title)}</h4><p>${esc(e.author)}</p><div class="hist-meta"><span><strong>${esc(e.fandom)}</strong></span><span>Words: <strong>${esc(e.words)}</strong></span><span>Added: <strong>${esc(e.date)}</strong></span>${e.ao3Link&&e.ao3Link!=='N/A'?`<span><a href="${esc(e.ao3Link)}" target="_blank" style="color:var(--maroon)">AO3 ↗</a></span>`:''}</div>`;
+    d.innerHTML=`<button class="hist-entry-delete" onclick="deleteHistEntry(${i})" title="Remove">✕</button><h4>${esc(e.title)}</h4><p>${esc(e.author)}</p><div class="hist-meta"><span><strong>${esc(e.fandom)}</strong></span><span>Words: <strong>${esc(e.words)}</strong></span><span>Added: <strong>${esc(e.date)}</strong></span>${e.ao3Link&&e.ao3Link!=='N/A'?`<span><a href="${esc(e.ao3Link)}" target="_blank" style="color:var(--maroon)">AO3 ↗</a></span>`:''}</div><div style="margin-top:8px;"><button class="btn btn-sm" onclick="sendHistEntryToExport(${i})">Send to Export</button></div>`;
     list.appendChild(d);
   });
+
+  // Pagination nav — styled like tab-navbar
+  let paginationEl = document.getElementById('hist-pagination');
+  if (!paginationEl) {
+    paginationEl = document.createElement('div');
+    paginationEl.id = 'hist-pagination';
+    paginationEl.className = 'tab-navbar';
+    paginationEl.style.cssText = 'padding:10px 0 4px;';
+    list.after(paginationEl);
+  }
+  if (totalPages <= 1) { paginationEl.style.display='none'; return; }
+  paginationEl.style.display = 'flex';
+  paginationEl.innerHTML = '';
+  for (let p = 1; p <= totalPages; p++) {
+    if (p > 1) {
+      const sep = document.createElement('span');
+      sep.className = 'tab-navsep';
+      sep.textContent = ' | ';
+      paginationEl.appendChild(sep);
+    }
+    const btn = document.createElement('button');
+    btn.className = 'tab-navlink';
+    btn.textContent = p;
+    btn.style.cssText = p === historyPage ? 'font-weight:bold;text-decoration:none;opacity:1;cursor:default;' : '';
+    if (p !== historyPage) btn.onclick = () => loadHistory(p);
+    paginationEl.appendChild(btn);
+  }
+}
+function deleteHistEntry(idx) {
+  if(!cookiesOk()) return;
+  try {
+    const h=JSON.parse(localStorage.getItem('aa_history')||'[]');
+    h.splice(idx,1);
+    localStorage.setItem('aa_history',JSON.stringify(h));
+    const newTotal = Math.ceil(h.length / HISTORY_PER_PAGE);
+    historyPage = Math.max(1, Math.min(historyPage, newTotal || 1));
+    loadHistory();
+  } catch {}
+}
+function sendHistEntryToExport(idx) {
+  try {
+    let entries=[];
+    if(cookiesOk()){try{entries=JSON.parse(localStorage.getItem('aa_history')||'[]');}catch{}}
+    const e=entries[idx];
+    if(!e) return toast('Entry not found.');
+    if(!catalogEntries.find(x=>x.title===e.title&&x.author===e.author))
+      catalogEntries.push(e);
+    switchTab('export'); buildExport();
+    toast(`"${e.title}" sent to Export ✦`);
+  } catch { toast('Could not send entry to Export.'); }
 }
 function clearHistory() {
-  if (!confirm('Clear all saved history? This cannot be undone.')) return;
-  if (cookiesOk()) { try { localStorage.removeItem('aa_history'); } catch {} }
-  catalogEntries = [];
-  excludedRows = new Set();
+  if (!confirm('Clear recent history entries? Extraction jobs will not be affected.')) return;
+  if (cookiesOk()) {
+    try { localStorage.removeItem('aa_history'); } catch {}
+  }
+  historyPage = 1;
   loadHistory();
-  document.getElementById('meta-tbody').innerHTML = '';
-  document.getElementById('cat-results').style.display = 'none';
-  document.getElementById('exp-content').style.display = 'none';
-  document.getElementById('exp-empty').style.display = 'block';
-  activeCols = new Set(COLS);
-  document.getElementById('exp-col-toggles').innerHTML = '';
   toast('History cleared.');
+}
+function clearCache() {
+  if (!confirm('Clear all cached data (history, extractions, theme, preferences) and reload? This cannot be undone.')) return;
+  try { localStorage.clear(); } catch {}
+  location.reload();
 }
 function exportHistory(){switchTab('export');buildExport();}
 
 // INIT
-document.addEventListener('DOMContentLoaded',()=>{checkCookieBanner();applyTheme();loadHistory();});
+document.addEventListener('DOMContentLoaded',()=>{checkCookieBanner();applyTheme();loadHistory();loadExtractions();});
 </script>
 </body>
 </html>
