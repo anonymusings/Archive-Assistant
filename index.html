@@ -731,7 +731,7 @@
         <div class="card-title">✦ Extracted Metadata</div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
           <label class="exp-toggle-label">
-            <input type="checkbox" id="cat-include-headers" checked>
+            <input type="checkbox" id="cat-include-headers" checked onchange="toggleCatHeaders()">
             Include column headers
           </label>
           <p id="cat-summary" style="font-family:'IM Fell English',serif;font-style:italic;color:var(--gold-dark);font-size:13px;margin:0;"></p>
@@ -739,7 +739,7 @@
         <div class="results-wrap-outer" id="results-wrap-outer">
           <div class="results-wrap" id="results-wrap-inner" onscroll="checkResultsScroll()">
           <table class="results-table">
-            <thead><tr>
+            <thead id="cat-thead"><tr>
               <th>Date</th><th>Date Posted</th><th>Title</th><th>Author</th>
               <th>Fandom</th><th>Relationships</th><th>Characters</th><th>Tags</th>
               <th>Warning</th><th>Words</th><th>Category</th><th>Rating</th><th>AO3 Link</th><th>Summary</th><th>Series</th>
@@ -1185,6 +1185,9 @@ async function catalogFiles() {
     saveExtractionJob(results);
   }
   renderMetaTable(getAllEntries().slice(-catalogEntries.length));
+  uploadedFiles = [];
+  renderFileList();
+  document.getElementById('dropzone').classList.add('compact');
 }
 
 // EPUB EXTRACTION
@@ -1471,6 +1474,11 @@ function renderMetaTable(entries) {
   document.getElementById('cat-results').style.display='block'; checkResultsScroll();
   const catSummary = document.getElementById('cat-summary');
   if (catSummary) catSummary.textContent = `${entries.length} entr${entries.length===1?'y':'ies'}`;
+}
+
+function toggleCatHeaders() {
+  const thead = document.getElementById('cat-thead');
+  if (thead) thead.style.display = document.getElementById('cat-include-headers').checked ? '' : 'none';
 }
 
 // ════ EXPORT ════
