@@ -133,6 +133,14 @@
     background: linear-gradient(90deg, transparent, var(--gold-dark), var(--maroon), var(--gold-dark), transparent);
   }
 
+  /* ── MOBILE HERO SHRINK (portrait phones) ── */
+  @media (max-width: 430px) {
+    .hero { padding: 28px 0 0; }
+    .hero-logo { width: 162px; height: 162px; }
+    .hero-title { font-size: clamp(13px, 3.2vw, 21px); }
+    .hero-sub { font-size: 12px; }
+  }
+
   /* ── THEME TOGGLE ── */
   .theme-toggle {
     position: fixed; top: 18px; right: 18px; z-index: 100;
