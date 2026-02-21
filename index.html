@@ -1030,6 +1030,9 @@ function loadScript(src) {
 }
 
 // ════ AO3 FETCH (via Cloudflare Worker) ════
+// Primary: Google Apps Script (server-side, no CORS issues)
+const AO3_SCRIPT = 'https://script.google.com/macros/s/AKfycbwcJWd3k8O6-zXTyldnxg2i__BYQQAG2KIBDInm7iSpzvTzqoVXrPuQXiHYKhXBYh60FA/exec';
+// Fallback: Cloudflare Worker
 const AO3_WORKER = 'https://ao3-proxy-2.archiveassistant.workers.dev';
 const AO3_RE = /https?:\/\/archiveofourown\.org\/works\/(\d+)/g;
 
@@ -1039,24 +1042,53 @@ function extractAo3WorkId(url) {
 }
 
 async function fetchAO3Meta(id) {
-  try {
-    const res = await fetch(`${AO3_WORKER}?id=${id}`, {
-      signal: AbortSignal.timeout(20000)
-    });
-    if (!res.ok) {
-      let msg = `HTTP ${res.status}`;
-      try { const j = await res.json(); msg = j.error || msg; } catch {}
-      throw new Error(msg);
+  // Try Apps Script first (reliable, server-side, no CORS)
+  // Fall back to Cloudflare Worker if Apps Script fails
+  const sources = [
+    async () => {
+      const res = await fetch(`${AO3_SCRIPT}?id=${id}`, { signal: AbortSignal.timeout(25000) });
+      if (!res.ok) throw new Error(`Apps Script HTTP ${res.status}`);
+      const j = await res.json();
+      if (j.error) throw new Error(j.error);
+      // Apps Script returns parsed metadata directly
+      // Decode any HTML entities that slipped through (e.g. &#8592; in series)
+      const decodeEntities = (str) => {
+        if (!str || str === 'N/A') return str;
+        const txt = document.createElement('textarea');
+        txt.innerHTML = str;
+        return txt.value;
+      };
+      Object.keys(j).forEach(k => { if (typeof j[k] === 'string') j[k] = decodeEntities(j[k]); });
+      return j;
+    },
+    async () => {
+      const res = await fetch(`${AO3_WORKER}?id=${id}`, { signal: AbortSignal.timeout(20000) });
+      if (!res.ok) {
+        let msg = `Worker HTTP ${res.status}`;
+        try { const j = await res.json(); msg = j.error || msg; } catch {}
+        throw new Error(msg);
+      }
+      const html = await res.text();
+      if (!html || html.length < 500) throw new Error('Empty response from worker');
+      const parsed = parseAO3Page(html, id);
+      if (parsed.title && parsed.title !== `Work #${id}`) return parsed;
+      throw new Error('Could not parse work page');
     }
-    const html = await res.text();
-    if (!html || html.length < 500) throw new Error('Empty response from worker');
-    const parsed = parseAO3Page(html, id);
-    if (parsed.title && parsed.title !== `Work #${id}`) return parsed;
-    throw new Error('Could not parse work page');
-  } catch (err) {
-    console.error('fetchAO3Meta failed:', err.message);
-    return {id, title:`Work #${id}`, author:'N/A', fandom:'N/A', relationships:'N/A', characters:'N/A', tags:'N/A', warning:'N/A', words:'N/A', category:'N/A', rating:'N/A', series:'N/A', datePosted:'N/A', ao3Link:`https://archiveofourown.org/works/${id}`, updatedAt:'', summary:'N/A'};
+  ];
+
+  for (const source of sources) {
+    try {
+      const result = await source();
+      if (result && result.title && result.title !== `Work #${id}`) return result;
+    } catch (err) {
+      console.warn('fetchAO3Meta source failed:', err.message);
+      continue;
+    }
   }
+
+  // All sources failed
+  console.error('fetchAO3Meta: all sources failed for id', id);
+  return {id, title:`Work #${id}`, author:'N/A', fandom:'N/A', relationships:'N/A', characters:'N/A', tags:'N/A', warning:'N/A', words:'N/A', category:'N/A', rating:'N/A', series:'N/A', datePosted:'N/A', ao3Link:`https://archiveofourown.org/works/${id}`, updatedAt:'', summary:'N/A'};
 }
 
 function parseAO3Page(html, id) {
