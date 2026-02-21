@@ -161,7 +161,7 @@
 
   /* ── BUTTONS ── */
   .btn {
-    display: inline-flex; align-items: center; gap: 7px; padding: 6px 22px;
+    display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px;
     border: 1.5px solid var(--maroon); background: var(--maroon); color: var(--ivory-light);
     font-family: 'IM Fell English', serif; font-size: 13px; border-radius: 5px;
     cursor: pointer; transition: all 0.2s; text-decoration: none;
@@ -171,7 +171,7 @@
   .btn-outline { background: transparent; color: var(--maroon); }
   .btn-outline:hover { background: rgba(139,32,53,0.08); }
   .btn-clear-gold {
-    display: inline-flex; align-items: center; gap: 7px; padding: 6px 22px;
+    display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px;
     background: transparent; border: 1.5px solid var(--gold); color: var(--gold-dark);
     font-family: 'IM Fell English', serif; font-size: 13px; border-radius: 5px;
     cursor: pointer; transition: all 0.2s;
@@ -555,7 +555,7 @@
             <thead><tr>
               <th>Date</th><th>Date Posted</th><th>Title</th><th>Author</th>
               <th>Fandom</th><th>Relationships</th><th>Characters</th><th>Tags</th>
-              <th>Warning</th><th>Words</th><th>Category</th><th>AO3 Link</th><th>Summary</th>
+              <th>Warning</th><th>Words</th><th>Category</th><th>Rating</th><th>AO3 Link</th><th>Summary</th><th>Series</th>
             </tr></thead>
             <tbody id="meta-tbody"></tbody>
           </table>
@@ -671,8 +671,8 @@
       </div>
 
       <div class="btn-row" id="hist-actions" style="display:none;justify-content:space-between;">
-        <button class="btn btn-outline" onclick="clearHistory()">✕ Clear History</button>
-        <button class="btn btn-outline" onclick="clearCache()" style="opacity:0.7;">⚠ Clear Cache</button>
+        <button class="btn btn-outline btn-sm" onclick="clearHistory()">✕ Clear History</button>
+        <button class="btn btn-outline btn-sm" onclick="clearCache()" style="opacity:0.7;">⚠ Clear Cache</button>
       </div>
     </div>
     <div class="tab-navbar">
@@ -691,9 +691,9 @@
 </div>
 
 <script>
-const COLS = ['date','datePosted','title','author','fandom','relationships','characters','tags','warning','words','category','ao3Link','summary'];
-const HDRS = ['Date','Date Posted','Title','Author','Fandom','Relationships','Characters','Tags','Warning','Words','Category','AO3 Link','Summary'];
-const HISTORY_EXCLUDED_COLS = new Set(['summary']);
+const COLS = ['date','datePosted','title','author','fandom','relationships','characters','tags','warning','words','category','rating','ao3Link','summary','series'];
+const HDRS = ['Date','Date Posted','Title','Author','Fandom','Relationships','Characters','Tags','Warning','Words','Category','Rating','AO3 Link','Summary','Series'];
+const HISTORY_EXCLUDED_COLS = new Set(['series','rating']);
 let catalogEntries = [];
 let uploadedFiles = [];
 
@@ -878,7 +878,7 @@ function parseAO3Page(html, id) {
   };
 }
 function addOne(m) {
-  const e={date:today(),datePosted:m.datePosted||'N/A',title:m.title||'N/A',author:m.author||'N/A',fandom:m.fandom||'N/A',relationships:m.relationships||'N/A',characters:m.characters||'N/A',tags:m.tags||'N/A',warning:m.warning||'N/A',words:m.words||'N/A',category:m.category||'N/A',ao3Link:m.ao3Link||'N/A',summary:m.summary||'N/A'};
+  const e={date:today(),datePosted:m.datePosted||'N/A',title:m.title||'N/A',author:m.author||'N/A',fandom:m.fandom||'N/A',relationships:m.relationships||'N/A',characters:m.characters||'N/A',tags:m.tags||'N/A',warning:m.warning||'N/A',words:m.words||'N/A',category:m.category||'N/A',rating:m.rating||'N/A',ao3Link:m.ao3Link||'N/A',series:m.series||'N/A',summary:m.summary||'N/A'};
   catalogEntries.push(e); saveHist(e); toast(`"${m.title}" added to catalog ✦`);
 }
 function addAllToCatalog() { (window._fm||[]).forEach(m=>addOne(m)); }
@@ -978,7 +978,7 @@ async function catalogFiles() {
 // files from the ZIP, flatten them to plain text with ||| delimiters at block boundaries,
 // then do a linear position scan between known AO3 header labels — exactly as the bot does.
 async function extractEpub(file) {
-  const base={date:today(),datePosted:'N/A',title:cleanName(file.name),author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',ao3Link:'N/A',summary:'N/A'};
+  const base={date:today(),datePosted:'N/A',title:cleanName(file.name),author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',rating:'N/A',ao3Link:'N/A',series:'N/A',summary:'N/A'};
   try {
     if (!window.JSZip) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
     const zip = await JSZip.loadAsync(await file.arrayBuffer());
@@ -1007,7 +1007,7 @@ async function extractEpub(file) {
     const res = {
       date:today(), datePosted:'N/A', title:cleanName(file.name),
       author:'N/A', fandom:'N/A', tags:'N/A', warning:'N/A',
-      words:'N/A', category:'N/A', ao3Link:'N/A', relationships:'N/A', characters:'N/A', summary:'N/A'
+      words:'N/A', category:'N/A', rating:'N/A', ao3Link:'N/A', relationships:'N/A', characters:'N/A', series:'N/A', summary:'N/A'
     };
 
     // Title + Author: look for "Title - Author - Fandom" pattern first (AO3 EPUB header),
@@ -1040,6 +1040,7 @@ async function extractEpub(file) {
       { id:'stats',         labels:['Stats:'] },
       { id:'summary',       labels:['Summary:', 'Summary'] },
       { id:'notes',         labels:['Notes:', 'Notes'] },
+      { id:'series',        labels:['Series:', 'Series Part'] },
     ];
     const found = [];
     for (const h of HEADER_MAP) {
@@ -1055,18 +1056,46 @@ async function extractEpub(file) {
       const next = found[i+1];
       const raw  = fullText.substring(cur.pos + cur.len, next ? next.pos : fullText.length);
       const val  = epubClean(raw.trim().replace(/\|\|\|/g, ', '));
+      if (cur.id === 'rating')        res.rating        = val;
       if (cur.id === 'fandom')        res.fandom        = val;
       if (cur.id === 'warning')       res.warning       = val;
       if (cur.id === 'category')      res.category      = val;
       if (cur.id === 'relationships') res.relationships = val;
       if (cur.id === 'characters')    res.characters    = val;
       if (cur.id === 'tags')          res.tags          = val;
+      if (cur.id === 'series')        res.series        = val;
       if (cur.id === 'summary') {
         const summaryRaw = fullText.substring(cur.pos + cur.len, next ? next.pos : fullText.length);
-        const summaryClean = summaryRaw
-          .replace(/\|\|\|/g, ' ').replace(/<[^>]*>/g, '')
-          .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'")
-          .replace(/\s{2,}/g, ' ').replace(/^[\s,]+|[\s,]+$/g, '').trim();
+        // Decode entities and strip tags first so marker matching works on clean text
+        let summaryDecoded = summaryRaw
+          .replace(/<[^>]*>/g, '')
+          .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'");
+        // Split on ||| block boundaries and take only the initial block(s).
+        // Stop at the first ||| that is followed by a known chapter/content marker,
+        // or at the first ||| after which the remaining text looks like chapter content.
+        // Known hard stop phrases (case-insensitive, matched at start of a trimmed segment):
+        const EPUB_SUM_STOPS = [
+          /^chapter\s+\d/i,
+          /^chapter\s+notes?/i,
+          /^chapter\s+summary/i,
+          /^see the end of the chapter/i,
+          /^notes?:/i,
+          /^end notes?/i,
+          /^author'?s?\s+notes?/i,
+        ];
+        const segments = summaryDecoded.split('|||');
+        const summaryParts = [];
+        for (const seg of segments) {
+          const s = seg.replace(/\s{2,}/g,' ').replace(/^[\s,]+|[\s,]+$/g,'').trim();
+          if (!s) continue;
+          // Stop if this segment matches a hard stop phrase
+          if (EPUB_SUM_STOPS.some(re => re.test(s))) break;
+          // Stop if this segment is the fic title or "Title - Author" pattern repeated from the header
+          if (res.title && res.title !== 'N/A' && s.toLowerCase().startsWith(res.title.toLowerCase().substring(0, Math.min(res.title.length, 30)))) break;
+          if (res.author && res.author !== 'N/A' && s.toLowerCase().startsWith(res.author.toLowerCase().substring(0, Math.min(res.author.length, 20)))) break;
+          summaryParts.push(s);
+        }
+        const summaryClean = summaryParts.join(' ').replace(/\s{2,}/g,' ').replace(/^[\s,]+|[\s,]+$/g,'').trim();
         res.summary = summaryClean || 'N/A';
       }
     }
@@ -1100,7 +1129,7 @@ function epubClean(str) {
 
 // PDF EXTRACTION
 async function extractPdf(file) {
-  const base={date:today(),datePosted:'N/A',title:cleanName(file.name),author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',ao3Link:'N/A',summary:'N/A'};
+  const base={date:today(),datePosted:'N/A',title:cleanName(file.name),author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',rating:'N/A',ao3Link:'N/A',series:'N/A',summary:'N/A'};
   try {
     if (!window.pdfjsLib) {
       await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
@@ -1165,9 +1194,13 @@ async function extractPdf(file) {
     const fandom        = getPdfField(headerText,'Fandom');
     const warning       = getPdfField(headerText,'Archive Warning');
     const category      = getPdfField(headerText,'Categor');
+    const rating        = getPdfField(headerText,'Rating');
     const relationships = getPdfField(headerText,'Relationship');
     const characters    = getPdfField(headerText,'Character');
     const tags          = getPdfField(headerText,'Additional Tags');
+    // Series: extracted separately — looks for "Series:" label in PDF header block.
+    // Only collects one line (the series name/part info) before any next anchor.
+    const series        = getPdfField(headerText,'Series');
 
     // --- Summary ---
     const PDF_SUM_STOPS = ['Notes','Stats:','Words:','Rating:','Archive Warning','Fandom','Language:','Collections:','Published:','Completed:','Updated:'];
@@ -1203,7 +1236,7 @@ async function extractPdf(file) {
       if (authorM) author=authorM[1].trim();
     }
 
-    return {date:today(),datePosted,title,author,fandom,relationships,characters,tags,warning,words,category,ao3Link,summary};
+    return {date:today(),datePosted,title,author,fandom,relationships,characters,tags,warning,words,category,rating,ao3Link,series,summary};
   } catch(err) { console.error('PDF parse error:', err); return base; }
 }
 function fmtPdfDate(d) { try{const s=d.replace('D:','');return `${s.substring(0,4)}-${s.substring(4,6)}-${s.substring(6,8)}`;}catch{return 'N/A';} }
