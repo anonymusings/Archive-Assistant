@@ -172,7 +172,7 @@
   .card {
     background: var(--surface); border: 1.5px solid var(--ivory-darker);
     border-top: 3px solid var(--gold); border-radius: 0 0 8px 8px;
-    padding: 24px; margin-bottom: 20px;
+    padding: 16px 24px; margin-bottom: 20px;
     box-shadow: 0 2px 20px var(--shadow); transition: background 0.4s;
   }
   .card-title {
@@ -235,14 +235,23 @@
 
   /* ── DROPZONE ── */
   .dropzone {
-    border: 2px dashed var(--ivory-darker); border-radius: 8px; padding: 40px 24px;
-    text-align: center; cursor: pointer; transition: all 0.25s;
+    border: 2px dashed var(--ivory-darker); border-radius: 8px; padding: 32px 24px;
+    text-align: center; cursor: pointer;
     background: rgba(201,169,110,0.04);
     font-family: 'IM Fell English', serif; color: var(--text-muted);
   }
   .dropzone:hover, .dropzone.dragover { border-color: var(--gold); background: rgba(201,169,110,0.1); color: var(--maroon); }
   .dropzone-icon { font-size: 40px; margin-bottom: 10px; display: block; }
   .dropzone input[type="file"] { display: none; }
+
+  /* ── COMPACT DROPZONE ── */
+  .dropzone.compact { padding: 10px 24px 16px; }
+  .dropzone.compact .dropzone-icon { font-size: 22px; margin-bottom: 4px; }
+  .dropzone.compact .dropzone-default-text { display: none; }
+  .dropzone.compact .dropzone-compact-text { display: block; }
+  .dropzone-compact-text { display: none; font-size: 12px; line-height: 1.3; }
+  .dropzone.compact strong { display: block; line-height: 1.2; font-size: 11px; }
+  .dropzone.compact .dropzone-compact-text { margin-top: 2px; }
 
   /* ── FILE LIST ── */
   .file-list { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
@@ -616,7 +625,7 @@
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   /* ── EMPTY STATE ── */
-  .empty-state { text-align: center; padding: 48px 20px; color: var(--text-muted); font-family: 'IM Fell English', serif; font-style: italic; font-size: 16px; }
+  .empty-state { text-align: center; padding: 35px 20px; color: var(--text-muted); font-family: 'IM Fell English', serif; font-style: italic; font-size: 16px; }
   .empty-icon { font-size: 36px; display: block; margin-bottom: 14px; opacity: 0.45; }
 
   /* ── FOOTER ── */
@@ -687,7 +696,8 @@
         <input type="file" id="file-input" multiple accept=".epub,.pdf" onchange="handleFiles(this.files)">
         <span class="dropzone-icon">🕯️</span>
         <strong style="font-family:'Cinzel Decorative',serif;font-size:12px;letter-spacing:0.12em;">PASS ME THE TOME!</strong>
-        <p style="font-size:13px;margin-top:6px;">drop or click to browse <em>.epub</em> and <em>.pdf</em> files up to 100 files / 100 MB per batch</p>
+        <p class="dropzone-default-text" style="font-size:13px;margin-top:6px;">drop or click to browse <em>.epub</em> and <em>.pdf</em> files up to 100 files / 100 MB per batch</p>
+        <p class="dropzone-compact-text" style="margin-top:4px;">keep adding files — drag and drop or click to browse</p>
       </div>
       <div class="file-list" id="file-list"></div>
       <div class="btn-row" id="cat-btn-row" style="display:none">
@@ -1089,19 +1099,28 @@ function renderFileList() {
     list.appendChild(d);
   });
   document.getElementById('cat-btn-row').style.display=uploadedFiles.length?'flex':'none';
+  document.getElementById('dropzone').classList.toggle('compact', uploadedFiles.length > 0);
 }
 function removeFile(i) { uploadedFiles.splice(i,1); renderFileList(); }
-function clearFiles()  { uploadedFiles=[]; renderFileList(); document.getElementById('cat-results').style.display='none'; }
+function clearFiles()  {
+  uploadedFiles=[];
+  renderFileList();
+  document.getElementById('cat-results').style.display='none';
+  document.getElementById('dropzone').classList.remove('compact');
+}
 function clearCatalog() {
   if (!confirm('Clear current session metadata?')) return;
   catalogEntries = [];
   excludedRows = new Set();
+  uploadedFiles = [];
+  renderFileList();
   document.getElementById('meta-tbody').innerHTML = '';
   document.getElementById('cat-results').style.display = 'none';
   document.getElementById('exp-content').style.display = 'none';
   document.getElementById('exp-empty').style.display = 'block';
   activeCols = new Set(COLS);
   document.getElementById('exp-col-toggles').innerHTML = '';
+  document.getElementById('dropzone').classList.remove('compact');
   toast('Session metadata cleared.');
 }
 function clearExport() {
@@ -1149,8 +1168,6 @@ async function catalogFiles() {
     saveExtractionJob(results);
   }
   renderMetaTable(getAllEntries().slice(-catalogEntries.length));
-  uploadedFiles=[];
-  renderFileList();
 }
 
 // EPUB EXTRACTION
