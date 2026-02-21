@@ -215,6 +215,14 @@
   .btn-gold:hover { background: rgba(201,169,110,0.10); box-shadow: 0 4px 14px rgba(201,169,110,0.3); }
   .btn-sm { padding: 3px 12px; font-size: 12px; }
   .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .btn-row-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-row-responsive { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 16px; }
+
+  @media (max-width: 520px) {
+    .btn-row-responsive { flex-direction: column; align-items: stretch; }
+    .btn-row-responsive .btn-row-actions { flex-wrap: wrap; }
+    .btn-row-responsive .btn-clear { align-self: flex-start; }
+  }
 
   /* ── DROPZONE ── */
   .dropzone {
@@ -704,13 +712,13 @@
           </table>
           </div>
         </div>
-        <div class="btn-row" style="margin-top:16px;justify-content:space-between;">
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <div class="btn-row btn-row-responsive" style="margin-top:16px;justify-content:space-between;">
+          <div class="btn-row-actions">
             <button class="btn" onclick="switchTab('export');buildExport()">Export Options</button>
             <button class="btn btn-gold" onclick="quickCopyTSV()">Copy TSV</button>
             <button class="btn btn-gold" onclick="quickDlCSV()">Download CSV</button>
           </div>
-          <button class="btn btn-outline" onclick="clearCatalog()"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Clear</button>
+          <button class="btn btn-outline btn-clear" onclick="clearCatalog()"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Clear</button>
         </div>
       </div>
     </div>
@@ -791,13 +799,13 @@
         <div id="tsv-out" style="display:none"></div>
         <div id="csv-out" style="display:none"></div>
 
-        <div class="btn-row" style="margin-top:6px;justify-content:space-between;">
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <div class="btn-row btn-row-responsive" style="margin-top:6px;justify-content:space-between;">
+          <div class="btn-row-actions">
             <button class="btn" onclick="switchTab('cataloger')">+ Add More</button>
             <button class="btn btn-gold" onclick="copyTSV()">Copy TSV</button>
             <button class="btn btn-gold" onclick="dlCSV()">Download CSV</button>
           </div>
-          <button class="btn btn-outline" onclick="clearExport()"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Clear</button>
+          <button class="btn btn-outline btn-clear" onclick="clearExport()"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Clear</button>
         </div>
 
       </div>
