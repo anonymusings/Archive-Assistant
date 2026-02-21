@@ -410,21 +410,16 @@
   .ext-job.open .ext-job-chevron { transform: rotate(90deg); }
   .ext-job-label { flex: 1; }
   .ext-job-count { font-size: 12px; color: var(--text-muted); }
-  .ext-job-delete {
-    background: none; border: none; cursor: pointer;
-    color: var(--text-muted); font-size: 13px; padding: 2px 6px;
-    transition: color 0.18s; flex-shrink: 0;
-    opacity: 0; pointer-events: none;
-  }
-  .ext-job.open .ext-job-delete { opacity: 1; pointer-events: auto; }
-  .ext-job-delete:hover { color: var(--maroon); }
   .ext-job-body {
     display: grid; grid-template-rows: 0fr;
     transition: grid-template-rows 0.25s ease;
   }
   .ext-job.open .ext-job-body { grid-template-rows: 1fr; }
   .ext-job-inner { overflow: hidden; }
-  .ext-job-entries { padding: 0 14px 10px; }
+  .ext-job-entries { padding: 0 14px 10px; max-height: 300px; overflow-y: auto; }
+  .ext-job-entries::-webkit-scrollbar { width: 3px; }
+  .ext-job-entries::-webkit-scrollbar-track { background: var(--ivory-dark); }
+  .ext-job-entries::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
   .ext-job-entry {
     padding: 7px 0; border-top: 1px solid var(--border);
     font-family: 'Crimson Pro', serif; font-size: 13px; color: var(--text);
@@ -432,9 +427,17 @@
   .ext-job-entry:first-child { border-top: none; }
   .ext-job-entry strong { color: var(--maroon); font-family: 'Cinzel Decorative', serif; font-size: 10px; }
   .ext-job-actions {
-    display: flex; gap: 8px; padding: 8px 14px 12px;
-    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 14px 12px; border-top: 1px solid var(--border);
+    position: sticky; bottom: 0; background: var(--ivory-dark);
   }
+  .ext-job-delete-link {
+    font-family: 'IM Fell English', serif; font-style: italic; font-size: 12px;
+    color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px;
+    background: none; border: none; cursor: pointer; padding: 0;
+    transition: color 0.18s;
+  }
+  .ext-job-delete-link:hover { color: var(--maroon); }
 
   /* ── DIVIDER ── */
   .divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: var(--gold-dark); font-family: 'IM Fell English', serif; font-style: italic; font-size: 13px; }
@@ -1422,7 +1425,6 @@ function loadExtractions(page) {
     div.className = 'ext-job';
     div.innerHTML = `
       <div class="ext-job-header" onclick="toggleExtJob(this)">
-        <button class="ext-job-delete" onclick="event.stopPropagation();deleteExtractionJob(${job.id})" title="Delete job">✕</button>
         <span class="ext-job-label">${esc(job.label||job.date||'')}</span>
         <span class="ext-job-count">${job.count} file${job.count===1?'':'s'}</span>
         <span class="ext-job-chevron">▶</span>
@@ -1438,6 +1440,7 @@ function loadExtractions(page) {
           </div>
           <div class="ext-job-actions">
             <button class="btn btn-sm" onclick="sendJobToExport(${job.id})">Send to Export</button>
+            <button class="ext-job-delete-link" onclick="deleteExtractionJob(${job.id})">Delete</button>
           </div>
         </div>
       </div>`;
