@@ -308,9 +308,10 @@
   }
   .exp-toggle-label input[type="checkbox"]::after {
     content: ''; position: absolute;
-    top: 1px; left: 3px; width: 5px; height: 8px;
+    top: 50%; left: 50%;
+    width: 4px; height: 7px;
     border: 1.5px solid transparent; border-top: none; border-left: none;
-    transform: rotate(42deg); transition: border-color 0.15s;
+    transform: translate(-50%, -60%) rotate(42deg); transition: border-color 0.15s;
   }
   .exp-toggle-label input[type="checkbox"]:checked {
     background: var(--maroon); border-color: var(--maroon);
@@ -331,9 +332,11 @@
     padding-bottom: 2px;
   }
   .col-options-chevron {
-    font-size: 9px; color: var(--text-muted); transition: transform 0.22s ease; display: inline-block;
+    width: 9px; height: 9px; color: var(--text-muted); transition: transform 0.22s ease;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
     transform: rotate(90deg);
   }
+  .col-options-chevron svg { display: block; }
   .col-options-header.open .col-options-chevron { transform: rotate(0deg); }
   .col-options-body {
     display: grid; grid-template-rows: 0fr; opacity: 0;
@@ -542,9 +545,10 @@
   }
   .ext-job-header:hover { background: rgba(139,32,53,0.04); }
   .ext-job-chevron {
-    font-size: 10px; color: var(--text-muted); transition: transform 0.22s ease;
-    flex-shrink: 0;
+    width: 10px; height: 10px; color: var(--text-muted); transition: transform 0.22s ease;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
+  .ext-job-chevron svg { display: block; }
   .ext-job.open .ext-job-chevron { transform: rotate(90deg); }
   .ext-job-label { flex: 1; }
   .ext-job-count { font-size: 12px; color: var(--text-muted); }
@@ -730,7 +734,7 @@
         <div class="exp-options-card">
           <div class="col-options-header" id="col-options-header" onclick="toggleColOptions()">
             <span class="exp-options-label" style="margin-bottom:0;">Select Included Columns</span>
-            <span class="col-options-chevron" id="col-options-chevron">▶</span>
+            <span class="col-options-chevron" id="col-options-chevron"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2,1 8,4.5 2,8" fill="currentColor"/></svg></span>
           </div>
           <div class="col-options-body" id="col-options-body">
             <div class="col-options-inner">
@@ -1739,7 +1743,7 @@ function loadExtractions(page) {
       <div class="ext-job-header" onclick="toggleExtJob(this)">
         <span class="ext-job-label">${esc(job.label||job.date||'')}</span>
         <span class="ext-job-count">${job.count} file${job.count===1?'':'s'}</span>
-        <span class="ext-job-chevron">▶</span>
+        <span class="ext-job-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2,1 9,5 2,9" fill="currentColor"/></svg></span>
       </div>
       <div class="ext-job-body">
         <div class="ext-job-inner">
