@@ -1161,9 +1161,9 @@ function loadScript(src) {
 // Each gets a unique IP, distributing load so AO3 sees 3 different "users".
 // Paste each /exec URL below. Bot 1 is your existing live deployment.
 const AO3_SCRIPTS = [
-  'https://script.google.com/macros/s/AKfycby-NtDe_5WL8WKn50kxxyDgbVHs5Ugepxgqmh7ptkaerUTjJchYv0RGwOFEUjIYx9Slsw/exec', // Bot 1
-  'https://script.google.com/macros/s/AKfycbw-24-1oqDu5sPod-Jj8aaSDZca_5sag-JP-uRTfQU5Fn5272U8kEOwHaEX8TBCO2Jf/exec',  // Bot 2
-  'https://script.google.com/macros/s/AKfycbzyeeWBc-MeNl_o0ib3G7TnelSkABvLfkJHS7ILqVCKFdNRsnLgPQ8sw_P3JZb2y5qT4w/exec', // Bot 3
+  'https://script.google.com/macros/s/AKfycbyogCqQGXe-Wzq41rDa64drlLTtQFQIhZjZMNa9rQcd6M3bK67bOnE72FD1WZFgNzaH/exec', // Bot 1
+  'https://script.google.com/macros/s/AKfycbzyeeWBc-MeNl_o0ib3G7TnelSkABvLfkJHS7ILqVCKFdNRsnLgPQ8sw_P3JZb2y5qT4w/exec', // Bot 2
+  'https://script.google.com/macros/s/AKfycbyc8GmKtRuxqRkG7JUf0IwQmVkO386C_psorWiWYzcq3obSZIZfWclzP53IjTm3ftHx1A/exec', // Bot 3
 ];
 
 // ── Rotation state ───────────────────────────────────────────────────────────
@@ -1195,6 +1195,7 @@ function openAo3Modal() {
   recEl.classList.remove('visible');
   recEl.innerHTML = '';
   recEl._ready = false;
+  // Bot 1 handles this — work fetches will always start at Bot 2 regardless of outcome
   fetch(AO3_SCRIPT + '?action=rss')
     .then(r => r.json())
     .then(rec => {
@@ -1323,8 +1324,10 @@ async function fetchAo3Works() {
   await sleep(PRE_FETCH_WAIT); // silent wait — no countdown shown
 
   let successCount = 0;
-  // Reset rotation: if RSS succeeded Bot 1 is warmed up, start work fetches at Bot 2
-  _botIdx = _rssSucceeded ? 1 : 0;
+  // Always start work fetches at Bot 2 (index 1).
+  // Bot 1 was used for the RSS attempt on modal open — give it a break
+  // regardless of whether RSS succeeded or failed.
+  _botIdx = 1;
 
   for (let i = 0; i < urlsToFetch.length; i++) {
     const url     = urlsToFetch[i];
@@ -1340,7 +1343,7 @@ async function fetchAo3Works() {
       if (!workId) throw new Error('Invalid AO3 URL');
 
       const res = await fetch(`${botUrl}?id=${workId}`, {
-        signal: AbortSignal.timeout(30000)
+        signal: AbortSignal.timeout(55000)
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
