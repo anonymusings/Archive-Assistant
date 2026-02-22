@@ -1278,7 +1278,7 @@ async function fetchAo3Works() {
   // ── PRE-FETCH: show holding message, then wait silently ─────────────────────
   statusEl.textContent = urlsToFetch.length > 1
     ? 'throwing pennies in the ao3 well…'
-    : 'throwing pennies in the ao3 well…';
+    : 'Patience is dead, but she lives in our hearts.  Do not exit. ';
   await sleep(PRE_FETCH_WAIT);
 
   let successCount = 0;
@@ -1292,7 +1292,7 @@ async function fetchAo3Works() {
 
     statusEl.textContent = urlsToFetch.length > 1
       ? `Fetching ${i + 1} of ${urlsToFetch.length}…`
-      : 'throwing pennies in the ao3 well…';
+      : 'Patience is dead, but she lives in our hearts.  Do not exit. ';
 
     try {
       if (!workId) throw new Error('Invalid AO3 URL');
@@ -1371,7 +1371,7 @@ async function fetchAo3Works() {
       const delay = INTER_URL_BASE + jitter();
       const waitMsg = urlsToFetch.length > 1
         ? 'throwing pennies in the ao3 well… '
-        : 'throwing pennies in the ao3 well… ';
+        : 'Patience is dead, but she lives in our hearts. ';
       await countdown(delay, s => `${waitMsg}Next in ${s}…`);
     }
   }
