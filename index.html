@@ -687,7 +687,7 @@
     padding: 10px 28px; border-radius: 30px;
     font-family: 'IM Fell English', serif; font-size: 14px;
     box-shadow: 0 4px 24px rgba(139,32,53,0.4);
-    opacity: 0; transition: all 0.3s; z-index: 999; pointer-events: none;
+    opacity: 0; transition: all 0.3s; z-index: 10000; pointer-events: none;
     white-space: nowrap;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -823,18 +823,6 @@
     font-size: 13px; color: var(--text-muted);
   }
   .ao3-fetch-status.visible { display: block; }
-  .ao3-fetch-rec {
-    display: none; margin-top: 10px;
-    font-family: 'IM Fell English', serif; font-size: 12px;
-    color: var(--text-muted); line-height: 1.5;
-  }
-  .ao3-fetch-rec.visible { display: block; }
-  .ao3-fetch-rec a {
-    color: #8B4A4A; text-decoration: underline dotted; font-style: italic;
-  }
-  .ao3-fetch-rec a:hover { color: #5C2E2E; }
-  [data-theme="dark"] .ao3-fetch-rec a { color: #B08080; }
-  [data-theme="dark"] .ao3-fetch-rec a:hover { color: #D0A0A0; }
   /* URL badge in file list */
   .file-type.url { background: #AD9999; color: #F3EFE8; }
   /* Dark mode modal */
@@ -1161,24 +1149,20 @@ function loadScript(src) {
 // Each gets a unique IP, distributing load so AO3 sees 3 different "users".
 // Paste each /exec URL below. Bot 1 is your existing live deployment.
 const AO3_SCRIPTS = [
-  'https://script.google.com/macros/s/AKfycbyogCqQGXe-Wzq41rDa64drlLTtQFQIhZjZMNa9rQcd6M3bK67bOnE72FD1WZFgNzaH/exec', // Bot 1
-  'https://script.google.com/macros/s/AKfycbzyeeWBc-MeNl_o0ib3G7TnelSkABvLfkJHS7ILqVCKFdNRsnLgPQ8sw_P3JZb2y5qT4w/exec', // Bot 2
-  'https://script.google.com/macros/s/AKfycbyc8GmKtRuxqRkG7JUf0IwQmVkO386C_psorWiWYzcq3obSZIZfWclzP53IjTm3ftHx1A/exec', // Bot 3
+  'https://script.google.com/macros/s/AKfycbzeSYSTStKFpw7-tyWuFbI-Zdzo6rBnvVjTUSquCQgzR_WCelJXUqDuAKkQTGQKTu4f6A/exec', // Bot 1
+  'https://script.google.com/macros/s/AKfycbzRwnF9FEJjyy2Q6bjwya9aYfTT-T4YDlEszufK0xGNnT6JaVWunys7r9O672h2IlBd/exec', // Bot 2
+  'https://script.google.com/macros/s/AKfycbw-_lWBs6L62dhz5ht1MEd417GY3UpiGyuduphZPGTsNIZM7Bclt5Xk_043XuUMqRs0/exec', // Bot 3
 ];
 
 // ── Rotation state ───────────────────────────────────────────────────────────
-// One bot per URL, no auto-retry. _botIdx advances by 1 each URL.
-// RSS always uses Bot 1. Work fetches start at Bot 2 so Bot 1 gets a breather.
-// URL 1: Bot 2 → URL 2: Bot 3 → URL 3: Bot 1 → URL 4: Bot 2 …
-let _botIdx = 1;         // starts at Bot 2 (index 1); RSS used Bot 1 (index 0)
-let _rssSucceeded = false;
-let _slothShown   = false; // first batch failure shows sloth message
+// Stick with the current bot on success — only rotate to the next one on failure.
+// A working bot stays in use; a failing bot is swapped out immediately.
+let _botIdx = 0;
+let _slothShown = false; // first batch failure shows sloth message
 function currentBot() { return AO3_SCRIPTS[_botIdx % AO3_SCRIPTS.length]; }
 function advanceBot() { _botIdx += 1; }
 
-// RSS always uses Bot 1 (rec fetch is independent of work fetching)
-const AO3_SCRIPT = AO3_SCRIPTS[0];
-const AO3_URL_RE  = /archiveofourown\.org\/works\/(\d+)/;
+const AO3_URL_RE = /archiveofourown\.org\/works\/(\d+)/;
 
 function extractAo3WorkId(url) {
   const m = url.match(AO3_URL_RE);
@@ -1189,23 +1173,6 @@ function extractAo3WorkId(url) {
 function openAo3Modal() {
   document.getElementById('ao3-modal-overlay').classList.add('visible');
   setTimeout(() => document.getElementById('ao3-url-input').focus(), 80);
-
-  // Prefetch a rec now while user types URLs — no overlap with work fetches
-  const recEl = document.getElementById('ao3-fetch-rec');
-  recEl.classList.remove('visible');
-  recEl.innerHTML = '';
-  recEl._ready = false;
-  // Bot 1 handles this — work fetches will always start at Bot 2 regardless of outcome
-  fetch(AO3_SCRIPT + '?action=rss')
-    .then(r => r.json())
-    .then(rec => {
-      if (rec && rec.title && rec.url) {
-        recEl.innerHTML = 'while you wait: <a href="' + rec.url.replace(/&/g,"&amp;") + '" target="_blank" rel="noopener">' + rec.title.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</a>';
-        recEl._ready = true;
-        _rssSucceeded = true; // Bot 1 was used — work fetches will start at Bot 2
-      }
-    })
-    .catch(() => {});
 }
 function closeAo3Modal() {
   document.getElementById('ao3-modal-overlay').classList.remove('visible');
@@ -1220,11 +1187,8 @@ function closeAo3Modal() {
   const batchList = document.getElementById('ao3-batch-list');
   if (batchList) { batchList.classList.remove('visible'); batchList.innerHTML = ''; }
   document.getElementById('ao3-fetch-btn').disabled = false;
-  const recEl = document.getElementById('ao3-fetch-rec');
-  if (recEl) { recEl.classList.remove('visible'); recEl.innerHTML = ''; recEl._ready = false; }
-  _rssSucceeded = false;
-  _slothShown   = false;
-  _botIdx = 1;
+  _slothShown = false;
+  _botIdx = 0;
 }
 function clearUrlInput() {
   document.getElementById('ao3-url-input').value = '';
@@ -1297,7 +1261,6 @@ async function fetchAo3Works() {
 
   btn.disabled = true;
   statusEl.classList.add('visible');
-  const recEl = document.getElementById('ao3-fetch-rec');
 
   // ── TIMING CONSTANTS ─────────────────────────────────────────────────────────
   const PRE_FETCH_WAIT  = 5000;  // ms silent wait before first request (single + batch)
@@ -1313,21 +1276,13 @@ async function fetchAo3Works() {
   }
 
   // ── PRE-FETCH: show holding message, then wait silently ─────────────────────
-  if (urlsToFetch.length > 1) {
-    // Batch: "this may take a while" + rec link if ready
-    statusEl.textContent = 'This may take a while… go read a fic while you wait!';
-    if (recEl._ready) recEl.classList.add('visible');
-  } else {
-    // Single: patience quote the whole time, no countdown
-    statusEl.textContent = 'Patience is dead, but she lives in our hearts.  Do not exit. ';
-  }
-  await sleep(PRE_FETCH_WAIT); // silent wait — no countdown shown
+  statusEl.textContent = urlsToFetch.length > 1
+    ? 'throwing pennies in the ao3 well…'
+    : 'throwing pennies in the ao3 well…';
+  await sleep(PRE_FETCH_WAIT);
 
   let successCount = 0;
-  // Always start work fetches at Bot 2 (index 1).
-  // Bot 1 was used for the RSS attempt on modal open — give it a break
-  // regardless of whether RSS succeeded or failed.
-  _botIdx = 1;
+  _botIdx = 0;
 
   for (let i = 0; i < urlsToFetch.length; i++) {
     const url     = urlsToFetch[i];
@@ -1337,13 +1292,13 @@ async function fetchAo3Works() {
 
     statusEl.textContent = urlsToFetch.length > 1
       ? `Fetching ${i + 1} of ${urlsToFetch.length}…`
-      : 'Patience is dead, but she lives in our hearts.  Do not exit. ';
+      : 'throwing pennies in the ao3 well…';
 
     try {
       if (!workId) throw new Error('Invalid AO3 URL');
 
       const res = await fetch(`${botUrl}?id=${workId}`, {
-        signal: AbortSignal.timeout(55000)
+        signal: AbortSignal.timeout(32000)
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
@@ -1351,6 +1306,7 @@ async function fetchAo3Works() {
 
       // ── 429: stop the whole batch — retrying makes blocks worse ──────────
       if (j.error === 'rate_limited') {
+        advanceBot(); // rotate away from the bot that got rate-limited
         statusEl.textContent = 'AO3 is rate limiting — wait a few minutes, then try again.';
         btn.disabled = false;
         if (batchModeOn) renderBatchList();
@@ -1394,10 +1350,8 @@ async function fetchAo3Works() {
 
     } catch (err) {
       console.error(`fetchAo3Works (URL ${i+1}, bot ${_botIdx % AO3_SCRIPTS.length}):`, err.message);
+      advanceBot(); // rotate to next bot on failure
     }
-
-    // Advance to next bot regardless of success/fail — keeps rotation clean
-    advanceBot();
 
     if (!succeeded) {
       if (batchModeOn) {
@@ -1416,8 +1370,8 @@ async function fetchAo3Works() {
     if (i < urlsToFetch.length - 1) {
       const delay = INTER_URL_BASE + jitter();
       const waitMsg = urlsToFetch.length > 1
-        ? 'This may take a while… go read a fic! '
-        : 'Patience is dead, but she lives in our hearts. ';
+        ? 'throwing pennies in the ao3 well… '
+        : 'throwing pennies in the ao3 well… ';
       await countdown(delay, s => `${waitMsg}Next in ${s}…`);
     }
   }
@@ -2460,7 +2414,6 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="ao3-batch-list" id="ao3-batch-list"></div>
         <button class="ao3-fetch-btn" id="ao3-fetch-btn" onclick="fetchAo3Works()">✦ FETCH</button>
         <span class="ao3-fetch-status" id="ao3-fetch-status"></span>
-        <div class="ao3-fetch-rec" id="ao3-fetch-rec"></div>
       </div>
     </div>
   </div>
