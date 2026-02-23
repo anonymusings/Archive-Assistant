@@ -1225,9 +1225,14 @@ async function fetchAo3Works() {
     try {
       if (!workId) throw new Error('Invalid AO3 URL');
 
-      const res = await fetch(`${botUrl}?id=${workId}`, {
-        signal: AbortSignal.timeout(32000)
-      });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 32000);
+      let res;
+      try {
+        res = await fetch(`${botUrl}?id=${workId}`, { signal: controller.signal });
+      } finally {
+        clearTimeout(timeoutId);
+      }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       const j = await res.json();
