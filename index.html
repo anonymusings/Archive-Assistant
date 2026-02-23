@@ -43,8 +43,7 @@
     --shadow: rgba(0,0,0,0.55);
     --tab-bg: rgba(139,32,53,0.18);
   }
-  /* ── DARK MODE OVERRIDES ── */
-  [data-theme="dark"] .btn { color: #D6D0C7; }
+    [data-theme="dark"] .btn { color: #D6D0C7; }
   [data-theme="dark"] .btn-cy { color: #D6D0C7; }
   [data-theme="dark"] .btn-outline { color: var(--maroon); }
   [data-theme="dark"] .btn-outline.btn-clear { color: #B8385A; border-color: #B8385A; }
@@ -53,8 +52,7 @@
   [data-theme="dark"] .exp-preview-table th { color: #D6D0C7; }
   [data-theme="dark"] .card-title { color: var(--gold); }
   [data-theme="dark"] .exp-options-label { color: var(--gold); }
-  /* ── DARK MODE PILL OVERRIDES ── */
-  [data-theme="dark"] .exp-col-toggle {
+    [data-theme="dark"] .exp-col-toggle {
     background: #2A1218; border-color: #4A2028; color: #C4A07A;
   }
   [data-theme="dark"] .exp-col-toggle.on {
@@ -105,8 +103,7 @@
 
   .page-wrap { position: relative; z-index: 1; max-width: 920px; margin: 0 auto; padding: 0 24px 80px; }
 
-  /* ── HERO ── */
-  .hero { display: flex; flex-direction: column; align-items: center; padding: 44px 0 0; }
+    .hero { display: flex; flex-direction: column; align-items: center; padding: 44px 0 0; }
   .hero-logo {
     width: 210px; height: 210px; object-fit: contain;
     mix-blend-mode: multiply;
@@ -136,23 +133,20 @@
     background: linear-gradient(90deg, transparent, var(--gold-dark), var(--maroon), var(--gold-dark), transparent);
   }
 
-  /* ── MOBILE HERO SHRINK (portrait phones) ── */
-  @media (max-width: 430px) {
+    @media (max-width: 430px) {
     .hero { padding: 28px 0 0; }
     .hero-logo { width: 162px; height: 162px; }
     .hero-title { font-size: clamp(13px, 3.2vw, 21px); }
     .hero-sub { font-size: 12px; }
   }
 
-  /* ── HERO COMPACT after extraction (all screen sizes) ── */
-  body.has-extraction .hero { padding: 14px 0 0; }
+    body.has-extraction .hero { padding: 14px 0 0; }
   body.has-extraction .hero-logo { width: 105px; height: 105px; }
   body.has-extraction .hero-title { font-size: clamp(9px, 1.6vw, 14px); margin: 7px 0 2px; }
   body.has-extraction .hero-sub { font-size: 8px; }
   body.has-extraction .hero-rule { margin: 7px 0 0; }
 
-  /* ── HERO COMPACT after extraction (mobile override) ── */
-  @media (max-width: 430px) {
+    @media (max-width: 430px) {
     body.has-extraction .hero { padding: 14px 0 0; }
     body.has-extraction .hero-logo { width: 81px; height: 81px; }
     body.has-extraction .hero-title { font-size: clamp(7px, 1.6vw, 11px); margin: 7px 0 2px; }
@@ -160,14 +154,12 @@
     body.has-extraction .hero-rule { margin: 13px 0 0; }
   }
 
-  /* ── MOBILE SPACING REDUCTION ── */
-  @media (max-width: 768px) {
+    @media (max-width: 768px) {
     .card { margin-bottom: 14px; }
     .tab-panel { padding: 18px 0 10px; }
   }
 
-  /* ── THEME TOGGLE ── */
-  .theme-toggle {
+    .theme-toggle {
     position: fixed; top: 18px; right: 18px; z-index: 100;
     background: var(--surface); border: 1.5px solid var(--gold);
     border-radius: 30px; padding: 6px 15px;
@@ -184,9 +176,7 @@
     filter: invert(0) grayscale(0);
   }
 
-
-  /* ── COOKIE BANNER ── */
-  .cookie-banner {
+    .cookie-banner {
     background: var(--surface); border: 1.5px solid var(--gold);
     border-radius: 8px; padding: 14px 20px; margin: 22px 0 0;
     display: flex; align-items: center; gap: 14px;
@@ -202,8 +192,7 @@
   .btn-cy:hover { background: var(--maroon-deep); }
   .btn-cn { background: transparent; color: var(--text-muted); border: 1px solid var(--border); padding: 5px 17px; border-radius: 4px; cursor: pointer; font-family: 'Crimson Pro', serif; font-size: 14px; }
 
-  /* ── COOKIE BANNER MOBILE ── */
-  @media (max-width: 768px) {
+    @media (max-width: 768px) {
     .cookie-banner {
       padding: 10px 14px;
       gap: 10px;
@@ -227,8 +216,7 @@
     }
   }
 
-  /* ── TABS ── */
-  .tab-nav { display: flex; margin: 25px 0 0; border-bottom: 2px solid var(--maroon); }
+    .tab-nav { display: flex; margin: 25px 0 0; border-bottom: 2px solid var(--maroon); }
   .tab-btn {
     background: var(--tab-bg); border: 1.5px solid var(--ivory-darker); border-bottom: none;
     padding: 10px 22px; cursor: pointer; font-family: 'IM Fell English', serif; font-size: 15px;
@@ -241,8 +229,7 @@
   .tab-panel.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; } }
 
-  /* ── CARDS ── */
-  .card {
+    .card {
     background: var(--surface); border: 1.5px solid var(--ivory-darker);
     border-top: 3px solid var(--gold); border-radius: 0 0 8px 8px;
     padding: 16px 18px 12px; margin-bottom: 20px;
@@ -256,8 +243,7 @@
   }
   .card-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin-left: 6px; }
 
-  /* ── INPUTS ── */
-  textarea, input[type="text"], input[type="url"] {
+    textarea, input[type="text"], input[type="url"] {
     width: 100%; background: var(--ivory-dark); border: 1.5px solid var(--border);
     border-radius: 6px; padding: 12px 16px;
     font-family: 'Crimson Pro', serif; font-size: 16px; color: var(--text);
@@ -266,8 +252,7 @@
   textarea:focus, input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,169,110,0.14); }
   textarea::placeholder, input::placeholder { color: var(--text-muted); font-style: italic; }
 
-  /* ── BUTTONS ── */
-  .btn {
+    .btn {
     display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px;
     border: 1.5px solid var(--maroon); background: var(--maroon); color: var(--ivory-light);
     font-family: 'IM Fell English', serif; font-size: 13px; border-radius: 5px;
@@ -295,19 +280,15 @@
   .btn-row-responsive .btn-primary  { flex-shrink: 0; }
   .btn-row-responsive .btn-clear    { margin-left: auto; flex-shrink: 0; }
 
-  /* Step 2: Clear wrapped — Copy+Download right-align on row 1 */
   .btn-row-responsive.wrap-clear .btn-secondary-start { margin-left: auto; }
 
-  /* Step 3: Download wrapped — Copy stays left, Download sits left on row 2, Clear pins right */
   .btn-row-responsive.wrap-download .btn-secondary-start { margin-left: 0; }
   .btn-row-responsive.wrap-download .btn-download { margin-left: 0; }
 
-  /* Step 4: Copy also wrapped — everything left, Clear still pins right via margin-left:auto */
   .btn-row-responsive.wrap-copy .btn-secondary-start { margin-left: 0; }
   .btn-row-responsive.wrap-copy .btn-download        { margin-left: 0; }
 
-  /* ── DROPZONE ── */
-  .dropzone {
+    .dropzone {
     border: 2px dashed var(--ivory-darker); border-radius: 8px; padding: 18px 18px 22px;
     text-align: center; cursor: pointer;
     background: rgba(201,169,110,0.04);
@@ -317,8 +298,7 @@
   .dropzone-icon { font-size: 40px; margin-bottom: 4px; display: block; }
   .dropzone input[type="file"] { display: none; }
 
-  /* ── COMPACT DROPZONE ── */
-  .dropzone.compact { padding: 10px 24px 16px; }
+    .dropzone.compact { padding: 10px 24px 16px; }
   .dropzone.compact .dropzone-icon { font-size: 22px; margin-bottom: 4px; }
   .dropzone.compact .dropzone-default-text { display: none; }
   .dropzone.compact .dropzone-compact-text { display: block; }
@@ -326,8 +306,7 @@
   .dropzone.compact strong { display: block; line-height: 1.2; font-size: 11px; }
   .dropzone.compact .dropzone-compact-text { margin-top: 2px; }
 
-  /* ── FILE LIST ── */
-  .file-list { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .file-list { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
   .file-item {
     background: var(--ivory-dark); border: 1px solid var(--border); border-radius: 6px;
     padding: 10px 16px; display: flex; align-items: center; gap: 12px; font-size: 15px;
@@ -344,8 +323,7 @@
   .file-item .rm { cursor: pointer; color: var(--maroon); opacity: 0.4; background: none; border: none; font-size: 18px; flex-shrink: 0; }
   .file-item .rm:hover { opacity: 1; }
 
-  /* ── RESULTS TABLE ── */
-  .results-wrap-outer { margin-top: 0; border-radius: 6px; border: 1px solid var(--border); position: relative; }
+    .results-wrap-outer { margin-top: 0; border-radius: 6px; border: 1px solid var(--border); position: relative; }
   .results-wrap { overflow-x: auto; overflow-y: auto; max-height: 272px; border-radius: 6px; }
   .results-wrap-outer::after {
     content: ''; pointer-events: none;
@@ -364,8 +342,7 @@
   .link-cell a { color: var(--maroon); text-decoration: none; }
   .link-cell a:hover { text-decoration: underline; }
 
-  /* ── OUTPUT BOX ── */
-  .output-box {
+    .output-box {
     background: var(--ivory-dark); border: 1.5px solid var(--border);
     border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0;
     padding: 16px; font-family: 'Courier New', monospace; font-size: 12px; color: var(--text);
@@ -373,8 +350,7 @@
   }
   .output-box-sm { max-height: 90px; font-size: 11px; padding: 10px 14px; }
 
-  /* ── EXPORT OPTIONS ── */
-  .exp-options-card {
+    .exp-options-card {
     background: var(--ivory-dark); border: 1px solid var(--border); border-radius: 8px;
     padding: 8px 18px 0px; margin-bottom: 14px;
   }
@@ -394,8 +370,7 @@
   .exp-col-toggle.on:hover { background: var(--gold-light); }
   .exp-col-toggle input { display: none; }
 
-  /* ── CUSTOM CHECKBOX (Include column headers) ── */
-  .exp-toggle-label input[type="checkbox"] {
+    .exp-toggle-label input[type="checkbox"] {
     appearance: none; -webkit-appearance: none;
     width: 13px; height: 13px; flex-shrink: 0;
     border: 1.5px solid var(--maroon); border-radius: 2px;
@@ -426,8 +401,7 @@
     border-color: var(--ink);
   }
 
-  /* ── COLUMN OPTIONS COLLAPSE ── */
-  .col-options-header {
+    .col-options-header {
     display: flex; align-items: center; gap: 7px; cursor: pointer; user-select: none;
     padding-bottom: 2px;
   }
@@ -451,9 +425,7 @@
     margin-bottom: -3px;
   }
 
-
-  /* ── REORDER MODE ── */
-  @keyframes pill-wiggle {
+    @keyframes pill-wiggle {
     0%   { transform: rotate(0deg); }
     20%  { transform: rotate(-2.5deg); }
     40%  { transform: rotate(2.5deg); }
@@ -507,9 +479,7 @@
     cursor: pointer;
   }
 
-
-  /* ── EXPORT PREVIEW TABLE ── */
-  .exp-preview-wrap { overflow-x: auto; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 20px; max-height: 200px; overflow-y: auto; }
+    .exp-preview-wrap { overflow-x: auto; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 20px; max-height: 200px; overflow-y: auto; }
   .exp-preview-table { width: 100%; border-collapse: collapse; font-size: 12px; }
   .exp-preview-table th {
     background: var(--maroon); color: var(--ivory-light); font-family: 'Cinzel Decorative', serif;
@@ -527,8 +497,7 @@
   .exp-preview-table .na-val { color: var(--text-muted); font-style: italic; }
   .exp-preview-table tr.excluded td { opacity: 0.35; text-decoration: line-through; background: rgba(139,32,53,0.04) !important; }
 
-  /* ── EDIT TOGGLE SWITCH ── */
-  .edit-toggle-row {
+    .edit-toggle-row {
     display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
     font-family: 'IM Fell English', serif; font-style: italic; font-size: 14px; color: var(--text-muted);
     cursor: pointer; user-select: none; width: fit-content;
@@ -549,15 +518,12 @@
     transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
   }
   .edit-switch-track.on .edit-switch-knob { transform: translateX(11px); }
-  /* edit mode: rows become clickable */
   .exp-preview-table.edit-mode tbody tr { cursor: pointer; }
   .exp-preview-table.edit-mode tbody tr:hover td { background: rgba(139,32,53,0.1) !important; }
   .exp-preview-table tr.excluded td { opacity: 0.35; text-decoration: line-through; background: rgba(139,32,53,0.04) !important; }
-  /* preview outer: full width, no side col */
   .exp-preview-outer { overflow-x: auto; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 12px; max-height: 200px; overflow-y: auto; }
 
-  /* ── SELECT ALL ROWS REVEAL ── */
-  .select-all-rows-wrap {
+    .select-all-rows-wrap {
     display: grid;
     grid-template-rows: 0fr;
     opacity: 0;
@@ -571,11 +537,9 @@
   }
   .select-all-rows-inner { overflow: hidden; }
 
-  /* ── DOWNLOAD FORMAT REVEAL ── */
+  
 
-
-  /* ── TAB NAV BAR ── */
-  .tab-navbar {
+    .tab-navbar {
     display: flex; align-items: center; justify-content: center;
     gap: 10px; padding: 8px 0 4px;
     font-family: 'IM Fell English', serif; font-style: italic; font-size: 13px;
@@ -590,15 +554,12 @@
   .tab-navlink:hover { opacity: 0.7; }
   .tab-navsep { color: var(--text-muted); user-select: none; }
 
-  /* ── PROGRESS ── */
-  .prog-wrap { background: var(--ivory-darker); border-radius: 20px; height: 7px; overflow: hidden; margin: 14px 0; }
+    .prog-wrap { background: var(--ivory-darker); border-radius: 20px; height: 7px; overflow: hidden; margin: 14px 0; }
   .prog-bar { height: 100%; background: linear-gradient(90deg, var(--maroon), var(--gold)); border-radius: 20px; transition: width 0.4s ease; width: 0%; }
   .prog-lbl { font-family: 'IM Fell English', serif; font-style: italic; font-size: 13px; color: var(--text-muted); text-align: center; }
 
 
-
-  /* ── HISTORY ENTRY ── */
-  .hist-entry {
+    .hist-entry {
     background: var(--ivory-dark); border: 1px solid var(--border);
     border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0;
     padding: 12px 16px; margin-bottom: 8px;
@@ -621,8 +582,7 @@
     text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px;
   }
 
-  /* ── EXTRACTION JOBS ── */
-  .ext-section-title {
+    .ext-section-title {
     font-family: 'Cinzel Decorative', serif; font-size: 9px; letter-spacing: 0.13em;
     text-transform: uppercase; color: var(--maroon); margin: 20px 0 10px;
   }
@@ -675,12 +635,10 @@
   }
   .ext-job-delete-link:hover { color: var(--maroon); }
 
-  /* ── DIVIDER ── */
-  .divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: var(--gold-dark); font-family: 'IM Fell English', serif; font-style: italic; font-size: 13px; }
+    .divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: var(--gold-dark); font-family: 'IM Fell English', serif; font-style: italic; font-size: 13px; }
   .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
 
-  /* ── TOAST ── */
-  .toast {
+    .toast {
     position: fixed; bottom: 28px; left: 50%;
     transform: translateX(-50%) translateY(20px);
     background: var(--maroon); color: #F3EFE8;
@@ -696,12 +654,10 @@
     .toast { font-size: 11px; padding: 8px 20px; }
   }
 
-  /* ── EMPTY STATE ── */
-  .empty-state { text-align: center; padding: 35px 20px; color: var(--text-muted); font-family: 'IM Fell English', serif; font-style: italic; font-size: 16px; }
+    .empty-state { text-align: center; padding: 35px 20px; color: var(--text-muted); font-family: 'IM Fell English', serif; font-style: italic; font-size: 16px; }
   .empty-icon { font-size: 36px; display: block; margin-bottom: 14px; opacity: 0.45; }
 
-  /* ── FOOTER ── */
-  footer { text-align: center; padding: 30px 0 10px; color: var(--text-muted); font-family: 'IM Fell English', serif; font-style: italic; font-size: 13px; border-top: 1px solid var(--ivory-darker); margin-top: 40px; }
+    footer { text-align: center; padding: 30px 0 10px; color: var(--text-muted); font-family: 'IM Fell English', serif; font-style: italic; font-size: 13px; border-top: 1px solid var(--ivory-darker); margin-top: 40px; }
   .foot-gem { color: var(--gold); margin: 0 8px; }
 
   label { font-family: 'IM Fell English', serif; font-style: italic; font-size: 14px; color: var(--text-muted); display: block; margin-bottom: 7px; }
@@ -723,8 +679,7 @@
     .cookie-btns { flex-direction: column; }
   }
 
-  /* ── AO3 IMPORT MODAL ── */
-  .ao3-import-link {
+    .ao3-import-link {
     font-family: 'Cinzel Decorative', serif; font-size: 9px; letter-spacing: 0.12em;
     color: var(--maroon); text-decoration: underline; text-underline-offset: 3px;
     cursor: pointer; margin-top: 10px; display: inline-block; background: none;
@@ -866,7 +821,7 @@
     <button class="tab-btn" onclick="switchTab('history')" data-tab="history">History</button>
   </nav>
 
-  <!-- ══ CATALOGER ══ -->
+  <!-- CATALOGER -->
   <div class="tab-panel active" id="tab-cataloger">
     <div class="card">
       <div class="card-title">Upload Files and Catalog</div>
@@ -927,7 +882,7 @@
     </div>
   </div>
 
-  <!-- ══ EXPORT ══ -->
+  <!-- EXPORT -->
   <div class="tab-panel" id="tab-export">
     <div class="card">
       <div class="card-title">Export Options</div>
@@ -983,7 +938,7 @@
           <table class="exp-preview-table" id="exp-preview-table"></table>
         </div>
 
-        <!-- Select all rows checkbox — hidden until edit mode on -->
+        <!-- Select all rows -->
         <div class="select-all-rows-wrap" id="select-all-rows-wrap">
           <div class="select-all-rows-inner">
             <label class="exp-toggle-label">
@@ -1013,11 +968,10 @@
     </div>
   </div>
 
-  <!-- ══ HISTORY ══ -->
+  <!-- HISTORY -->
   <div class="tab-panel" id="tab-history">
     <div class="card">
       <div class="card-title">History</div>
-      <!-- Individual fic history -->
       <div id="hist-list"></div>
       <div id="hist-empty" class="empty-state" style="position:relative;">
         <div id="hist-cookie-note" style="display:none;position:absolute;top:0;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:'IM Fell English',serif;font-style:italic;color:var(--gold-dark);font-size:12px;padding:3px 10px;background:rgba(201,169,110,0.08);border:1px solid var(--gold);border-radius:6px;">
@@ -1027,7 +981,6 @@
         The void! Go forth and catalog.
       </div>
 
-      <!-- Divider + extraction jobs -->
       <div id="hist-extractions-section" style="display:none">
         <div class="divider">✦</div>
         <div class="ext-section-title">Extraction Jobs</div>
@@ -1064,7 +1017,6 @@ let ao3UrlItems    = [];  // URL-imported entries shown in file list
 let batchUrls      = [];  // batch mode URL queue
 let batchModeOn    = false;
 
-// THEME
 function toggleTheme() {
   const d = document.documentElement, dark = d.getAttribute('data-theme')==='dark';
   d.setAttribute('data-theme', dark?'light':'dark');
@@ -1088,7 +1040,6 @@ function applyTheme() {
   document.getElementById('theme-label').textContent = t==='dark'?'Day':'Night';
 }
 
-// COOKIES
 function cookiesOk() { return localStorage.getItem('aa_cookies')==='yes'; }
 function checkCookieBanner() {
   if (localStorage.getItem('aa_cookies')) document.getElementById('cookie-banner').classList.add('hidden');
@@ -1107,7 +1058,6 @@ function declineCookies() {
   document.getElementById('hist-cookie-note').style.display='inline-block';
 }
 
-// TABS
 function switchTab(name) {
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -1118,14 +1068,12 @@ function switchTab(name) {
   requestAnimationFrame(checkBtnRowWrap);
 }
 
-// TOAST
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 2800);
 }
 
-// HELPERS
 function today() { return new Date().toISOString().split('T')[0]; }
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function csvEsc(s) { s=String(s||''); return (s.includes(',')||s.includes('"')||s.includes('\n'))?'"'+s.replace(/"/g,'""')+'"':s; }
@@ -1141,24 +1089,12 @@ function loadScript(src) {
   });
 }
 
-// ════ AO3 URL IMPORT (via Google Apps Script) ════
-// Apps Script fetches AO3 server-side — no CORS issues, same approach as the Telegram bot.
-// Confirmed working: bare UrlFetchApp.fetch() without custom headers, just like executeAo3Download.
-// ── Apps Script bot deployments ─────────────────────────────────────────────
-// Deploy ao3-fetcher.gs as 3 separate Google Apps Script projects.
-// Each gets a unique IP, distributing load so AO3 sees 3 different "users".
-// Paste each /exec URL below. Bot 1 is your existing live deployment.
 const AO3_SCRIPTS = [
-  'https://script.google.com/macros/s/AKfycbzeSYSTStKFpw7-tyWuFbI-Zdzo6rBnvVjTUSquCQgzR_WCelJXUqDuAKkQTGQKTu4f6A/exec', // Bot 1
-  'https://script.google.com/macros/s/AKfycbzRwnF9FEJjyy2Q6bjwya9aYfTT-T4YDlEszufK0xGNnT6JaVWunys7r9O672h2IlBd/exec', // Bot 2
-  'https://script.google.com/macros/s/AKfycbw-_lWBs6L62dhz5ht1MEd417GY3UpiGyuduphZPGTsNIZM7Bclt5Xk_043XuUMqRs0/exec', // Bot 3
+  'https://YOUR-SERVICE-NAME.onrender.com',
 ];
 
-// ── Rotation state ───────────────────────────────────────────────────────────
-// Stick with the current bot on success — only rotate to the next one on failure.
-// A working bot stays in use; a failing bot is swapped out immediately.
 let _botIdx = 0;
-let _slothShown = false; // first batch failure shows sloth message
+let _slothShown = false;
 function currentBot() { return AO3_SCRIPTS[_botIdx % AO3_SCRIPTS.length]; }
 function advanceBot() { _botIdx += 1; }
 
@@ -1169,7 +1105,6 @@ function extractAo3WorkId(url) {
   return m ? m[1] : null;
 }
 
-// ── Modal control ──
 function openAo3Modal() {
   document.getElementById('ao3-modal-overlay').classList.add('visible');
   setTimeout(() => document.getElementById('ao3-url-input').focus(), 80);
@@ -1195,7 +1130,6 @@ function clearUrlInput() {
   document.getElementById('ao3-url-input').focus();
 }
 
-// ── Batch mode ──
 function toggleBatchMode() {
   batchModeOn = !batchModeOn;
   document.getElementById('ao3-batch-switch-track').classList.toggle('on', batchModeOn);
@@ -1227,7 +1161,7 @@ function renderBatchList() {
     </div>`).join('');
 }
 
-// ── Decode HTML entities that Apps Script may leave in strings ──
+// decode HTML entities that Apps Script may leave in strings
 function decodeEntities(str) {
   if (!str || str === 'N/A') return str;
   const t = document.createElement('textarea');
@@ -1235,13 +1169,11 @@ function decodeEntities(str) {
   return t.value;
 }
 
-// ── Main fetch orchestrator ──
 async function fetchAo3Works() {
   const input    = document.getElementById('ao3-url-input');
   const statusEl = document.getElementById('ao3-fetch-status');
   const btn      = document.getElementById('ao3-fetch-btn');
 
-  // Build URL list
   let urlsToFetch = [];
   if (batchModeOn) {
     if (!batchUrls.length) { toast('Add at least one URL to the batch.'); return; }
@@ -1253,7 +1185,7 @@ async function fetchAo3Works() {
     urlsToFetch = [url];
   }
 
-  // ── SAFEGUARD: max 5 URLs (AO3 rate-limit protection) ──
+  // max 5 URLs — AO3 rate limiting
   if (urlsToFetch.length > 5) {
     toast('Maximum 5 URLs at a time to avoid AO3 blocks — trimming to 5.');
     urlsToFetch = urlsToFetch.slice(0, 5);
@@ -1262,12 +1194,9 @@ async function fetchAo3Works() {
   btn.disabled = true;
   statusEl.classList.add('visible');
 
-  // ── TIMING CONSTANTS ─────────────────────────────────────────────────────────
-  const PRE_FETCH_WAIT  = 5000;  // ms silent wait before first request (single + batch)
-  const INTER_URL_BASE  = 15;    // base seconds between URLs
-  const jitter          = () => Math.floor(Math.random() * 6); // 0–5s extra
-
-  // Countdown helper — visible ticking between URLs
+  const PRE_FETCH_WAIT  = 5000;
+  const INTER_URL_BASE  = 15;
+  const jitter          = () => Math.floor(Math.random() * 6); // 0–5s
   async function countdown(seconds, labelFn) {
     for (let s = seconds; s > 0; s--) {
       statusEl.textContent = labelFn(s);
@@ -1275,7 +1204,6 @@ async function fetchAo3Works() {
     }
   }
 
-  // ── PRE-FETCH: show holding message, then wait silently ─────────────────────
   statusEl.textContent = urlsToFetch.length > 1
     ? 'throwing pennies in the ao3 well…'
     : 'Patience is dead, but she lives in our hearts.  Do not exit. ';
@@ -1304,7 +1232,7 @@ async function fetchAo3Works() {
 
       const j = await res.json();
 
-      // ── 429: stop the whole batch — retrying makes blocks worse ──────────
+      // 429 — stop batch, retrying makes it worse
       if (j.error === 'rate_limited') {
         advanceBot(); // rotate away from the bot that got rate-limited
         statusEl.textContent = 'AO3 is rate limiting — wait a few minutes, then try again.';
@@ -1318,8 +1246,7 @@ async function fetchAo3Works() {
       // Decode HTML entities (e.g. &#8592; in series)
       Object.keys(j).forEach(k => { if (typeof j[k] === 'string') j[k] = decodeEntities(j[k]); });
 
-      // Build entry
-      const entry = {
+        const entry = {
         date:          today(),
         datePosted:    j.datePosted    || 'N/A',
         title:         j.title        || 'N/A',
@@ -1366,7 +1293,6 @@ async function fetchAo3Works() {
       }
     }
 
-    // ── Inter-URL wait with visible countdown ────────────────────────────────
     if (i < urlsToFetch.length - 1) {
       const delay = INTER_URL_BASE + jitter();
       const waitMsg = urlsToFetch.length > 1
@@ -1387,13 +1313,11 @@ async function fetchAo3Works() {
       renderFileList();
       statusEl.textContent = `${successCount} imported. ${failedUrls.length} failed — retry after 5 minutes.`;
     } else if (successCount > 0 && failedUrls.length === 0) {
-      // All succeeded — close as normal
       renderBatchList();
       renderFileList();
       closeAo3Modal();
       toast(`${successCount} work${successCount === 1 ? '' : 's'} imported from AO3 ❖`);
     } else {
-      // All failed — stay open, failed badges already shown
       renderBatchList();
       if (!_slothShown) {
         statusEl.textContent = 'I am the sin of sloth. Please try again.';
@@ -1414,7 +1338,6 @@ async function fetchAo3Works() {
   }
 }
 
-// ── File list integration ──
 function sendUrlToExport(idx) {
   const entry = ao3UrlItems[idx];
   if (!entry) return toast('Entry not found.');
@@ -1430,7 +1353,6 @@ function removeUrlItem(idx) {
   renderFileList();
 }
 
-// ════ CATALOGER ════
 function onDragOver(e) { e.preventDefault(); document.getElementById('dropzone').classList.add('dragover'); }
 function onDragLeave()  { document.getElementById('dropzone').classList.remove('dragover'); }
 function onDrop(e) { e.preventDefault(); document.getElementById('dropzone').classList.remove('dragover'); handleFiles(e.dataTransfer.files); }
@@ -1454,7 +1376,6 @@ function renderFileList() {
   const list = document.getElementById('file-list');
   list.innerHTML = '';
 
-  // Render uploaded EPUB/PDF files
   uploadedFiles.forEach((f, i) => {
     const ext = f.name.split('.').pop().toLowerCase();
     const d = document.createElement('div'); d.className = 'file-item';
@@ -1462,7 +1383,6 @@ function renderFileList() {
     list.appendChild(d);
   });
 
-  // Render AO3 URL imported items — badge "URL", title/author, AO3 link icon, Send to Export, remove
   ao3UrlItems.forEach((item, i) => {
     const d = document.createElement('div'); d.className = 'file-item';
     d.innerHTML = `<span class="file-type url">URL</span><span class="file-name">${esc(item.title)} — ${esc(item.author)}<a href="${esc(item.ao3Link)}" target="_blank" onclick="event.stopPropagation()" style="margin-left:6px;color:var(--maroon);display:inline-block;vertical-align:middle;" title="Open on AO3"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="1" y1="8" x2="8" y2="1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="4,1 8,1 8,5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></a></span><button class="rm" onclick="removeUrlItem(${i})"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="1" y1="1" x2="8" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="1" x2="1" y2="8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>`;
@@ -1565,11 +1485,7 @@ async function catalogFiles() {
   document.getElementById('dropzone').classList.add('compact');
 }
 
-// EPUB EXTRACTION
-// Ported directly from the bot's unzipEpub + parseAO3Data logic.
-// Rather than reading OPF dc:subject tags (unreliable), we extract all HTML/XHTML
-// files from the ZIP, flatten them to plain text with ||| delimiters at block boundaries,
-// then do a linear position scan between known AO3 header labels — exactly as the bot does.
+// ported from bot's unzipEpub + parseAO3Data
 async function extractEpub(file) {
   const base={date:today(),datePosted:'N/A',title:cleanName(file.name),author:'N/A',fandom:'N/A',relationships:'N/A',characters:'N/A',tags:'N/A',warning:'N/A',words:'N/A',category:'N/A',rating:'N/A',ao3Link:'N/A',series:'N/A',summary:'N/A'};
   try {
@@ -1577,8 +1493,6 @@ async function extractEpub(file) {
     const zip = await JSZip.loadAsync(await file.arrayBuffer());
 
     // --- Step 1: unzipEpub equivalent ---
-    // Collect all title + xhtml/html files, replace block-level tags with ||| separator,
-    // strip remaining tags, concatenate. Mirrors the bot's unzipEpub() exactly.
     let fullText = '';
     const entries = Object.keys(zip.files).sort(); // consistent ordering
     for (const name of entries) {
@@ -1588,7 +1502,6 @@ async function extractEpub(file) {
         if (!content) continue;
         // Replace block-level open tags with ||| (same regex as bot)
         content = content.replace(/<(p|div|br|li|h1|h2|tr|td|span|dd|dt)[^>]*>/gi, ' ||| ');
-        // Strip all remaining tags
         content = content.replace(/<[^>]*>/g, ' ');
         fullText += content + ' ||| ';
       }
@@ -1603,8 +1516,7 @@ async function extractEpub(file) {
       words:'N/A', category:'N/A', rating:'N/A', ao3Link:'N/A', relationships:'N/A', characters:'N/A', series:'N/A', summary:'N/A'
     };
 
-    // Title + Author: look for "Title - Author - Fandom" pattern first (AO3 EPUB header),
-    // then fall back to "by AuthorName" scan.
+    // title + author: try "Title - Author - Fandom" pattern first, fall back to "by Name" scan
     const comboMatch = fullText.match(/([^|\n\-]+)\s*-\s*([^|\n\-]+)\s*-\s*([^|\n\-]+)/);
     if (comboMatch && comboMatch[1].trim().length > 1 && !comboMatch[1].includes('Archive of Our Own')) {
       res.title  = epubClean(comboMatch[1]);
@@ -1620,7 +1532,6 @@ async function extractEpub(file) {
     }
 
     // Linear position scan between known header labels — the core of the bot's approach.
-    // We find each header's position in the text, sort by position, then slice between them.
     const HEADER_MAP = [
       { id:'rating',        labels:['Rating:'] },
       { id:'warning',       labels:['Archive Warning:', 'Archive Warnings:'] },
@@ -1663,10 +1574,7 @@ async function extractEpub(file) {
         let summaryDecoded = summaryRaw
           .replace(/<[^>]*>/g, '')
           .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'");
-        // Split on ||| block boundaries and take only the initial block(s).
-        // Stop at the first ||| that is followed by a known chapter/content marker,
-        // or at the first ||| after which the remaining text looks like chapter content.
-        // Known hard stop phrases (case-insensitive, matched at start of a trimmed segment):
+        // stop at chapter/notes markers
         const EPUB_SUM_STOPS = [
           /^chapter\s+\d/i,
           /^chapter\s+notes?/i,
@@ -1681,9 +1589,7 @@ async function extractEpub(file) {
         for (const seg of segments) {
           const s = seg.replace(/\s{2,}/g,' ').replace(/^[\s,]+|[\s,]+$/g,'').trim();
           if (!s) continue;
-          // Stop if this segment matches a hard stop phrase
           if (EPUB_SUM_STOPS.some(re => re.test(s))) break;
-          // Stop if this segment is the fic title or "Title - Author" pattern repeated from the header
           if (res.title && res.title !== 'N/A' && s.toLowerCase().startsWith(res.title.toLowerCase().substring(0, Math.min(res.title.length, 30)))) break;
           if (res.author && res.author !== 'N/A' && s.toLowerCase().startsWith(res.author.toLowerCase().substring(0, Math.min(res.author.length, 20)))) break;
           summaryParts.push(s);
@@ -1748,11 +1654,7 @@ async function extractPdf(file) {
       fullText+=pageText+' ';
     }
 
-    // --- Field extraction: line-accumulator with smart joining ---
-    // Handles both inline ("Relationship: A/B") and two-column ("Relationships:\nA/B") PDF layouts.
-    // Anchors target + stop detection to line starts to prevent false matches inside tag values.
-    // Smart joining: detects wrapped continuation lines (ending in & or word char) vs new entries.
-    // Strips AO3 UI artifact lines (e.g. "Apply" that leaks after Archive Warnings field).
+    // line-accumulator with smart joining — handles inline and two-column PDF layouts
     const PDF_ANCHORS=['Rating:','Archive Warning','Categor','Fandom','Relationship','Character','Additional Tags','Language:','Stats:','Summary:','Words:','Series:','Collections:'];
     const anchorLineRe = new RegExp('^(?:'+PDF_ANCHORS.map(a=>a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','i');
     const PDF_STRIP_LINES = new Set(['apply','choose not to warn','not choose to warn']);
@@ -1791,8 +1693,6 @@ async function extractPdf(file) {
     const relationships = getPdfField(headerText,'Relationship');
     const characters    = getPdfField(headerText,'Character');
     const tags          = getPdfField(headerText,'Additional Tags');
-    // Series: extracted separately — looks for "Series:" label in PDF header block.
-    // Only collects one line (the series name/part info) before any next anchor.
     const series        = getPdfField(headerText,'Series');
 
     // --- Summary ---
@@ -1802,16 +1702,16 @@ async function extractPdf(file) {
     const sM = headerText.match(new RegExp('Summary\\s*:?\\s*([\\s\\S]+?)(?=\\s*(?:'+sPat+')|$)','i'));
     if(sM){const raw=sM[1].replace(/\n+/g,' ').replace(/\s{2,}/g,' ').replace(/^[\s,]+|[\s,]+$/g,'').trim();if(raw.length>2)summary=raw;}
 
-    // --- AO3 URL: scan header text first, then full metadata ---
+    // --- AO3 URL ---
     const urlM = headerText.match(/https?:\/\/archiveofourown\.org\/works\/\d+/i)
                ||(info.Subject+' '+(info.Keywords||'')).match(/https?:\/\/archiveofourown\.org\/works\/\d+/i);
     const ao3Link = urlM ? urlM[0] : 'N/A';
 
-    // --- Date: prefer "Published:" from text, fall back to PDF CreationDate ---
+    // --- Date ---
     const dateM = headerText.match(/(?:Published|Completed):\s*(\d{4}-\d{2}-\d{2})/i);
     const datePosted = dateM ? dateM[1] : (info.CreationDate ? fmtPdfDate(info.CreationDate) : 'N/A');
 
-    // --- Words: prefer AO3's reported count from text, fall back to computed ---
+    // --- Words ---
     const wordsStatM = fullText.match(/Words:\s*([\d,]+)/i);
     let words='N/A';
     if (wordsStatM) {
@@ -1821,7 +1721,7 @@ async function extractPdf(file) {
       if (wc>0) words=wc.toLocaleString();
     }
 
-    // --- Title & Author: prefer PDF metadata (usually reliable), fall back to text ---
+    // --- Title & Author ---
     let title=info.Title||cleanName(file.name);
     let author=info.Author||'N/A';
     if (author==='N/A') {
@@ -1856,16 +1756,13 @@ function toggleCatHeaders() {
   if (thead) thead.style.display = document.getElementById('cat-include-headers').checked ? '' : 'none';
 }
 
-// ════ EXPORT ════
 function getAllEntries() {
-  // Returns only the current session's catalogEntries (in-memory).
-  // History is kept separately in aa_history and is not mixed into export/copy.
   return catalogEntries;
 }
 
 let activeCols = new Set(COLS.filter(c => !HISTORY_EXCLUDED_COLS.has(c)));
 
-// ── Column order: persisted, defaults to COLS sequence ──
+// persisted col order
 let colOrder = (() => {
   try {
     const saved = JSON.parse(localStorage.getItem('aa_col_order')||'null');
@@ -1878,7 +1775,6 @@ function saveColOrder() {
   try { localStorage.setItem('aa_col_order', JSON.stringify(colOrder)); } catch {}
 }
 
-// ── Column options collapse ──
 let colOptionsOpen = (() => {
   try { return localStorage.getItem('aa_col_options_open') === 'true'; } catch { return false; }
 })();
@@ -1899,7 +1795,6 @@ function applyColOptionsState() {
   if (hdr)  hdr.classList.toggle('open', colOptionsOpen);
 }
 
-// ── Reorder mode ──
 let reorderModeOn = false;
 let colOrderBeforeReorder = [];
 
@@ -1949,7 +1844,6 @@ function revertColOrder() {
   toast('Column order reset to default ✦');
 }
 
-// ── Build / rebuild toggle pills ──
 function rebuildTogglePills() {
   const wrap = document.getElementById('exp-col-toggles');
   if (!wrap) return;
@@ -1968,8 +1862,7 @@ function rebuildTogglePills() {
       else { activeCols.delete(col); lbl.classList.remove('on'); }
       refreshExport();
     });
-    // Drag events
-    lbl.addEventListener('dragstart', e => {
+      lbl.addEventListener('dragstart', e => {
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('text/plain', col);
       setTimeout(() => lbl.classList.add('dragging'), 0);
@@ -2064,7 +1957,6 @@ function refreshExport() {
   const hdrs = getActiveHdrs();
   const withHdrs = includeHeaders();
 
-  // Preview table
   const tbl = document.getElementById('exp-preview-table');
   if (tbl) {
     let html = '';
@@ -2081,7 +1973,6 @@ function refreshExport() {
     tbl.innerHTML = html;
   }
 
-  // Apply edit-mode class to table (rows clickable when edit mode on)
   const editOn = document.getElementById('edit-switch-track')?.classList.contains('on');
   if (tbl) tbl.classList.toggle('edit-mode', !!editOn);
 
@@ -2123,7 +2014,6 @@ function dlCSV(){
   dlText(rows.join('\n'),'archive-assistant.csv','text/csv');
 }
 
-// ════ HISTORY ════
 function saveHist(e) {
   if (!cookiesOk()) return;
   try{const h=JSON.parse(localStorage.getItem('aa_history')||'[]');h.unshift(e);localStorage.setItem('aa_history',JSON.stringify(h.slice(0,21)));}catch{}
@@ -2195,7 +2085,6 @@ function loadExtractions(page) {
     list.appendChild(div);
   });
 
-  // Render pagination nav — styled like tab-navbar
   let paginationEl = document.getElementById('ext-pagination');
   if (!paginationEl) {
     paginationEl = document.createElement('div');
@@ -2275,7 +2164,6 @@ function loadHistory(page) {
     list.appendChild(d);
   });
 
-  // Pagination nav — styled like tab-navbar
   let paginationEl = document.getElementById('hist-pagination');
   if (!paginationEl) {
     paginationEl = document.createElement('div');
@@ -2341,7 +2229,6 @@ function clearCache() {
 }
 function exportHistory(){switchTab('export');buildExport();}
 
-// ── BUTTON ROW WRAP DETECTION ──
 function checkBtnRowWrap() {
   document.querySelectorAll('.btn-row-responsive').forEach(row => {
     const primary  = row.querySelector('.btn-primary');
@@ -2373,7 +2260,6 @@ function initBtnRowWrapObservers() {
   checkBtnRowWrap();
 }
 
-// INIT
 document.addEventListener('DOMContentLoaded', () => {
   checkCookieBanner();
   applyTheme();
