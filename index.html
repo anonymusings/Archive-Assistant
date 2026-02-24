@@ -1217,7 +1217,7 @@ async function fetchAo3Works() {
   statusEl.classList.add('visible');
 
   const PRE_FETCH_WAIT  = 5000;
-  const INTER_URL_BASE  = 15;
+  const INTER_URL_BASE  = 7;
   const jitter          = () => Math.floor(Math.random() * 6); // 0–5s
   async function countdown(seconds, labelFn) {
     for (let s = seconds; s > 0; s--) {
