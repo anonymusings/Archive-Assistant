@@ -807,6 +807,36 @@
   [data-theme="dark"] .ao3-fetch-btn { color: #D6D0C7; }
   .ao3-url-input::placeholder { color: #A89898; font-style: italic; }
   [data-theme="dark"] .ao3-url-input::placeholder { color: #7A7070; }
+
+  /* Page footer */
+  .page-footer {
+    padding: 12px 20px;
+    text-align: center;
+    font-family: serif;
+    font-size: 12px;
+  }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    padding: 2px 6px;
+    font-family: serif;
+    font-size: 12px;
+  }
+  .footer-link:hover {
+    color: var(--maroon);
+    text-decoration: underline;
+  }
+  .footer-separator {
+    color: var(--gold);
+    user-select: none;
+  }
 </style>
 </head>
 <body>
@@ -2330,5 +2360,14 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
   </div>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <div class="footer-links">
+      <a href="terms.html" class="footer-link">Terms & Conditions</a>
+      <span class="footer-separator">|</span>
+      <a href="#" class="footer-link">Report a Bug</a>
+    </div>
+  </footer>
 </body>
 </html>
