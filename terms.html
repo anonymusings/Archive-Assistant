@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legal Information - Archive Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ivory: #EAE4DC;
+    --ivory-dark: #DDD6CC;
+    --ivory-darker: #C8BFAF;
+    --ivory-light: #F3EFE8;
+    --maroon: #8B2035;
+    --maroon-deep: #611426;
+    --maroon-light: #A83048;
+    --gold: #C9A96E;
+    --gold-light: #DEC08A;
+    --gold-dark: #9E7830;
+    --ink: #2A1A10;
+    --ink-muted: #6B4A38;
+    --shadow: rgba(42,26,16,0.15);
+    --bg: var(--ivory);
+    --surface: rgba(242,236,224,0.9);
+    --text: var(--ink);
+    --text-muted: var(--ink-muted);
+    --border: var(--ivory-darker);
+    --tab-bg: rgba(139,32,53,0.07);
+  }
+  [data-theme="dark"] {
+    --bg: #1C1008;
+    --ivory: #281608;
+    --ivory-dark: #221208;
+    --ivory-darker: #3A2010;
+    --ivory-light: #281608;
+    --surface: rgba(40,22,8,0.94);
+    --text: #F0E4D0;
+    --text-muted: #C4A07A;
+    --border: #482C16;
+    --ink: #F0E4D0;
+    --ink-muted: #C4A07A;
+    --shadow: rgba(0,0,0,0.55);
+    --tab-bg: rgba(139,32,53,0.18);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.7;
+    min-height: 100vh;
+    transition: background 0.4s, color 0.4s;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 16px;
+    margin-bottom: 24px;
+    transition: color 0.3s;
+  }
+
+  .back-link:hover {
+    color: var(--maroon);
+  }
+
+  .back-link svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  
+  .tab-nav { display: flex; margin: 25px 0 0; border-bottom: 2px solid var(--maroon); }
+  .tab-btn {
+    background: var(--tab-bg); border: 1.5px solid var(--ivory-darker); border-bottom: none;
+    padding: 10px 22px; cursor: pointer; font-family: 'IM Fell English', serif; font-size: 15px;
+    color: var(--text-muted); transition: all 0.2s; margin-right: 3px;
+    border-radius: 6px 6px 0 0; display: flex; align-items: center; gap: 6px;
+  }
+  .tab-btn:hover { color: var(--maroon); background: rgba(139,32,53,0.13); border-color: var(--gold); }
+  .tab-btn.active { background: var(--bg); color: var(--maroon); font-style: italic; border-color: var(--maroon); border-bottom-color: var(--bg); z-index: 2; }
+  .tab-panel { display: none; padding: 26px 0 10px; animation: fadeIn 0.28s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; } }
+
+  
+  .tab-panel { display: none; padding: 26px 0 10px; }
+  .tab-panel.active { display: block; }
+
+  .tab-panel h2 {
+    font-family: 'IM Fell English', serif;
+    font-size: 24px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--maroon);
+    margin-bottom: 20px;
+    letter-spacing: 0.08em;
+  }
+
+  .tab-panel h3 {
+    font-family: 'IM Fell English', serif;
+    font-size: 20px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--maroon-light);
+    margin-top: 28px;
+    margin-bottom: 12px;
+  }
+
+  .tab-panel p {
+    margin-bottom: 16px;
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+  }
+
+  .tab-panel ul, .tab-panel ol {
+    margin-left: 28px;
+    margin-bottom: 16px;
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+  }
+
+  .tab-panel li {
+    margin-bottom: 8px;
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+  }
+
+  .tab-panel a {
+    color: var(--maroon);
+    text-decoration: underline;
+  }
+
+  .tab-panel a:hover {
+    color: var(--maroon-light);
+  }
+
+  .tab-panel strong {
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .tab-panel em {
+    font-style: italic;
+  }
+
+  
+  .page-footer {
+    padding: 12px 20px;
+    text-align: center;
+    font-family: 'Crimson Pro', serif;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    padding: 2px 6px;
+    text-transform: uppercase;
+  }
+
+  .footer-link:hover {
+    color: var(--maroon);
+    text-decoration: underline;
+  }
+
+  .footer-separator {
+    color: var(--gold);
+    user-select: none;
+  }
+
+  
+  .theme-toggle {
+    position: fixed; top: 18px; right: 18px; z-index: 100;
+    background: var(--surface); border: 1.5px solid var(--gold);
+    border-radius: 30px; padding: 6px 15px;
+    cursor: pointer; font-family: 'Crimson Pro', serif; font-size: 13px;
+    color: var(--text-muted); display: flex; align-items: center; gap: 6px;
+    transition: all 0.3s; box-shadow: 0 2px 12px var(--shadow);
+  }
+  .theme-toggle:hover { border-color: var(--maroon); color: var(--maroon); }
+  #theme-icon {
+    filter: invert(1) grayscale(1);
+  }
+  [data-theme="dark"] #theme-icon {
+    filter: invert(0) grayscale(0);
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 24px 16px 80px;
+    }
+
+    .tab-panel {
+      padding: 20px 0 10px;
+    }
+
+    .tab-nav {
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      font-size: 13px;
+      padding: 8px 12px;
+    }
+
+    .page-footer {
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()">
+  <span id="theme-icon">🌙</span> <span id="theme-label">Night</span>
+</button>
+  
+  <div class="container">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Back to Archive Assistant
+    </a>
+
+    
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('about')" data-tab="about">Disclaimer</button>
+      <button class="tab-btn" onclick="switchTab('privacy')" data-tab="privacy">Privacy</button>
+      <button class="tab-btn" onclick="switchTab('terms')" data-tab="terms">Terms & Conditions</button>
+    </div>
+
+    
+    <div id="tab-about" class="tab-panel active">
+      <h2>ABOUT</h2>
+      
+      <p>Archive Assistant is a transformative fan utility tool created for fans. This project is built upon a foundation of deep respect for the Organization for Transformative Works (OTW) and the Archive of Our Own (AO3). Its mission is to provide a tool that enhances the personal organization and preservation of fanworks without compromising the integrity of the Archive or the rights of its creators</p>
+
+      <p>This tool is intended for personal use only and is intended to function as a companion and not a replacement for (AO3) the Archive of Our Own.</p>
+
+      <h3>Fair Use Notice</h3>
+      
+      <p>This webpage and any associated tools facilitate the processing of metadata and fanwork content for purposes such as personal archiving, data organization, and non-commercial research.</p>
+
+      <p>Under Section 107 of the Copyright Act 1976, allowance is made for "fair use" for purposes such as criticism, comment, news reporting, teaching, scholarship, and research. This tool is a transformative technology that allows users to reformat data for their private collections, which constitutes a non-competing, non-commercial use of the original works and the original tool hosting them.</p>
+
+      <h3>I. Legal Disclaimers</h3>
+      
+      <ol>
+        <li>Archive Assistant is an independent fanmade project. It does not in any way claim that it is affiliated with, endorsed by, or connected in any capacity to the Organization for Transformative Works or Archive of Our Own.</li>
+        <li>Archive Assistant does not claim ownership over any file, data, text, or metadata retrieved from AO3 or from its users. All intellectual property rights remain with the original creators and the platform.</li>
+        <li>This tool and the developer is not responsible for any data loss, service interruptions, or changes in AO3's infrastructure that may render the tool inoperable.</li>
+      </ol>
+
+      <h3>II. Aesthetic Attribution</h3>
+      
+      <ol>
+        <li>The purpose of this tool's visual identity is only intended to evoke the spirit of the fanworks community. It does not in any way shape or form claim that the archive assistant is in association with the otw and ao3.</li>
+        <li>The banner art used on the page is a derivative edit of the community created "Medieval skin" (AO3 Skin) by memorizingthedigitsofpi on github. Archive assistant does not claim ownership of the original artwork, font, CSS, assets, or design used in the original skin. Full credit is given to the original community creator for the aesthetic contribution to the archive. This use is intended as a transformative homage and does not imply an official partnership with the skin's original creator.</li>
+      </ol>
+
+      <h3>III. Prohibited Use</h3>
+      
+      <p>To maintain the safety of the Archive and the trust of the community, users are strictly prohibited from the following:</p>
+      
+      <ol>
+        <li>You may not use this tool to extract data for sale, for use in advertisements, or to populate any for-profit database or service.</li>
+        <li>You shall not use this tool to reupload works and data for the purpose of hosting them on other platforms without consent from the original author.</li>
+        <li>you shall not attempt to bypass rate limiting measures of this tool.</li>
+        <li>You are prohibited from using this tool for malicious attacks or harassment to authors and their works or to the ao3 and otw servers, you are prohibited from the collection of data for the purpose of doxxing or targeting other community members and contributors.</li>
+        <li>You must respect the privacy restrictions of creators. This tool should not be used to circumvent Archive Only and private work restrictions for the purpose of public exposure.</li>
+      </ol>
+    </div>
+
+    
+    <div id="tab-terms" class="tab-panel">
+      <h2>Terms and Conditions</h2>
+      
+      <p><em>Effective Date: February 2026</p>
+
+      <p>By accessing or using this tool, you (the "User") agree to be bound by the following Terms and Conditions. If you do not agree to these terms, please discontinue use of the tool immediately.</p>
+
+      <h3>1. Nature of Service</h3>
+      
+      <p>Archive Assistant is a client-side utility designed to help fans organize metadata and personal archives of works from the Archive of Our Own (AO3) tool. Archive Assistant is not a hosting platform; it is a processing and organization tool.</p>
+
+      <h3>2. No Affiliation</h3>
+      
+      <p>Archive Assistant is an independent, open-source project. It is not affiliated with, endorsed by, or representative of the Organization for Transformative Works (OTW) or Archive of Our Own (AO3). All trademarks, including "AO3" and "Archive of Our Own," and other community and organization contributors belong to their respective owners.</p>
+
+      <h3>3. Proper Use & Prohibited Conduct</h3>
+      
+      <p>By using this tool, you agree to the following its fair usage.</p>
+      
+      <ol>
+        <li>You shall not use automated scripts, bots, or scrapers to interact with the Archive Assistant interface or the underlying backend API server in a way that creates an undue burden on resources of AO3's servers.</li>
+        <li>This tool is intended for personal use only. It is only for non-commercial, personal, or educational purposes. You may not use this tool to harvest data for sale or for-profit databases. You may not use this tool for any machine learning or ai language model without explicit permission from archive of our own ( ao3) , otw, the board members and the individual contributors in the archive.</li>
+        <li>You agree not to use this tool to reupload or redistribute fanworks on other platforms without the express written consent of the original authors.</li>
+        <li>You shall not attempt to reverseengineer, disrupt, or interfere with the functionality of this tool and use it as for any forms of malicious activities, hate, bigotry, homophobia transphobia, racism, hate, sexual assault or online and personal harassment.</li>
+      </ol>
+
+      <h3>4. Data Privacy & User Responsibility</h3>
+      
+      <ol>
+        <li>You acknowledge that Archive Assistant stores your extraction history and preferences locally in your browser's localStorage. You are solely responsible for managing this data.</li>
+        <li>It will not be possible to recover lost or deleted history. If you clear your browser cache or use a different device, your data will not be saved.</li>
+        <li>The user (you) is solely responsible for using the "Clear All History" function to ensure any data is not accessible to other users when using public devices or networks.</li>
+        <li>The "Import from AO3" feature utilizes a proxy. You understand that this script acts as a temporary relay. While it processes the URL you provide, it does not log your identity or store a permanent record of the content it processes.</li>
+        <li>use of the "paste ao3 link" feature is subject to the availability and terms of ao3 servers and web hosting servers. This tool is not responsible for interruptions originating from ao3's servers or the backend API server.</li>
+      </ol>
+
+      <h3>6. Intellectual Property & Attribution</h3>
+      
+      <ol>
+        <li>The webapp banner is a derivative work and edited based on a community-created AO3 Skin ("Medieval AO3 skin"). The developer claims no ownership of the original assets or design of the underlying skin.</li>
+        <li>Imported and uploaded Content intellectual property rights of the works retrieved and processed using this tool remain with the original creators.</li>
+      </ol>
+
+      <h3>7. Limitation of Liability</h3>
+      
+      <p>Archive Assistant is available without warranties of any kind. The developer shall not be liable for:</p>
+      
+      <ol>
+        <li>Changes to AO3's code that render the tool inoperable.</li>
+        <li>Loss of extracted data stored in your browser's local storage.</li>
+        <li>Any actions taken by AO3 or the OTW in response to your use of this tool.</li>
+      </ol>
+
+      <h3>8. Termination</h3>
+      
+      <p>The developer reserves the right to restrict access to the tool webpage or its functions or update these terms at any time without prior notice to prevent abuse or ensure compliance with third-party Terms of Service.</p>
+
+      <h3>9. Contact</h3>
+      
+      <p>To report a bug or ask a question send a message here.</p>
+    </div>
+
+    
+    <div id="tab-privacy" class="tab-panel">
+      <h2>Privacy Notice</h2>
+      
+      <p><em>Last Updated: February 2024</em></p>
+
+      <h3>1. Local Processing</h3>
+      
+      <ol>
+        <li>Archive Assistant does not have a central database. All file parsing (EPUB/PDF/HTML) and metadata extraction happen locally within the browser.</li>
+        <li>localStorage is used to save recent "History" and "Extraction Jobs." This data never leaves the localstorage of the device. this tool will not store any data for the purpose of transferring or accessing from another browser.</li>
+        <li>Temporary variables used during the extraction process may be cleared when you refresh the page or close the tab.</li>
+      </ol>
+
+      <h3>2. External Connections</h3>
+      
+      <ol>
+        <li>the "paste from AO3" feature sends a request to the Archive of Our Own servers to retrieve publicly available metadata. Archive assistant does not retrieve your personal AO3 account details or login credentials.</li>
+        <li>This tool loads aesthetic fonts from Google Fonts. This may involve minimal logging of your IP address by Google for the sole purpose of serving the font files.</li>
+        <li>This tool uses an external api server to request works from ao3.
+      </ol>
+
+      <h3>3. Cookies & Tracking</h3>
+      
+      <ol>
+        <li>no use of Google Analytics, Facebook Pixels, or any other third-party tracking scripts for data tracking and data analysis.</li>
+        <li>This does not use traditional tracking cookies. The Banner upon entry is a consent notice for the use of Local Storage, which your browser uses to remember themes, preferences, and upload history.</li>
+      </ol>
+
+      <h3>4. Data and privacy</h3>
+      
+      <ol>
+        <li>the user has full control over data by clearing individual history entries, using the "clear all" functions in the settings to instantly wipe all stored information from the browser.</li>
+        <li>no data is stored in cloud or other file hosting servers. Data is only saved when it is externally copied or downloaded by using the download csv and copy tsv features to export extracted data.</li>
+      </ol>
+
+      <h3>Fair use of backend API server</h3>
+      
+      <ol>
+        <li>By Entering an AO3 URL, the tool sends the link to an API server which requests the HTML from an AO3 work. It does not use your cookies, session data, or Ao3 login credentials.</li>
+        <li>None of the tools or servers used to host this page store any data it handles in a database. It does not keep logs of URLs, history of searches. The script reads the metadata from the AO3 HTML and packages it into a JSON object. This json is sent back to the browser. Once the data reaches your device, it is handled according to the Local Storage policy, and no copy of the metadata remains online.</li>
+      </ol>
+    </div>
+  </div>
+
+  
+  <footer class="page-footer">
+    <div class="footer-links">
+      <a href="terms.html" class="footer-link">Terms & Conditions</a>
+      <span class="footer-separator">|</span>
+      <a href="index.html" class="footer-link">Back to Archive Assistant</a>
+    </div>
+  </footer>
+
+  <script>
+
+    function applyTheme() {
+      const saved = localStorage.getItem('aa_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      const icon = document.getElementById('theme-icon');
+      const label = document.getElementById('theme-label');
+      icon.textContent = saved === 'dark' ? '✷' : '⏾';
+      label.textContent = saved === 'dark' ? 'Day' : 'Night';
+    }
+
+    function toggleTheme() {
+      const d = document.documentElement, dark = d.getAttribute('data-theme') === 'dark';
+      d.setAttribute('data-theme', dark ? 'light' : 'dark');
+      document.getElementById('theme-icon').textContent = dark ? '⏾' : '✷';
+      document.getElementById('theme-label').textContent = dark ? 'Night' : 'Day';
+      localStorage.setItem('aa_theme', dark ? 'light' : 'dark');
+    }
+
+
+    function switchTab(tabName) {
+
+      document.querySelectorAll('.tab-panel').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+
+      document.getElementById('tab-' + tabName).classList.add('active');
+      
+
+      event.target.classList.add('active');
+      
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+
+    applyTheme();
+  </script>
+</body>
+</html>
