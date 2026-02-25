@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact & Feedback — Archive Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ivory: #EAE4DC;
+    --ivory-dark: #DDD6CC;
+    --ivory-darker: #C8BFAF;
+    --ivory-light: #F3EFE8;
+    --maroon: #8B2035;
+    --maroon-deep: #611426;
+    --maroon-light: #A83048;
+    --gold: #C9A96E;
+    --gold-light: #DEC08A;
+    --gold-dark: #9E7830;
+    --ink: #2A1A10;
+    --ink-muted: #6B4A38;
+    --shadow: rgba(42,26,16,0.15);
+    --bg: var(--ivory);
+    --surface: rgba(242,236,224,0.9);
+    --text: var(--ink);
+    --text-muted: var(--ink-muted);
+    --border: var(--ivory-darker);
+  }
+  [data-theme="dark"] {
+    --bg: #1C1008;
+    --ivory: #281608;
+    --ivory-dark: #221208;
+    --ivory-darker: #3A2010;
+    --ivory-light: #281608;
+    --surface: rgba(40,22,8,0.94);
+    --text: #F0E4D0;
+    --text-muted: #C4A07A;
+    --border: #482C16;
+    --ink: #F0E4D0;
+    --ink-muted: #C4A07A;
+    --shadow: rgba(0,0,0,0.55);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.7;
+    min-height: 100vh;
+    transition: background 0.4s, color 0.4s;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
+  .container {
+    position: relative; z-index: 1;
+    max-width: 680px; margin: 0 auto;
+    padding: 40px 24px 24px;
+  }
+  .theme-toggle {
+    position: fixed; top: 18px; right: 18px; z-index: 100;
+    background: var(--surface); border: 1.5px solid var(--gold);
+    border-radius: 30px; padding: 6px 15px;
+    cursor: pointer; font-family: 'Crimson Pro', serif; font-size: 13px;
+    color: var(--text-muted); display: flex; align-items: center; gap: 6px;
+    transition: all 0.3s; box-shadow: 0 2px 12px var(--shadow);
+  }
+  .theme-toggle:hover { border-color: var(--maroon); color: var(--maroon); }
+  #theme-icon { filter: invert(1) grayscale(1); }
+  [data-theme="dark"] #theme-icon { filter: invert(0) grayscale(0); }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: 'IM Fell English', serif; font-style: italic;
+    color: var(--text-muted); text-decoration: none;
+    font-size: 15px; margin-bottom: 32px;
+    transition: color 0.25s;
+  }
+  .back-link:hover { color: var(--maroon); }
+  .page-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(15px, 3vw, 22px);
+    color: var(--maroon);
+    letter-spacing: 0.18em;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .page-rule {
+    width: 100%; border: none; height: 2px; margin: 12px 0 28px;
+    background: linear-gradient(90deg, transparent, var(--gold-dark), var(--maroon), var(--gold-dark), transparent);
+  }
+  .page-subtitle {
+    font-family: 'IM Fell English', serif; font-style: italic;
+    color: var(--text-muted); font-size: 15px;
+    margin-bottom: 14px; line-height: 1.6;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 32px 32px 28px;
+    box-shadow: 0 4px 24px var(--shadow);
+  }
+  @media (max-width: 500px) { .card { padding: 22px 18px 20px; } }
+  .form-body { display: flex; flex-direction: column; gap: 5px; }
+  .field-label {
+    display: block;
+    font-family: 'IM Fell English', serif; font-style: italic;
+    font-size: 14px; color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .field-label .opt { font-size: 12px; opacity: 0.7; font-style: normal; }
+  .contact-toggle-label {
+    display: flex; align-items: center; gap: 9px; cursor: pointer;
+  }
+  .contact-toggle-label input[type="checkbox"] {
+    appearance: none; -webkit-appearance: none;
+    width: 15px; height: 15px; flex-shrink: 0;
+    border: 1.5px solid var(--border); border-radius: 3px;
+    background: var(--ivory-dark); cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    position: relative;
+  }
+  .contact-toggle-label input[type="checkbox"]:checked {
+    background: var(--maroon); border-color: var(--maroon);
+  }
+  .contact-toggle-label input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute; left: 3px; top: 1px;
+    width: 5px; height: 8px;
+    border: 1.5px solid var(--ivory-light);
+    border-top: none; border-left: none;
+    transform: rotate(40deg);
+  }
+  .field-input,
+  .field-textarea {
+    width: 100%; font-family: 'Crimson Pro', serif; font-size: 16px;
+    background: var(--ivory-dark); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text); outline: none;
+    transition: border-color 0.2s;
+  }
+  .field-input { padding: 9px 13px; }
+  .field-textarea { padding: 10px 13px; resize: vertical; min-height: 130px; line-height: 1.6; }
+  .field-input:focus, .field-textarea:focus { border-color: var(--maroon); }
+  .field-input::placeholder, .field-textarea::placeholder { color: var(--text-muted); opacity: 0.6; }
+  .word-count {
+    text-align: right; font-size: 12px; margin-top: 5px;
+    font-family: 'IM Fell English', serif; font-style: italic;
+    color: var(--text-muted); transition: color 0.2s;
+  }
+  .word-count.warn { color: var(--maroon); }
+  .photo-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .photo-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 6px; padding: 7px 14px;
+    font-family: 'Crimson Pro', serif; font-size: 14px;
+    color: var(--text-muted); cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .photo-btn:hover { border-color: var(--maroon); color: var(--maroon); }
+  #photo-list { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; }
+  .photo-item {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--ivory-dark); border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 10px;
+  }
+  .photo-item-thumb {
+    width: 38px; height: 38px; object-fit: cover;
+    border-radius: 4px; flex-shrink: 0;
+  }
+  .photo-item-name {
+    font-family: 'IM Fell English', serif; font-style: italic;
+    font-size: 13px; color: var(--text-muted);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
+  }
+  .photo-item-remove {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); font-size: 15px; padding: 0 3px;
+    transition: color 0.2s; line-height: 1; flex-shrink: 0;
+  }
+  .photo-item-remove:hover { color: var(--maroon); }
+  .form-error {
+    display: none; font-family: 'IM Fell English', serif; font-style: italic;
+    font-size: 13.5px; color: var(--maroon);
+    padding: 8px 12px; border: 1px solid var(--maroon);
+    border-radius: 6px; background: rgba(139,32,53,0.06);
+  }
+  .form-error.visible { display: block; }
+  .submit-btn {
+    background: var(--maroon); color: var(--ivory-light); border: none;
+    border-radius: 6px; padding: 10px 26px;
+    font-family: 'Cinzel Decorative', serif; font-size: 10px;
+    letter-spacing: 0.12em; cursor: pointer;
+    transition: background 0.2s; align-self: center;
+  }
+  .submit-btn:hover { background: var(--maroon-light); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  [data-theme="dark"] .submit-btn { color: #D6D0C7; }
+  .confirm-view { display: none; }
+  .confirm-view.visible { display: block; }
+  .form-view.hidden { display: none; }
+  .confirm-title {
+    font-family: 'IM Fell English', serif; font-style: italic;
+    font-size: 22px; color: var(--maroon);
+    margin-bottom: 6px;
+  }
+  .confirm-sub {
+    font-family: 'IM Fell English', serif; font-style: italic;
+    font-size: 14px; color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+  .confirm-rule { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+  .confirm-field-label {
+    font-family: 'IM Fell English', serif; font-style: italic;
+    font-size: 13px; color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .confirm-field-value {
+    font-family: 'Crimson Pro', serif; font-size: 16px;
+    color: var(--text); line-height: 1.65;
+    white-space: pre-wrap; word-break: break-word;
+    background: var(--ivory-dark); border: 1px solid var(--border);
+    border-radius: 6px; padding: 10px 13px;
+    margin-bottom: 16px;
+  }
+  .confirm-photo-preview {
+    display: block; max-width: 100%; max-height: 220px;
+    border-radius: 6px; border: 1px solid var(--border);
+    object-fit: contain; margin-bottom: 16px;
+  }
+  .confirm-back-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: 'IM Fell English', serif; font-style: italic;
+    color: var(--text-muted); text-decoration: none;
+    font-size: 15px; margin-top: 8px;
+    transition: color 0.25s; cursor: pointer;
+    background: none; border: none; padding: 0;
+  }
+  .confirm-back-btn:hover { color: var(--maroon); }
+  .page-footer {
+    position: relative; z-index: 1;
+    max-width: 680px; margin: 0 auto;
+    padding: 20px 24px 40px; text-align: center;
+    font-family: 'Crimson Pro', serif; font-size: 14px;
+    text-transform: uppercase;
+  }
+  .footer-links { display: flex; justify-content: center; align-items: center; gap: 8px; }
+  .footer-link {
+    color: var(--text-muted); text-decoration: none;
+    transition: color 0.3s; padding: 2px 6px;
+  }
+  .footer-link:hover { color: var(--maroon); text-decoration: underline; }
+  .footer-separator { color: var(--gold); user-select: none; }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()">
+  <span id="theme-icon">⏾</span> <span id="theme-label">Night</span>
+</button>
+
+<div class="container">
+
+  <a class="back-link" id="back-link" href="index.html">
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14">
+      <line x1="13" y1="8" x2="3" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <polyline points="7,4 3,8 7,12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    Go back
+  </a>
+
+  <h1 class="page-title">CONTACT & FEEDBACK</h1>
+  <hr class="page-rule">
+  <p class="page-subtitle">Report a bug, request a feature, or send a general message.</p>
+
+  <div class="card form-view" id="form-view">
+    <div class="form-body">
+
+      <div>
+        <label class="field-label" for="f-description">
+          Message <span class="opt">(required · 20 char min · 200 word max)</span>
+        </label>
+        <textarea class="field-textarea" id="f-description"
+          placeholder="please describe it in detail…"
+          oninput="onDescInput()"></textarea>
+        <div class="word-count" id="word-count">0 / 200 words</div>
+      </div>
+
+      <div>
+        <label class="field-label">
+          Screenshots <span class="opt">(optional · JPG / PNG / GIF / WEBP · 5 MB total)</span>
+        </label>
+        <div class="photo-row">
+          <label style="cursor:pointer">
+            <span class="photo-btn">Attach image</span>
+            <input type="file" id="f-photo" accept="image/jpeg,image/png,image/gif,image/webp"
+              style="display:none" onchange="onPhotoChange(this)">
+          </label>
+        </div>
+        <div id="photo-list"></div>
+      </div>
+
+      <div style="margin-top:10px;">
+        <label class="contact-toggle-label">
+          <input type="checkbox" id="f-contact-check" onchange="toggleContactField()">
+          <span class="field-label" style="margin-bottom:0;cursor:pointer;">I'd like a reply <span class="opt">(optional)</span></span>
+        </label>
+        <div id="contact-input-wrap" style="display:none; margin-top:8px;">
+          <input class="field-input" id="f-contact" type="email"
+            placeholder="Enter your email address">
+        </div>
+      </div>
+
+      <div class="form-error" id="form-error"></div>
+
+      <button class="submit-btn" id="submit-btn" onclick="submitReport()">SEND</button>
+
+    </div>
+  </div>
+
+  <div class="card confirm-view" id="confirm-view">
+    <p class="confirm-title">Message sent ⚔︎</p>
+    <p class="confirm-sub">Thank you — your message has been received.</p>
+    <hr class="confirm-rule">
+
+    <p class="confirm-field-label">Your message</p>
+    <div class="confirm-field-value" id="conf-description"></div>
+
+    <div id="conf-contact-wrap">
+      <p class="confirm-field-label">Contact provided</p>
+      <div class="confirm-field-value" id="conf-contact"></div>
+    </div>
+
+    <div id="conf-photo-wrap" style="display:none">
+      <p class="confirm-field-label">Attached screenshots</p>
+      <div id="conf-photo-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></div>
+    </div>
+
+    <button class="confirm-back-btn" onclick="goBack()">
+      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14">
+        <line x1="13" y1="8" x2="3" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <polyline points="7,4 3,8 7,12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      Go back
+    </button>
+  </div>
+
+</div>
+
+<footer class="page-footer">
+  <div class="footer-links">
+    <a href="index.html" class="footer-link">Archive Assistant</a>
+    <span class="footer-separator">✶</span>
+    <a href="terms.html" class="footer-link">Terms & Conditions</a>
+  </div>
+</footer>
+
+<script>
+function applyTheme() {
+  const t = localStorage.getItem('aa_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('theme-icon').textContent  = t === 'dark' ? '✷' : '⏾';
+  document.getElementById('theme-label').textContent = t === 'dark' ? 'Day' : 'Night';
+}
+function toggleTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('aa_theme', next);
+  applyTheme();
+}
+applyTheme();
+
+(function() {
+  const ref = document.referrer;
+  if (ref) document.getElementById('back-link').href = ref;
+})();
+
+function goBack() {
+  if (document.referrer) { location.href = document.referrer; }
+  else { history.back(); }
+}
+
+const REPORT_ENDPOINT = 'https://YOUR-RENDER-APP.onrender.com/report';
+const MAX_WORDS = 200;
+const MIN_CHARS = 20;
+
+function toggleContactField() {
+  const checked = document.getElementById('f-contact-check').checked;
+  document.getElementById('contact-input-wrap').style.display = checked ? 'block' : 'none';
+  if (!checked) document.getElementById('f-contact').value = '';
+}
+function countWords(str) {
+  return str.trim() === '' ? 0 : str.trim().split(/\s+/).length;
+}
+function onDescInput() {
+  const ta = document.getElementById('f-description');
+  const words = countWords(ta.value);
+  const el = document.getElementById('word-count');
+  el.textContent = `${words} / ${MAX_WORDS} words`;
+  el.classList.toggle('warn', words >= MAX_WORDS * 0.9);
+  if (words > MAX_WORDS) {
+    ta.value = ta.value.trim().split(/\s+/).slice(0, MAX_WORDS).join(' ');
+    el.textContent = `${MAX_WORDS} / ${MAX_WORDS} words`;
+  }
+}
+
+let photoFiles = [];
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+
+function photoToast(msg) {
+  let t = document.getElementById('photo-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'photo-toast';
+    t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--maroon);color:var(--ivory-light);font-family:\'Crimson Pro\',serif;font-size:14px;padding:9px 22px;border-radius:20px;opacity:0;transition:opacity 0.25s,transform 0.25s;z-index:9999;pointer-events:none;white-space:nowrap;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(10px)';
+  }, 2800);
+}
+
+function onPhotoChange(input) {
+  const file = input.files[0];
+  input.value = '';
+  if (!file) return;
+  const allowed = ['image/jpeg','image/png','image/gif','image/webp'];
+  if (!allowed.includes(file.type)) { showError('Only JPG, PNG, GIF, or WEBP images are accepted.'); return; }
+  const currentTotal = photoFiles.reduce((s, f) => s + f.size, 0);
+  if (currentTotal + file.size > MAX_PHOTO_BYTES) {
+    photoToast('Total size limit of 5 MB reached ⚔︎');
+    return;
+  }
+  photoFiles.push(file);
+  renderPhotoList();
+  hideError();
+}
+
+function removePhoto(idx) {
+  photoFiles.splice(idx, 1);
+  renderPhotoList();
+}
+
+function renderPhotoList() {
+  const list = document.getElementById('photo-list');
+  list.innerHTML = '';
+  photoFiles.forEach((file, i) => {
+    const item = document.createElement('div');
+    item.className = 'photo-item';
+    const thumb = document.createElement('img');
+    thumb.className = 'photo-item-thumb';
+    thumb.src = URL.createObjectURL(file);
+    const name = document.createElement('span');
+    name.className = 'photo-item-name';
+    name.textContent = file.name;
+    const rm = document.createElement('button');
+    rm.className = 'photo-item-remove';
+    rm.textContent = '×';
+    rm.title = 'Remove';
+    rm.onclick = () => removePhoto(i);
+    item.appendChild(thumb);
+    item.appendChild(name);
+    item.appendChild(rm);
+    list.appendChild(item);
+  });
+}
+
+function showError(msg) {
+  const el = document.getElementById('form-error');
+  el.textContent = msg; el.classList.add('visible');
+}
+function hideError() {
+  document.getElementById('form-error').classList.remove('visible');
+}
+
+function gatherContext() {
+  const prevPage = document.referrer
+    ? new URL(document.referrer).pathname.split('/').pop() || 'index.html'
+    : 'direct visit (no referrer)';
+  const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'Dark' : 'Light';
+  const ua = navigator.userAgent;
+  const browserName = (function() {
+    if (/Edg\//.test(ua))     return 'Edge';
+    if (/OPR\//.test(ua))     return 'Opera';
+    if (/Chrome\//.test(ua))  return 'Chrome';
+    if (/Firefox\//.test(ua)) return 'Firefox';
+    if (/Safari\//.test(ua))  return 'Safari';
+    return 'Unknown browser';
+  })();
+  const os = (function() {
+    if (/Windows NT 10/.test(ua)) return 'Windows 10/11';
+    if (/Windows/.test(ua))       return 'Windows';
+    if (/Mac OS X/.test(ua))      return 'macOS';
+    if (/Android/.test(ua))       return 'Android';
+    if (/iPhone|iPad/.test(ua))   return 'iOS';
+    if (/Linux/.test(ua))         return 'Linux';
+    return 'Unknown OS';
+  })();
+  const screenInfo = `${screen.width}x${screen.height} (pixel ratio: ${devicePixelRatio})`;
+  return [
+    `Arrived from: ${prevPage}`,
+    `Theme in use: ${theme} mode`,
+    `Browser: ${browserName}`,
+    `Operating system: ${os}`,
+    `Screen resolution: ${screenInfo}`,
+    `Full user agent: ${ua}`,
+  ].join('\n');
+}
+
+async function submitReport() {
+  hideError();
+  const description = document.getElementById('f-description').value.trim();
+  const checked     = document.getElementById('f-contact-check').checked;
+  const contact     = checked ? document.getElementById('f-contact').value.trim() : '';
+
+  if (description.length < MIN_CHARS) { showError(`Please write at least ${MIN_CHARS} characters.`); return; }
+  if (countWords(description) > MAX_WORDS) { showError(`Please keep it under ${MAX_WORDS} words.`); return; }
+  if (checked && !contact) { showError('Please enter your email address, or uncheck the reply option.'); return; }
+  if (checked && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) { showError('Please enter a valid email address.'); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'SENDING...';
+
+  try {
+    const fd = new FormData();
+    fd.append('description', description);
+    if (contact)   fd.append('contact', contact);
+    photoFiles.forEach((f, i) => fd.append(`photo_${i}`, f, f.name));
+    fd.append('context', gatherContext());
+
+    const res = await fetch(REPORT_ENDPOINT, { method: 'POST', body: fd });
+    if (!res.ok) throw new Error(`Server responded ${res.status}`);
+
+    showConfirmation(description, contact);
+
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'SEND';
+    showError('Could not send — please try again or check your connection.');
+    console.error('[report]', err);
+  }
+}
+
+function showConfirmation(description, contact) {
+  document.getElementById('conf-description').textContent = description;
+
+  const contactWrap = document.getElementById('conf-contact-wrap');
+  if (contact) {
+    document.getElementById('conf-contact').textContent = contact;
+    contactWrap.style.display = 'block';
+  } else {
+    contactWrap.style.display = 'none';
+  }
+
+  const photoWrap = document.getElementById('conf-photo-wrap');
+  if (photoFiles.length) {
+    const confList = document.getElementById('conf-photo-list');
+    confList.innerHTML = '';
+    photoFiles.forEach(f => {
+      const img = document.createElement('img');
+      img.className = 'confirm-photo-preview';
+      img.src = URL.createObjectURL(f);
+      img.alt = f.name;
+      confList.appendChild(img);
+    });
+    photoWrap.style.display = 'block';
+  } else {
+    photoWrap.style.display = 'none';
+  }
+
+  document.getElementById('form-view').classList.add('hidden');
+  document.getElementById('confirm-view').classList.add('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
