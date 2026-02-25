@@ -209,6 +209,16 @@
     user-select: none;
   }
 
+  .inline-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.25s;
+  }
+  .inline-link:hover {
+    color: var(--maroon);
+  }
+
   
   .theme-toggle {
     position: fixed; top: 18px; right: 18px; z-index: 100;
@@ -312,6 +322,9 @@
         <li>You are prohibited from using this tool for malicious attacks or harassment to authors and their works or to the ao3 and otw servers, you are prohibited from the collection of data for the purpose of doxxing or targeting other community members and contributors.</li>
         <li>You must respect the privacy restrictions of creators. This tool should not be used to circumvent Archive Only and private work restrictions for the purpose of public exposure.</li>
       </ol>
+      <h3>Contact</h3>
+      
+      <p>To report a bug or ask a question send a message <a href="feedback.html" class="inline-link">here</a>.</p>
     </div>
 
     
@@ -372,9 +385,6 @@
       
       <p>The developer reserves the right to restrict access to the tool webpage or its functions or update these terms at any time without prior notice to prevent abuse or ensure compliance with third-party Terms of Service.</p>
 
-      <h3>9. Contact</h3>
-      
-      <p>To report a bug or ask a question send a message here.</p>
     </div>
 
     
@@ -426,7 +436,7 @@
   
   <footer class="page-footer">
     <div class="footer-links">
-      <a href="terms.html" class="footer-link">Terms & Conditions</a>
+      <a href="abouf.html" class="footer-link">Terms & Conditions</a>
       <span class="footer-separator">✶</span>
       <a href="index.html" class="footer-link">Back to Archive Assistant</a>
     </div>
@@ -476,5 +486,6 @@
 
     applyTheme();
   </script>
+  <script src="report-modal.js"></script>
 </body>
 </html>
