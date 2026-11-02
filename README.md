@@ -8,4 +8,9 @@ bulk process up to 100 files at a time, maximum of 100mb per extraction, and rea
 
 do not abuse.
 
-works on browser - https://anonymusings.github.io/Archive-Assistant/
+use in browser - https://anonymusings.github.io/Archive-Assistant/
+
+-----NOTES-----
+
+• export csv works best with notion for clean tags in building a library / database. easily import the csv, tweak the headers and done.
+• copy tsv for google sheets.
