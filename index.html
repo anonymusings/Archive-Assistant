@@ -2060,7 +2060,7 @@ function buildExport() {
   refreshExport();
 }
 function copyTSV(){navigator.clipboard.writeText(document.getElementById('tsv-out').textContent).then(()=>toast('TSV copied — paste into Google Sheets ✷'));}
-function quickCopyTSV(){const all=getAllEntries();if(!all.length){toast('No entries to copy yet.');return;}const withHdrs=document.getElementById('cat-include-headers')?.checked!==false;const rows=all.map(e=>colOrder.map(c=>tsvEsc(e[c]||'N/A')).join('\t'));if(withHdrs)rows.unshift(colOrder.map(c=>HDRS[COLS.indexOf(c)]).map(tsvEsc).join('\t'));navigator.clipboard.writeText(rows.join('\n')).then(()=>toast('TSV copied — paste into Google Sheets ✷'));}
+function quickCopyTSV(){const all=getAllEntries();if(!all.length){toast('No entries to copy yet.');return;}const withHdrs=document.getElementById('cat-include-headers')?.checked!==false;const rows=all.map(e=>colOrder.map(c=>tsvEsc(e[c]||'N/A')).join('\t'));if(withHdrs)rows.unshift(colOrder.map(c=>HDRS[COLS.indexOf(c)]).map(tsvEsc).join('\t'));navigator.clipboard.writeText(rows.join('\n')).then(()=>toast('TSV copied — paste into your spreadsheet ✷'));}
 function quickDlCSV(){const all=getAllEntries();if(!all.length){toast('No entries to download.');return;}const withHdrs=document.getElementById('cat-include-headers')?.checked!==false;const rows=all.map(e=>colOrder.map(c=>csvEsc(e[c]||'N/A')).join(','));if(withHdrs)rows.unshift(colOrder.map(c=>HDRS[COLS.indexOf(c)]).map(csvEsc).join(','));dlText(rows.join('\n'),'archive-assistant.csv','text/csv');}
 function dlCSV(){
   const all=getExportEntries();
