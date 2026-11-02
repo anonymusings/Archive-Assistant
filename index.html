@@ -1670,7 +1670,7 @@ async function extractEpub(file) {
     // (allows ||| between label and value, since EPUB text is split on block tags above)
     const chapM = fullText.match(/Chapters:[\s|]*(\d+)\s*\/\s*(\d+|\?)/i);
     if (chapM) {
-      res.chapters = chapM[1];
+      res.chapters = chapM[1] + '/' + chapM[2];
       res.status   = (chapM[2] !== '?' && parseInt(chapM[1],10) === parseInt(chapM[2],10)) ? 'Complete' : 'Ongoing';
     } else if (/Completed:\s*\d{4}-\d{2}-\d{2}/i.test(fullText)) {
       res.status = 'Complete';
@@ -1803,7 +1803,7 @@ async function extractPdf(file) {
     const chapStatM = fullText.match(/Chapters:\s*(\d+)\s*\/\s*(\d+|\?)/i);
     let chapters='N/A', status='N/A';
     if (chapStatM) {
-      chapters=chapStatM[1];
+      chapters=chapStatM[1] + '/' + chapStatM[2];
       status=(chapStatM[2]!=='?' && parseInt(chapStatM[1],10)===parseInt(chapStatM[2],10)) ? 'Complete' : 'Ongoing';
     } else if (/Completed:\s*\d{4}-\d{2}-\d{2}/i.test(headerText)) {
       status='Complete';
