@@ -913,7 +913,7 @@
             <thead id="cat-thead"><tr>
               <th>Date</th><th>Date Posted</th><th>Title</th><th>Author</th>
               <th>Fandom</th><th>Relationships</th><th>Characters</th><th>Tags</th>
-              <th>Warning</th><th>Words</th><th>Category</th><th>Rating</th><th>AO3 Link</th><th>Summary</th><th>Series</th>
+              <th>Warning</th><th>Words</th><th>Category</th><th>Rating</th><th>AO3 Link</th><th>Summary</th><th>Series</th><th>Status</th><th>Chapters</th>
             </tr></thead>
             <tbody id="meta-tbody"></tbody>
           </table>
@@ -1060,8 +1060,8 @@
 </div>
 
 <script>
-const COLS = ['date','datePosted','title','author','fandom','relationships','characters','tags','warning','words','category','rating','ao3Link','summary','series'];
-const HDRS = ['Date','Date Posted','Title','Author','Fandom','Relationships','Characters','Tags','Warning','Words','Category','Rating','AO3 Link','Summary','Series'];
+const COLS = ['date','datePosted','title','author','fandom','relationships','characters','tags','warning','words','category','rating','ao3Link','summary','series','status','chapters'];
+const HDRS = ['Date','Date Posted','Title','Author','Fandom','Relationships','Characters','Tags','Warning','Words','Category','Rating','AO3 Link','Summary','Series','Status','Chapters'];
 const HISTORY_EXCLUDED_COLS = new Set(['series','rating']);
 let catalogEntries = [];
 let uploadedFiles  = [];
@@ -1319,6 +1319,8 @@ async function fetchAo3Works() {
         ao3Link:       j.ao3Link      || `https://archiveofourown.org/works/${workId}`,
         summary:       j.summary      || 'N/A',
         series:        j.series       || 'N/A',
+        status:        j.status       || 'N/A',
+        chapters:      j.chapters     || 'N/A',
         fileType:      'url'
       };
 
@@ -1664,6 +1666,16 @@ async function extractEpub(file) {
     const wordM = fullText.match(/Words:\s*([\d,]+)/i);
     if (wordM) res.words      = wordM[1];
 
+    // Chapters + completion status — AO3 stats line e.g. "Chapters: 3/10" or "Chapters: 3/?"
+    // (allows ||| between label and value, since EPUB text is split on block tags above)
+    const chapM = fullText.match(/Chapters:[\s|]*(\d+)\s*\/\s*(\d+|\?)/i);
+    if (chapM) {
+      res.chapters = chapM[1];
+      res.status   = (chapM[2] !== '?' && parseInt(chapM[1],10) === parseInt(chapM[2],10)) ? 'Complete' : 'Ongoing';
+    } else if (/Completed:\s*\d{4}-\d{2}-\d{2}/i.test(fullText)) {
+      res.status = 'Complete';
+    }
+
     return res;
   } catch(err) { console.error('EPUB parse error:', err); return base; }
 }
@@ -1786,7 +1798,18 @@ async function extractPdf(file) {
       if (authorM) author=authorM[1].trim();
     }
 
-    return {date:today(),datePosted,title,author,fandom,relationships,characters,tags,warning,words,category,rating,ao3Link,series,summary};
+    // --- Chapters + status ---
+    // AO3 stats line e.g. "Chapters: 3/10" or "Chapters: 3/?" (scanned in fullText, like Words)
+    const chapStatM = fullText.match(/Chapters:\s*(\d+)\s*\/\s*(\d+|\?)/i);
+    let chapters='N/A', status='N/A';
+    if (chapStatM) {
+      chapters=chapStatM[1];
+      status=(chapStatM[2]!=='?' && parseInt(chapStatM[1],10)===parseInt(chapStatM[2],10)) ? 'Complete' : 'Ongoing';
+    } else if (/Completed:\s*\d{4}-\d{2}-\d{2}/i.test(headerText)) {
+      status='Complete';
+    }
+
+    return {date:today(),datePosted,title,author,fandom,relationships,characters,tags,warning,words,category,rating,ao3Link,series,summary,status,chapters};
   } catch(err) { console.error('PDF parse error:', err); return base; }
 }
 function fmtPdfDate(d) { try{const s=d.replace('D:','');return `${s.substring(0,4)}-${s.substring(4,6)}-${s.substring(6,8)}`;}catch{return 'N/A';} }
@@ -2371,4 +2394,3 @@ document.addEventListener('DOMContentLoaded', () => {
   </footer>
 </body>
 </html>
-
