@@ -1,11 +1,11 @@
 for personal use only.
 
-this is intended for those who keep a spreadsheet to track their favorite fics.
-instead of copy and pasting the tags of the fic one by one, simply upload the files or paste the work link
-and wait for the output. you can copy the data and paste directly to your spreadsheet, or save it as a file.
+this is intended for those who keep a spreadsheet to track their favorite fics or need to extract metadata from pdf or epub files.
+instead of copy and pasting the metadata and tags of the fic one by one, simply upload the files or paste the work link
+and wait for the output. you can outputs in csv or tsv for google sheets. paste directly to your spreadsheet, or save it as a file.
 
-you can rearrange and hide the rows and columns, so
+bulk process up to 100 files at a time, maximum of 100mb per extraction, and rearrange or hide rows and columns you don't need.
 
 do not abuse.
 
-use it online - https://anonymusings.github.io/Archive-Assistant/
+works on browser - https://anonymusings.github.io/Archive-Assistant/
