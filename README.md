@@ -7,3 +7,5 @@ and wait for the output. you can copy the data and paste directly to your spread
 you can rearrange and hide the rows and columns, so
 
 do not abuse.
+
+use it online - https://anonymusings.github.io/Archive-Assistant/
